@@ -1,7 +1,6 @@
 import os
 
 from ppadb.client import Client as AdbClient
-import time
 
 class ADB_server:
     def __init__(self):
@@ -11,11 +10,16 @@ class ADB_server:
         self.devices = client.devices()
         self.device = self.devices[0]
 
-    def cheakCR(self):
+    def cheakInstallCR(self):
         packages = self.device.shell('pm list packages').split('\r\n')
         for package in packages:
             if package == 'package:com.supercell.clashroyale':
                 return True
+        return False
+
+    def cheakRunCR(self):
+        if self.device.get_pid('com.supercell.clashroyale'):
+            return True
         return False
 
     def openCR(self):
@@ -31,9 +35,4 @@ class ADB_server:
         return self.device.screencap()
 
 if __name__ == '__main__':
-    z = ADB_server()
-    c = []
-    v = time.time()
-    for i in range(10):
-        print(z.click(100, 100))
-    print(time.time() - v)
+    pass
