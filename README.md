@@ -12,8 +12,11 @@
 
 По зависимостям у нас 
 
-Nox 6.3.0
-// настройки нокса
+BlueStacks 5.3.0
+Настройки:
+Разрешение экрана 960Х540
+Включенный ADB
 
 pip install loguru==0.5.3
 pip install pure-python-adb==0.3.0
+pip install Pillow
