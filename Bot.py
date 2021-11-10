@@ -1,5 +1,6 @@
-from ADB_server import ADB_server
+from random import randint
 
+from ADB_server import ADB_server
 
 class Bot:
     def __init__(self):
@@ -35,10 +36,10 @@ class Bot:
         self.ADB.click(370, 590)
 
     def _placingCard1X1(self):
-        self.ADB.click(275, 720)
+        self.ADB.click(randint(270, 340), randint(545, 730))
 
     def _placingCard2X2(self):
-        self.ADB.click(285, 726)
+        self.ADB.click(randint(150, 380), randint(570, 735))
 
     def exitBatle2X2(self):
         self.ADB.click(74, 910)
@@ -48,3 +49,6 @@ class Bot:
 
     def _selectCard(self, number):
         self.ADB.click(170 + number * 100, 850)
+
+    def getScreen(self):
+        return self.ADB.getScreen()
