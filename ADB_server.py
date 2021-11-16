@@ -2,10 +2,12 @@ import os
 
 from ppadb.client import Client as AdbClient
 
+
 class ADB_server:
-    def __init__(self):
-        os.system(r'"C:\Program Files (x86)\Nox\bin\adb.exe start-server"')
-        os.system(r'"C:\Program Files (x86)\Nox\bin\adb.exe connect 127.0.0.1:62001"')
+    def __init__(self, port: str = '5555'):
+        os.system(r'"adb kill-server"')
+        os.system(r'"adb start-server"')
+        os.system(fr'"adb connect 127.0.0.1:{port}"')
         client = AdbClient(host="127.0.0.1", port=5037)
         self.devices = client.devices()
         self.device = self.devices[0]
@@ -31,8 +33,9 @@ class ADB_server:
     def click(self, x: int, y: int):
         self.device.shell(f'input tap {str(x)} {(str(y))}')
 
+    def swipe(self, x1, y1, x2, y2):
+        self.device.shell(f'input swipe {str(x1)} {(str(y1))} {str(x2)} {(str(y2))} 2000')
+
     def getScreen(self):
         return self.device.screencap()
 
-if __name__ == '__main__':
-    pass
