@@ -11,17 +11,17 @@ class Bot:
         self._battleMode = None
         self._timeOpenChest = None
 
-    def _runBattleMode(self, mode):
+    def runBattleMode(self, mode=1):
         self.ADB.click(400, 630)
         if mode == 1:
             self.ADB.click(420, 400)
         else:
             self.ADB.click(420, 640)
 
-    def _runBattleGlobal(self):
+    def runBattleGlobal(self):
         self.ADB.click(180, 630)
 
-    def _runBattleEvent(self):
+    def runBattleEvent(self):
         self.ADB.click(280, 720)
 
     def rewardLimit(self):
@@ -38,6 +38,9 @@ class Bot:
     def goToClanChat(self):
         self.ADB.click(371, 911)
 
+    def openCloseClanChat(self):
+        self.ADB.click(490, 61)
+
     def requestCard(self):
         self.ADB.click(70, 805)
 
@@ -53,11 +56,11 @@ class Bot:
     def goToShop(self):
         self.ADB.click(80, 930)
 
-    def _placingCard1X1(self):
-        self.ADB.click(randint(270, 340), randint(545, 730))
+    def placingCard1X1(self, x=randint(270, 340), y=randint(545, 730)):
+        self.ADB.click(x, y)
 
-    def _placingCard2X2(self):
-        self.ADB.click(randint(150, 380), randint(570, 735))
+    def placingCard2X2(self, x=randint(150, 380), y=randint(570, 735)):
+        self.ADB.click(x, y)
 
     def exitBatle2X2(self):
         self.ADB.click(74, 910)
@@ -68,7 +71,7 @@ class Bot:
     def exitBatle1X1(self):
         self.ADB.click(270, 840)
 
-    def _selectCard(self, number):
+    def selectCard(self, number):
         self.ADB.click(170 + number * 100, 850)
 
     def setEnglishLanguage(self):

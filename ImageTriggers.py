@@ -22,8 +22,15 @@ class ImageTriggers:
         return 0
 
     def _getTriggerOpenChest(self):
-        i = self.image.crop((10, 700, 537, 845))
-        pass
+        Chests = [
+                self.image.crop((109, 833, 114, 838)),
+                self.image.crop((243, 833, 248, 838)),
+                self.image.crop((376, 833, 381, 838)),
+                self.image.crop((508, 833, 513, 838)),
+                ]
+
+    def getTextError(self):
+        i = self.image.crop((40, 370, 495, 540))
 
     def getTrigger(self, img):
         self.image = Image.open(io.BytesIO(img))
@@ -33,17 +40,17 @@ class ImageTriggers:
             if self.image.getpixel((300, 840)) == (104, 187, 255, 255):  # тригер на кнопку выйти
                 logger.info(self._getNumeberCrown())
                 return 121  # тригер на конец боя 1х1
-            return 124 # тригер на облачко
+        if self.image.getpixel((508, 38)) == (242, 43, 39, 255):
+            return 123  # тригер на закрытие чата в после боя 2х2
         if self.image.getpixel((526, 951)) == (52, 66, 83, 255):  # тригер нижнию часть экрана при игре 2х2
-            if self.image.getpixel((511, 39)) == (242, 43, 39, 255):
-                logger.info(self._getNumeberCrown())
-                return 123  # тригер на закрытие чата в после боя 2х2
             logger.info(self._getNumeberCrown())
             return 122  # тригер на конец боя 2х2
+        if self.image.getpixel((40, 790)) == (255, 255, 255, 255):
+            return 124 # тригер на облачко
 
         if self.image.getpixel((530, 944)) == (64, 76, 95, 255):  # пиксель на кропку эвента если она не активка
             if self.image.getpixel((272, 893)) == (216, 234, 246, 255):  # пиксель на кропку эвента если она не активка
-                if self.image.getpixel((433, 876)) == ('Зеленый потом исправить', 255):
+                if self.image.getpixel((435, 876)) == (48, 185, 71, 255):
                     return 201  # тригер на отправку запроса карт
                 return 200  # тригер на меню
 
@@ -60,4 +67,3 @@ class ImageTriggers:
             return 500  # тригер на лимит наград
 
         return 0  # В случае если не нашел тригеров
-
