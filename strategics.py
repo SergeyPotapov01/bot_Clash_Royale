@@ -1,5 +1,6 @@
 import time
 from random import randint
+import threading
 
 from Bot import Bot
 from ImageTriggers import ImageTriggers
@@ -10,7 +11,8 @@ class strategics:
         self.bot.openCR()
         self.triggers = ImageTriggers()
         self.index = 0
-        self.cycleStart = True
+        self.cycleStart = False
+        self.thread = None
 
     def cycleStarted(self):
         self.cycleStart = True
@@ -19,6 +21,12 @@ class strategics:
         self.cycleStart = False
 
     def main(self, combatMode=1):
+        if self.bot.ADB.cheakInstallCR() == False:
+            self.cycleStart = False
+            print(1234123)
+        if self.bot.ADB.cheakRunCR() == False:
+            self.bot.openCR()
+
         while self.cycleStart:
             t = time.time()
             image = self.bot.getScreen()
@@ -60,6 +68,13 @@ class strategics:
                 self.bot.rewardLimit()
             self.index = 0
             print(trigger, time.time() - t)
+
+    def startFarm(self):
+        self.cycleStart = True
+        self.thread = threading.Thread(target=self.main).start()
+
+    def stopFarm(self):
+        self.cycleStart = False
 
 if __name__ == '__main__':
     x = strategics()

@@ -13,7 +13,7 @@ class ADB_server:
         self.device = self.devices[0]
 
     def cheakInstallCR(self):
-        packages = self.device.shell('pm list packages').split('\r\n')
+        packages = self.device.shell('pm list packages').split('\r\n')[0].split('\n')
         for package in packages:
             if package == 'package:com.supercell.clashroyale':
                 return True

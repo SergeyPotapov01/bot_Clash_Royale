@@ -28,7 +28,7 @@ class Bot:
         self.ADB.click(276, 600)
 
     def openChest(self, number):
-        self.ADB.click(75 + number * 120, 780)
+        self.ADB.click(-25 + number * 120, 780)
         self.ADB.click(276, 625)
 
     def returnHome(self):
