@@ -3,12 +3,12 @@ import sys
 from gui import Ui_MainWindow
 
 from loguru import logger
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets
 
 logger.add('log/CrownFarm.log', format='{time} {level} {message}',
            level='INFO', rotation='1 week', compression='zip')
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 
 if __name__ == '__main__':

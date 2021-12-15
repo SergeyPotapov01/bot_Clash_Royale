@@ -1,15 +1,9 @@
-from random import randint
-
 from ADB_server import ADB_server
 
 
 class Bot:
-    def __init__(self):
-        self.ADB = ADB_server()
-        self._inGame = False
-        self._inBattle = False
-        self._battleMode = None
-        self._timeOpenChest = None
+    def __init__(self, port):
+        self.ADB = ADB_server(port=port)
 
     def runBattleMode(self, mode=1):
         self.ADB.click(400, 630)
@@ -56,10 +50,10 @@ class Bot:
     def goToShop(self):
         self.ADB.click(80, 930)
 
-    def placingCard1X1(self, x=randint(270, 340), y=randint(545, 730)):
+    def placingCard1X1(self, x, y):
         self.ADB.click(x, y)
 
-    def placingCard2X2(self, x=randint(150, 380), y=randint(570, 735)):
+    def placingCard2X2(self, x, y):
         self.ADB.click(x, y)
 
     def exitBatle2X2(self):
