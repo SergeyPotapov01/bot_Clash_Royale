@@ -28,8 +28,7 @@ Bug Report: https://t.me/leninka20
 надо сделать интерфейс красивым, но это не точно
 
 
-
-#По зависимостям у нас 
+# По зависимостям у нас 
 
 BlueStacks 5.3.0
 Настройки:
@@ -42,6 +41,6 @@ pip install loguru==0.5.3
 
 pip install pure-python-adb==0.3.0
 
-pip install Pillow 8.4.0
+pip install Pillow==8.4.0
 
 pip install PyQt5
