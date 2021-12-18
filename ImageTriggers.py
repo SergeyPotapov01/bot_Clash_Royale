@@ -1,8 +1,5 @@
 import io
 
-import cv2
-import pytesseract
-
 from PIL import Image
 from loguru import logger
 
