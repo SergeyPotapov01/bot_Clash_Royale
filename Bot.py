@@ -5,7 +5,7 @@ class Bot:
     def __init__(self, port):
         self.ADB = ADB_server(port=port)
 
-    def runBattleMode(self, mode=1):
+    def runBattleMode(self, mode=2):
         self.ADB.click(400, 630)
         if mode == 1:
             self.ADB.click(420, 400)
@@ -20,6 +20,9 @@ class Bot:
 
     def rewardLimit(self):
         self.ADB.click(276, 600)
+
+    def getRewardChest(self, number):
+        self.ADB.click(-25 + number * 120, 780)
 
     def openChest(self, number):
         self.ADB.click(-25 + number * 120, 780)
