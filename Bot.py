@@ -1,3 +1,5 @@
+from time import sleep
+
 from ADB_server import ADB_server
 
 
@@ -7,6 +9,7 @@ class Bot:
 
     def runBattleMode(self, mode=2):
         self.ADB.click(400, 630)
+        sleep(0.5)
         if mode == 1:
             self.ADB.click(420, 400)
         else:
@@ -26,11 +29,14 @@ class Bot:
 
     def openChest(self, number):
         self.ADB.click(-25 + number * 120, 780)
+        sleep(0.5)
         self.ADB.click(276, 625)
 
     def returnHome(self):
         self.ADB.click(500, 920)
+        sleep(0.5)
         self.ADB.click(220, 920)
+        sleep(0.5)
 
     def goToClanChat(self):
         self.ADB.click(371, 911)
@@ -43,6 +49,7 @@ class Bot:
 
     def swipeRequestCard(self):
         self.ADB.swipe(250, 800, 250, 297)
+        sleep(0.5)
 
     def goToEvents(self):
         self.ADB.click(520, 930)
@@ -73,13 +80,18 @@ class Bot:
 
     def setEnglishLanguage(self):
         self.ADB.click(500, 100)
+        sleep(0.5)
         self.ADB.click(325, 470)
+        sleep(0.5)
         self.ADB.click(160, 570)
+        sleep(0.5)
         self.ADB.click(275, 235)
+        sleep(0.5)
         self.ADB.click(370, 590)
 
     def reboot(self):
         self.ADB.closeCR()
+        sleep(2)
         self.ADB.openCR()
 
     def openCR(self):

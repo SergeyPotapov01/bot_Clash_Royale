@@ -14,6 +14,7 @@ from ImageTriggers import ImageTriggers
 
 from PyQt5 import QtCore, QtWidgets, QtGui
 
+
 class MyThread(QtCore.QThread):
     def __init__(self, parent=None):
         QtCore.QThread.__init__(self, parent)
@@ -27,7 +28,8 @@ class MyThread(QtCore.QThread):
         else:
             self.farm = True
             threading.Thread(target=self.bot.startFarm).start()
-            
+
+
 class Ui_MainWindow(object):
     mySignal = QtCore.pyqtSignal(str)
 

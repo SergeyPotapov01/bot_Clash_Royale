@@ -19,10 +19,13 @@ class Strategics:
         self.cycleStart = False
 
     def main(self, combatMode=2):
+
         if self.bot.ADB.cheakInstallCR() == False:
             self.cycleStart = False
+
         if self.bot.ADB.cheakRunCR() == False:
             self.bot.openCR()
+
         indexBatle = 0
         while self.cycleStart:
             t = time.time()
@@ -50,6 +53,7 @@ class Strategics:
                     continue
                 self.bot.selectCard(randint(0, 3))
                 self.bot.placingCard1X1(randint(275, 475), randint(426, 700))
+
             elif trigger == 121:
                 indexBatle += 1
                 self.bot.exitBatle1X1()
@@ -57,6 +61,7 @@ class Strategics:
                     self.bot.reboot()
                     indexBatle = 0
                 time.sleep(3)
+
             elif trigger == 122:
                 self.bot.exitBatle2X2()
                 indexBatle += 1
@@ -64,8 +69,10 @@ class Strategics:
                     self.bot.reboot()
                     indexBatle = 0
                 time.sleep(3)
+
             elif trigger == 123:
                 self.bot.closeChatBatle2X2()
+
             elif trigger == 124:
                 self.bot.ADB.click(400, 420)
 
@@ -85,6 +92,15 @@ class Strategics:
             elif trigger == 250:
                 self.bot.rewardLimit()
 
+            elif trigger == 270:
+                self.index += 1
+                if self.index >= 5:
+                    self.bot.setEnglishLanguage()
+                else:
+                    self.bot.returnHome()
+                    time.sleep(2)
+                    continue
+
             elif trigger == 400:
                 time.sleep(120)
                 self.bot.exitBatle1X1()
@@ -98,9 +114,3 @@ class Strategics:
 
     def stopFarm(self):
         self.cycleStart = False
-
-if __name__ == '__main__':
-    x = Strategics()
-    while True:
-        image = x.bot.getScreen()
-        triggers = x.triggers.getTrigger(image)

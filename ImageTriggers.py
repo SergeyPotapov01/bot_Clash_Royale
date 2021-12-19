@@ -6,7 +6,17 @@ from loguru import logger
 
 class ImageTriggers:
     def __init__(self):
+        self.index2X2 = False
         self.image = None
+        self.imageCheakEnglishLanguage = Image.open('imageTrigger/EnglishLanguage.png')
+
+    def _cheakEnglishLanguage(self):
+        image = self.image.crop((231, 934, 306, 955))
+        for x in range(75):
+            for y in range(21):
+                if image.getpixel((x, y)) != self.imageCheakEnglishLanguage.getpixel((x, y)):
+                    return True
+        return False
 
     def _getNumeberCrown(self):
         if self.image.getpixel((401, 462)) == (200, 111, 22, 255) or self.image.getpixel((401, 462)) == (49, 54, 54, 255):
@@ -29,12 +39,14 @@ class ImageTriggers:
         for image in Chests:
             width, height = image.size
             sumPixel = [0, 0, 0]
-            for i in range(0, width):
-                for j in range(0, height):
-                    pixel = image.getpixel((i, j))
+
+            for x in range(0, width):
+                for y in range(0, height):
+                    pixel = image.getpixel((x, y))
                     sumPixel[0] += pixel[0]
                     sumPixel[1] += pixel[1]
                     sumPixel[2] += pixel[2]
+
             sumPixelChests.append(sumPixel)
 
         meanPixels = []
@@ -83,23 +95,42 @@ class ImageTriggers:
         error = 1 if self != 0 else 0
         return round(sumPixel / 37) + error
 
+
     def getTrigger(self, img):
         self.image = Image.open(io.BytesIO(img))
 
         if self.image.getpixel((40, 790)) == (255, 255, 255, 255):  # тригер на облачко
+
             if self.image.getpixel((529, 950)) == (7, 71, 144, 255):  # тригер нижнию часть экрана
                 return (100, self._getElixir())  # тригер на бой
-            if self.image.getpixel((300, 840)) == (104, 187, 255, 255):  # тригер на кнопку выйти
-                logger.info(self._getNumeberCrown())
-                return (121, self._getNumeberCrown())  # тригер на конец боя 1х1
-        if self.image.getpixel((508, 38)) == (242, 43, 39, 255):
-            return (123, None)  # тригер на закрытие чата в после боя 2х2
-        if self.image.getpixel((526, 951)) == (52, 66, 83, 255):  # тригер нижнию часть экрана при игре 2х2
-            logger.info(self._getNumeberCrown())
-            return (122, self._getNumeberCrown())  # тригер на конец боя 2х2
-        if self.image.getpixel((40, 790)) == (255, 255, 255, 255):
-            return (124, None) # тригер на облачко
 
+            if self.image.getpixel((300, 840)) == (104, 187, 255, 255):  # тригер на кнопку выйти
+                if self.index2X2:
+                    return (121, None)  # тригер на закрытие чата в после боя 2х2
+                else:
+                    self.index2X2 = True
+                    logger.info(self._getNumeberCrown())
+                    return (124, None)  # тригер на конец боя 1х1
+
+        if self.image.getpixel((508, 38)) == (242, 43, 39, 255):
+            if self.index2X2:
+                return (123, None)  # тригер на закрытие чата в после боя 2х2
+            else:
+                self.index2X2 = True
+                return (124, None)
+
+        if self.image.getpixel((526, 951)) == (52, 66, 83, 255):  # тригер нижнию часть экрана при игре 2х2
+            if self.index2X2:
+                return (123, None)  # тригер на закрытие чата в после боя 2х2
+            else:
+                self.index2X2 = True
+                logger.info(self._getNumeberCrown())
+                return (124, None)  # тригер на конец боя 2х2
+
+        if self.image.getpixel((40, 790)) == (255, 255, 255, 255):
+            return (124, None)
+
+        self.index2X2 = False
 
         if self.image.getpixel((530, 944)) == (64, 76, 95, 255):  # пиксель на кропку эвента если она не активка
             if self.image.getpixel((272, 893)) == (216, 234, 246, 255):  # пиксель на кропку эвента если она не активка
@@ -112,6 +143,10 @@ class ImageTriggers:
 
                 if self._getTriggerOpenedChest():
                     return (230 + self._getTriggerOpenedChest(), None)
+
+                if self._cheakEnglishLanguage():
+                    return (270, None)
+
                 return (200, None)  # тригер на меню
 
         if self.image.getpixel((267, 431)) == (255, 200, 88, 255):  # пиксель всплывающего окна лимита
@@ -119,6 +154,7 @@ class ImageTriggers:
 
         if self.image.getpixel((442, 906)) == (154, 205, 255, 255):
             return (300, None)  # тригер на пиксель экрана поиска боя
+
         if self.image.getpixel((14, 945)) == (24, 113, 216, 255):
             return (301, None)  # тригер на пиксель экрана загрузки
 
