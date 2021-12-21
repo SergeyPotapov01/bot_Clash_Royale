@@ -18,7 +18,7 @@ class Strategics:
     def cycleStoped(self):
         self.cycleStart = False
 
-    def main(self, combatMode=2):
+    def main(self, combatMode=0):
 
         if self.bot.ADB.cheakInstallCR() == False:
             self.cycleStart = False

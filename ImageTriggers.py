@@ -11,12 +11,7 @@ class ImageTriggers:
         self.imageCheakEnglishLanguage = Image.open('imageTrigger/EnglishLanguage.png')
 
     def _cheakEnglishLanguage(self):
-        image = self.image.crop((231, 934, 306, 955))
-        for x in range(75):
-            for y in range(21):
-                if image.getpixel((x, y)) != self.imageCheakEnglishLanguage.getpixel((x, y)):
-                    return True
-        return False
+        pass
 
     def _getNumeberCrown(self):
         if self.image.getpixel((401, 462)) == (200, 111, 22, 255) or self.image.getpixel((401, 462)) == (49, 54, 54, 255):
@@ -106,25 +101,20 @@ class ImageTriggers:
 
             if self.image.getpixel((300, 840)) == (104, 187, 255, 255):  # тригер на кнопку выйти
                 if self.index2X2:
+                    self.index2X2 = False
+                    logger.info(self._getNumeberCrown())
                     return (121, None)  # тригер на закрытие чата в после боя 2х2
                 else:
                     self.index2X2 = True
-                    logger.info(self._getNumeberCrown())
                     return (124, None)  # тригер на конец боя 1х1
-
-        if self.image.getpixel((508, 38)) == (242, 43, 39, 255):
-            if self.index2X2:
-                return (123, None)  # тригер на закрытие чата в после боя 2х2
-            else:
-                self.index2X2 = True
-                return (124, None)
 
         if self.image.getpixel((526, 951)) == (52, 66, 83, 255):  # тригер нижнию часть экрана при игре 2х2
             if self.index2X2:
-                return (123, None)  # тригер на закрытие чата в после боя 2х2
+                self.index2X2 = False
+                logger.info(self._getNumeberCrown())
+                return (122, None)  # тригер на закрытие чата в после боя 2х2
             else:
                 self.index2X2 = True
-                logger.info(self._getNumeberCrown())
                 return (124, None)  # тригер на конец боя 2х2
 
         if self.image.getpixel((40, 790)) == (255, 255, 255, 255):
@@ -143,9 +133,6 @@ class ImageTriggers:
 
                 if self._getTriggerOpenedChest():
                     return (230 + self._getTriggerOpenedChest(), None)
-
-                if self._cheakEnglishLanguage():
-                    return (270, None)
 
                 return (200, None)  # тригер на меню
 
