@@ -4,13 +4,16 @@ from random import randint
 from Bot import Bot
 from ImageTriggers import ImageTriggers
 
+from loguru import  logger
+
 
 class Strategics:
-    def __init__(self, port=5555):
+    def __init__(self, batlleMode, port='5555'):
         self.bot = Bot(port=port)
         self.triggers = ImageTriggers()
         self.index = 0
         self.cycleStart = False
+        self.batlleMode = batlleMode
 
     def cycleStarted(self):
         self.cycleStart = True
@@ -18,7 +21,7 @@ class Strategics:
     def cycleStoped(self):
         self.cycleStart = False
 
-    def main(self, combatMode=0):
+    def main(self):
 
         if self.bot.ADB.cheakInstallCR() == False:
             self.cycleStart = False
@@ -43,13 +46,13 @@ class Strategics:
 
             if trigger == 0:
                 self.index += 1
-                print('Не найден триггер')
+                logger.debug('Не найден триггер')
                 time.sleep(1)
                 continue
 
             elif trigger == 100:
                 if triggers[1] < 4:
-                    print('МАЛО ЭЛИКА')
+                    logger.debug('МАЛО ЭЛИКА')
                     continue
                 self.bot.selectCard(randint(0, 3))
                 self.bot.placingCard1X1(randint(275, 475), randint(426, 700))
@@ -70,21 +73,21 @@ class Strategics:
                     indexBatle = 0
                 time.sleep(3)
 
-            elif trigger == 123:
-                self.bot.closeChatBatle2X2()
-
             elif trigger == 124:
                 self.bot.ADB.click(400, 420)
 
             elif trigger == 200:
-                if combatMode == 0:
+                if self.batlleMode == 'global':
                     self.bot.runBattleGlobal()
                 else:
-                    self.bot.runBattleMode(combatMode)
+                    self.bot.runBattleMode(self.batlleMode)
                 time.sleep(1)
 
             elif trigger > 220 and trigger < 225:
                 self.bot.getRewardChest(trigger - 220)
+
+            elif trigger == 225:
+                self.bot.returnHome()
 
             elif trigger > 230 and trigger < 235:
                 self.bot.openChest(trigger - 230)
@@ -106,7 +109,7 @@ class Strategics:
                 self.bot.exitBatle1X1()
 
             self.index = 0
-            print(triggers, time.time() - t)
+            logger.debug(str(triggers) + ' ' + str(time.time() - t))
 
     def startFarm(self):
         self.cycleStart = True

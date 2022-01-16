@@ -3,12 +3,12 @@ import io
 from PIL import Image
 from loguru import logger
 
+from time import  time
 
 class ImageTriggers:
     def __init__(self):
         self.index2X2 = False
         self.image = None
-        self.imageCheakEnglishLanguage = Image.open('imageTrigger/EnglishLanguage.png')
 
     def _cheakEnglishLanguage(self):
         pass
@@ -74,6 +74,16 @@ class ImageTriggers:
     def _getTextError(self):
         i = self.image.crop((40, 370, 495, 540))
         return 'TEXT ERROR'
+    
+    def _getCardsInBatlle(self):
+        card = [
+            self.image.crop((122, 775, 214, 911)),
+            self.image.crop((224, 775, 316, 911)),
+            self.image.crop((322, 775, 414, 911)),
+            self.image.crop((427, 775, 519, 911)),
+        ]
+        for i in card:
+            pass
 
     def _getElixir(self):
         arrayPixel = self.image.crop((184, 937, 516, 938))
@@ -88,7 +98,7 @@ class ImageTriggers:
                 sumPixel += 1
 
         error = 1 if self != 0 else 0
-        return round(sumPixel / 37) + error
+        return round(sumPixel / 35) + error
 
 
     def getTrigger(self, img):
@@ -97,6 +107,7 @@ class ImageTriggers:
         if self.image.getpixel((40, 790)) == (255, 255, 255, 255):  # тригер на облачко
 
             if self.image.getpixel((529, 950)) == (7, 71, 144, 255):  # тригер нижнию часть экрана
+                self._getCardsInBatlle()
                 return (100, self._getElixir())  # тригер на бой
 
             if self.image.getpixel((300, 840)) == (104, 187, 255, 255):  # тригер на кнопку выйти
@@ -136,6 +147,9 @@ class ImageTriggers:
 
                 return (200, None)  # тригер на меню
 
+        if self.image.getpixel((47, 539)) == (7, 49, 74, 255):
+            return (225, None)
+
         if self.image.getpixel((267, 431)) == (255, 200, 88, 255):  # пиксель всплывающего окна лимита
             return (250, None)  # тригер на лимит наград
 
@@ -150,4 +164,3 @@ class ImageTriggers:
                 return (400, self._getTextError())  # тригер на потерю соединения либо подключения другого устройства
 
         return (0, None)  # В случае если не нашел тригеров
-
