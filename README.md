@@ -7,8 +7,6 @@ Bug Report: https://t.me/leninka20
 
 
 
-отсутвует автооткрытие сундуков
-
 отсутствует переключеник между аккаунтами ссид
 
 Отсутствует определение колличество элексира
@@ -17,8 +15,6 @@ Bug Report: https://t.me/leninka20
 
 отсутствует стратегия
 
-отсутствует распознание колоды
-
 отсутствует распознание юнитов на поле
 
 отсутствует счетчик элексира противника
@@ -26,6 +22,8 @@ Bug Report: https://t.me/leninka20
 отсутствует считыватель колоды противника
 
 надо сделать интерфейс красивым, но это не точно
+
+надо сделать интерфейс
 
 
 # По зависимостям у нас 
@@ -37,10 +35,14 @@ BlueStacks 5.3.0
 
 Включенный ADB в настройках блюстакса
 
+python 3.7+ 64 bit
+
+pip install tensorflow
+
 pip install loguru==0.5.3
 
-pip install pure-python-adb==0.3.0
+pip install pure-python-adb
 
-pip install Pillow==8.4.0
+pip install Pillow
 
 pip install PyQt5
