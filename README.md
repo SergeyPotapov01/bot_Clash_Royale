@@ -37,6 +37,8 @@ BlueStacks 5.3.0
 
 python 3.7+ 64 bit
 
+pip install opencv-python
+
 pip install tensorflow
 
 pip install loguru==0.5.3
