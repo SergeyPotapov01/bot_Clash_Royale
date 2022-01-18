@@ -1,14 +1,17 @@
 import io
 
+import neural_networks
+
 from PIL import Image
 from loguru import logger
 
-from time import  time
+from time import time
 
 class ImageTriggers:
     def __init__(self):
         self.index2X2 = False
         self.image = None
+        self.x = neural_networks.CardInBatlle()
 
     def _cheakEnglishLanguage(self):
         pass
@@ -77,13 +80,17 @@ class ImageTriggers:
     
     def _getCardsInBatlle(self):
         card = [
-            self.image.crop((122, 775, 214, 911)),
-            self.image.crop((224, 775, 316, 911)),
-            self.image.crop((322, 775, 414, 911)),
-            self.image.crop((427, 775, 519, 911)),
+            self.image.crop((142, 815, 194, 871)),
+            self.image.crop((244, 815, 296, 871)),
+            self.image.crop((342, 815, 394, 871)),
+            self.image.crop((447, 815, 499, 871)),
         ]
+        z = []
         for i in card:
-            pass
+            i = i.resize((26, 28))
+            i.save(f'1231/{time()}.png')
+            z.append(self.x.predict(i))
+        return z
 
     def _getElixir(self):
         arrayPixel = self.image.crop((184, 937, 516, 938))
@@ -107,8 +114,7 @@ class ImageTriggers:
         if self.image.getpixel((40, 790)) == (255, 255, 255, 255):  # тригер на облачко
 
             if self.image.getpixel((529, 950)) == (7, 71, 144, 255):  # тригер нижнию часть экрана
-                self._getCardsInBatlle()
-                return (100, self._getElixir())  # тригер на бой
+                return (100, self._getElixir(), self._getCardsInBatlle())  # тригер на бой
 
             if self.image.getpixel((300, 840)) == (104, 187, 255, 255):  # тригер на кнопку выйти
                 if self.index2X2:

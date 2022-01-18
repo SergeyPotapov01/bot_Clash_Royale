@@ -30,11 +30,12 @@ class Strategics:
             self.bot.openCR()
 
         indexBatle = 0
+        t = time.time()
         while self.cycleStart:
-            t = time.time()
             image = self.bot.getScreen()
             triggers = self.triggers.getTrigger(image)
             trigger = triggers[0]
+            logger.debug(str(triggers) + ' ' + str(time.time() - t))
 
             if self.index == 30:
                 self.bot.returnHome()
@@ -51,9 +52,57 @@ class Strategics:
                 continue
 
             elif trigger == 100:
-                if triggers[1] < 4:
-                    logger.debug('МАЛО ЭЛИКА')
+                if 'Golem' in triggers[2]:
+                    self.bot.selectCard(triggers[2].index('Golem'))
+                    if triggers[1] >= 8:
+                        self.bot.placingCard1X1(275, 700)
+                    else:
+                        time.sleep((8 - triggers[1]) * 2)
+                        image = self.bot.getScreen()
+                        if self.triggers.getTrigger(image)[0] != 100:
+                            continue
+                        self.bot.placingCard1X1(275, 700)
+                    time.sleep(9)
+                    if 'Witch' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Witch'))
+                        self.bot.placingCard1X1(275, 700)
+                    elif 'Night_Witch' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Night_Witch'))
+                        self.bot.placingCard1X1(275, 700)
+                    else:
+                        self.bot.selectCard(triggers[2].index('Golem'))
+                        self.bot.placingCard1X1(275, 700)
+                    time.sleep(9)
+                    image = self.bot.getScreen()
+                    if self.triggers.getTrigger(image)[0] != 100:
+                        continue
+                    self.bot.selectCard(randint(0, 3))
+                    self.bot.placingCard1X1(475, 550)
+                    time.sleep(9)
+                    image = self.bot.getScreen()
+                    if self.triggers.getTrigger(image)[0] != 100:
+                        continue
+                    self.bot.selectCard(randint(0, 3))
+                    self.bot.placingCard1X1(390, 450)
                     continue
+
+                if 'Hog_Rider' in triggers[2]:
+                    self.bot.selectCard(triggers[2].index('Hog_Rider'))
+                    if triggers[1] >= 4:
+                        self.bot.placingCard1X1(475, 426)
+                    else:
+                        time.sleep((4 - triggers[1]) * 2)
+                        self.bot.placingCard1X1(475, 426)
+
+                if 'Cannon' in triggers[2]:
+                    self.bot.selectCard(triggers[2].index('Cannon'))
+                    if triggers[1] >= 4:
+                        self.bot.placingCard1X1(275, 600)
+                    else:
+                        time.sleep((4 - triggers[1]) * 2)
+                        self.bot.placingCard1X1(275, 600)
+                    continue
+
                 self.bot.selectCard(randint(0, 3))
                 self.bot.placingCard1X1(randint(275, 475), randint(426, 700))
 
@@ -88,6 +137,7 @@ class Strategics:
 
             elif trigger == 225:
                 self.bot.returnHome()
+                time.sleep(0.5)
 
             elif trigger > 230 and trigger < 235:
                 self.bot.openChest(trigger - 230)
@@ -109,7 +159,8 @@ class Strategics:
                 self.bot.exitBatle1X1()
 
             self.index = 0
-            logger.debug(str(triggers) + ' ' + str(time.time() - t))
+            time.sleep(0.3)
+            t = time.time()
 
     def startFarm(self):
         self.cycleStart = True
