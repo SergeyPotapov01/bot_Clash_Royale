@@ -48,4 +48,4 @@ class ElixirInBatlle:
         except ValueError:
             pass
 
-        return self._elexir
+        return self._elixir
