@@ -26,6 +26,8 @@ Bug Report: https://t.me/leninka20
 
 # По зависимостям у нас 
 
+Tesseract-osr
+
 BlueStacks 5.3.0
 Настройки:
 
