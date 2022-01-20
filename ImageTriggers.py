@@ -2,19 +2,26 @@ import io
 
 import neural_networks
 
+import pytesseract
+
 from PIL import Image
 from loguru import logger
 
 from time import time
 
+
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+
 class ImageTriggers:
     def __init__(self):
         self.index2X2 = False
         self.image = None
-        self.x = neural_networks.CardInBatlle()
+        self.recognitionCard = neural_networks.CardInBatlle()
+        self.recognitionElixir = neural_networks.ElixirInBatlle()
 
-    def _cheakEnglishLanguage(self):
-        pass
+    def _cheakTimeInBatlle(self):
+        i = self.image.crop((450, 0, 538, 53))
 
     def _getNumeberCrown(self):
         if self.image.getpixel((401, 462)) == (200, 111, 22, 255) or self.image.getpixel((401, 462)) == (49, 54, 54, 255):
@@ -52,13 +59,13 @@ class ImageTriggers:
             meanPixel = [sumPixelChest[0]/25, sumPixelChest[1]/25, sumPixelChest[2]/25]
             meanPixels.append(meanPixel)
 
-        index = 0
+        indexChest = 0
         for meanPixel in meanPixels:
-            index += 1
+            indexChest += 1
             if meanPixel[0] == 255.0:
                 if meanPixel[1] >= 229.0 and meanPixel[2] <= 255.0:
                     if meanPixel[2] >= 84.0 and meanPixel[2] <= 112.1:
-                        return index
+                        return indexChest
 
     def _getTriggerOpenedChest(self):
         chestsPixel = [
@@ -68,45 +75,36 @@ class ImageTriggers:
             self.image.getpixel((452, 701)),
         ]
 
-        index = 0
+        indexChest = 0
         for pixel in chestsPixel:
-            index += 1
+            indexChest += 1
             if pixel == (255, 255, 255, 255):
-                return index
+                return indexChest
 
     def _getTextError(self):
         i = self.image.crop((40, 370, 495, 540))
-        return 'TEXT ERROR'
+        return pytesseract.image_to_string(i).strip()
     
     def _getCardsInBatlle(self):
-        card = [
+        imageCards = [
             self.image.crop((142, 815, 194, 871)),
             self.image.crop((244, 815, 296, 871)),
             self.image.crop((342, 815, 394, 871)),
             self.image.crop((447, 815, 499, 871)),
         ]
-        z = []
-        for i in card:
-            i = i.resize((26, 28))
-            i.save(f'1231/{time()}.png')
-            z.append(self.x.predict(i))
-        return z
+
+        cards = []
+        for card in imageCards:
+            card = card.resize((26, 28))
+            card = self.recognitionCard.predict(card)
+            cards.append(card)
+
+        return cards
 
     def _getElixir(self):
-        arrayPixel = self.image.crop((184, 937, 516, 938))
-        sumPixel = 0
-
-        if self.image.getpixel((519, 940)) != (2, 25, 88, 255):
-            return 10
-
-        for index in range(330):
-            pixel = arrayPixel.getpixel((index, 0))
-            if pixel == (210, 34, 216, 255):
-                sumPixel += 1
-
-        error = 1 if self != 0 else 0
-        return round(sumPixel / 35) + error
-
+        elixir = self.image.crop((142, 912, 182, 940))
+        elixir = elixir.resize((20, 14))
+        return self.recognitionElixir.predict(elixir)
 
     def getTrigger(self, img):
         self.image = Image.open(io.BytesIO(img))

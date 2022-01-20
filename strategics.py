@@ -52,17 +52,42 @@ class Strategics:
                 continue
 
             elif trigger == 100:
+
+                if 'Goblin_Gang' in triggers[2]:
+                    self.bot.selectCard(triggers[2].index('Goblin_Gang'))
+                    if triggers[1] >= 3:
+                        self.bot.placingCard1X1(260, 700)
+                    else:
+                        time.sleep((3 - triggers[1]) * 2)
+                        image = self.bot.getScreen()
+                        if self.triggers.getTrigger(image)[0] != 100:
+                            continue
+                        self.bot.placingCard1X1(250, 515)
+                    continue
+
+                if 'Princess' in triggers[2]:
+                    self.bot.selectCard(triggers[2].index('Princess'))
+                    if triggers[1] >= 3:
+                        self.bot.placingCard1X1(260, 700)
+                    else:
+                        time.sleep((3 - triggers[1]) * 2)
+                        image = self.bot.getScreen()
+                        if self.triggers.getTrigger(image)[0] != 100:
+                            continue
+                        self.bot.placingCard1X1(260, 700)
+                    continue
+
                 if 'Golem' in triggers[2]:
                     self.bot.selectCard(triggers[2].index('Golem'))
                     if triggers[1] >= 8:
                         self.bot.placingCard1X1(275, 700)
                     else:
-                        time.sleep((8 - triggers[1]) * 2)
+                        time.sleep((7 - triggers[1]) * 2)
                         image = self.bot.getScreen()
                         if self.triggers.getTrigger(image)[0] != 100:
                             continue
                         self.bot.placingCard1X1(275, 700)
-                    time.sleep(9)
+                    time.sleep(7)
                     if 'Witch' in triggers[2]:
                         self.bot.selectCard(triggers[2].index('Witch'))
                         self.bot.placingCard1X1(275, 700)
@@ -72,13 +97,13 @@ class Strategics:
                     else:
                         self.bot.selectCard(triggers[2].index('Golem'))
                         self.bot.placingCard1X1(275, 700)
-                    time.sleep(9)
+                    time.sleep(7)
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
                     self.bot.placingCard1X1(475, 550)
-                    time.sleep(9)
+                    time.sleep(6)
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
@@ -93,14 +118,15 @@ class Strategics:
                     else:
                         time.sleep((4 - triggers[1]) * 2)
                         self.bot.placingCard1X1(475, 426)
+                    continue
 
                 if 'Cannon' in triggers[2]:
                     self.bot.selectCard(triggers[2].index('Cannon'))
                     if triggers[1] >= 4:
-                        self.bot.placingCard1X1(275, 600)
+                        self.bot.placingCard1X1(250, 515)
                     else:
                         time.sleep((4 - triggers[1]) * 2)
-                        self.bot.placingCard1X1(275, 600)
+                        self.bot.placingCard1X1(250, 515)
                     continue
 
                 self.bot.selectCard(randint(0, 3))

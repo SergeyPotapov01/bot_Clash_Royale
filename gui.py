@@ -18,7 +18,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 class MyThread(QtCore.QThread):
     def __init__(self, parent=None):
         QtCore.QThread.__init__(self, parent)
-        self.bot = Strategics('mode_2')
+        self.bot = Strategics('global')
         self.farm = False
 
     def run(self):

@@ -21,7 +21,7 @@ class CardInBatlle:
                             'Rocket', 'Royal_Delivery', 'Royal_Ghost', 'Royal_Giant', 'Royal_Hogs', 'Royal_Recruits',
                             'Skeleton_Army', 'Skeleton_Barrel', 'Skeleton_Dragons', 'Skeleton_King', 'Skeletons',
                             'Sparky', 'Spear_Goblins', 'Tesla', 'The_Log', 'Three_Musketeers', 'Tombstone', 'Tornado',
-                            'Valkyrie', 'Wall_Breakers', 'Witch', 'Wizard', 'X-Bow', 'Zap', 'Zappies']
+                            'Valkyrie', 'Wall_Breakers', 'Witch', 'Wizard', 'X-Bow', 'Zap', 'Zappies', 'МУСОР']
 
     def predict(self, image):
         image = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGBA2RGB)
@@ -30,3 +30,22 @@ class CardInBatlle:
         prediction = self.model.predict(image)
         prediction = np.argmax(prediction)
         return self.class_names[prediction]
+
+class ElixirInBatlle:
+    def __init__(self):
+        self.model = load_model('neural_networks/Elixir.h5')
+        self.class_names = ['0', '1', '10', '2', '3', '4', '5', '6', '7', '8', '9', 'МУСОР']
+        self._elixir = 0
+
+    def predict(self, image):
+        image = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGBA2RGB)
+        image = image.astype("float") / 255.0
+        image = image.reshape(1, 840)
+        prediction = self.model.predict(image)
+        prediction = np.argmax(prediction)
+        try:
+            self._elixir = int(self.class_names[prediction])
+        except ValueError:
+            pass
+
+        return self.elexir
