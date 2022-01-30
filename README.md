@@ -26,7 +26,13 @@ Bug Report: https://t.me/leninka20
 
 # По зависимостям у нас 
 
+Установить с++
+https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170
+
+
 Tesseract-osr
+https://github.com/UB-Mannheim/tesseract/wiki
+
 
 BlueStacks 5.3.0
 Настройки:
