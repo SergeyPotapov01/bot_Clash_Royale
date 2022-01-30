@@ -47,10 +47,12 @@ pip install opencv-python
 
 pip install tensorflow
 
-pip install loguru==0.5.3
+pip install loguru
 
 pip install pure-python-adb
 
 pip install Pillow
 
 pip install PyQt5
+
+pip install pytesseract
