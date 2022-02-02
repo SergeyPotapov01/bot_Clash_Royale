@@ -49,7 +49,9 @@ https://github.com/UB-Mannheim/tesseract/wiki
 Install BlueStacks 5.3.0+
 
 Then:
+
 BlueStacks > Settings > Display > 960x540
+
 BlueStacks > Settings > Preferences > Enable Android Debug Bridge (ADB)
 
 Install Python 3.7+ 64 bit
