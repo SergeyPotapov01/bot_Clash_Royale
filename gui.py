@@ -494,7 +494,13 @@ class Ui_MainWindow(object):
             self.thread.run()
 
     def getTrigger(self):
-        self._textBrowser_3 += 'Получен тригер: ' + str(ImageTriggers().getTrigger(self.bot.bot.getScreen())) + '\n'
+        x = ImageTriggers().getTriggerDEBUG(self.bot.bot.getScreen())
+        s = ''
+        for i in x:
+            for j in i:
+                s += str(j)
+            s += '\n'
+        self._textBrowser_3 += 'Получен тригер: ' + s + '\n'
         self.textBrowser_3.setText(self._textBrowser_3)
 
     def reboot(self):
