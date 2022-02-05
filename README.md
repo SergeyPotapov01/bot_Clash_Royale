@@ -6,10 +6,32 @@ Clash Royale crowns farming BOT
 Game Bot example
 https://www.youtube.com/watch?v=udde0HUNdYE
 
+telegram channel:
+https://t.me/bot_Clash_Royale
 
 Bug Report:
 https://t.me/leninka20
 
+
+# Install for users
+
+Download and unzip the archive with the latest version of the bot from the telegram channel https://t.me/bot_Clash_Royale
+
+Install с++
+https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170
+
+Install Tesseract-osr
+https://github.com/UB-Mannheim/tesseract/wiki
+
+Install BlueStacks 5.3.0+
+
+Then:
+
+BlueStacks > Settings > Display > 960x540
+
+BlueStacks > Settings > Preferences > Enable Android Debug Bridge (ADB)
+
+#
 
 Current features:
 
@@ -36,15 +58,14 @@ Further features:
 9) Self-learning neural network that increases gaming level
 10) Multilanguage
 
-# Install
+
+# Install for developers
 
 Install с++
 https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170
 
-
 Install Tesseract-osr
 https://github.com/UB-Mannheim/tesseract/wiki
-
 
 Install BlueStacks 5.3.0+
 
