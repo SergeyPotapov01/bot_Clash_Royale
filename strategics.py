@@ -8,9 +8,9 @@ from loguru import logger
 
 
 class Strategics:
-    def __init__(self, batlleMode, port='5555'):
+    def __init__(self, batlleMode, open_chest, requested_card, port):
         self.bot = Bot(port=port)
-        self.triggers = ImageTriggers()
+        self.triggers = ImageTriggers(open_chest, requested_card)
         self.index = 0
         self.cycleStart = False
         self.batlleMode = batlleMode

@@ -15,7 +15,7 @@ class Bot:
         self.ADB.click(400, 630)
         sleep(0.5)
         if mode == 'mode_1':
-            self.ADB.click(420, 400)
+            self.ADB.click(420, 396)
         elif mode == 'mode_2':
             self.ADB.click(420, 644)
         elif mode == '2X2':
@@ -129,3 +129,6 @@ class Bot:
     def getScreen(self):
         logger.debug('Bot.getScreen')
         return self.ADB.getScreen()
+
+    def x(self):
+        print('Рандомная карта')

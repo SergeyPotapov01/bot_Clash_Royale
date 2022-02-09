@@ -12,34 +12,58 @@ import threading
 from strategics import Strategics
 from ImageTriggers import ImageTriggers
 
+from loguru import logger
 from PyQt5 import QtCore, QtWidgets, QtGui
+from keras.models import load_model
 
 
 class MyThread(QtCore.QThread):
-    def __init__(self, parent=None):
+    def __init__(self, mode, open_chest, requested_card, port, parent=None):
         QtCore.QThread.__init__(self, parent)
-        self.bot = Strategics('global')
         self.farm = False
+        self.bot = Strategics(mode, open_chest, requested_card, port)
 
-    def run(self):
+    def run(self, mode, open_chest, requested_card, port):
         if self.farm:
             self.farm = False
             self.bot.stopFarm()
         else:
             self.farm = True
+            self.bot = Strategics(mode, open_chest, requested_card, port)
             threading.Thread(target=self.bot.startFarm).start()
-
 
 class Ui_MainWindow(object):
     mySignal = QtCore.pyqtSignal(str)
 
     def __init__(self):
         self.farm = False
-        self._textBrowser = ''
-        self._textBrowser_2 = ''
         self._textBrowser_3 = ''
-        self.thread = MyThread()
-        self.bot = self.thread.bot
+        self._textBrowser_2 = ''
+        self._textBrowser = 'Получено корон\nВремя игры\nКолличество боев\nИзменения по кубкам'
+        self._mode = 'global'
+        self._card_request = 'Skeletons'
+        self.request_card = False
+        self.open_chest = False
+        self.bot = None
+        self.port = 5555
+        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port)
+        self.list_mode = ['global', 'mode_1', 'mode_2', '2X2']
+        self.list_card_request = [
+                                    'Skeletons', 'Ice_Spirit', 'Fire_Spirit', 'Electro_Spirit',
+                                    'Goblins', 'Bomber', 'Spear_Goblins', 'Bats',
+                                    'Zap', 'Giant_Snowball', 'Knight', 'Archers',
+                                    'Minions', 'Goblin_Gang', 'Skeleton_Barrel', 'Firecracker',
+                                    'Cannon', 'Arrows', 'Royal_Delivery', 'Skeleton_Dragons',
+                                    'Mortar', 'Tesla', 'Barbarians', 'Minion_Horde',
+                                    'Rascals', 'Royal_Giant', 'Elite_Barbarians', 'Royal_Delivery',
+                                    'Heal_Spirit', 'Ice_Golem', 'Mega_Minion', 'Dart_Goblin',
+                                    'Elixir_Golem', 'Tombstone', 'Graveyard', 'Valkyrie',
+                                    'Musketeer', 'Mini_PEKKA', 'Hog_Rider', 'Battle_Ram',
+                                    'Zappies', 'Flying_Machine', 'Battle_Healer', 'Bomb_Tower',
+                                    'Furnace', 'Goblin_Cage', 'Fireball', 'Giant',
+                                    'Wizard', 'Royal_Hogs', 'Goblin_Hut', 'Inferno_Tower',
+                                    'Elixir_Collector', 'Rocket', 'Barbarian_Hut', 'Three_Musketeers',
+                                  ]
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -69,6 +93,7 @@ class Ui_MainWindow(object):
         self.textBrowser_2.setGeometry(QtCore.QRect(20, 291, 381, 111))
         self.textBrowser_2.setObjectName("textBrowser_2")
         self.textBrowser_3 = QtWidgets.QTextBrowser(self.Log)
+        self.textBrowser.setText(self._textBrowser)
         self.textBrowser_3.setGeometry(QtCore.QRect(20, 30, 381, 231))
         self.textBrowser_3.setObjectName("textBrowser_3")
         self.label_2 = QtWidgets.QLabel(self.Log)
@@ -86,12 +111,18 @@ class Ui_MainWindow(object):
         self.checkBox = QtWidgets.QCheckBox(self.tab_3)
         self.checkBox.setGeometry(QtCore.QRect(10, 55, 181, 41))
         self.checkBox.setObjectName("checkBox")
+        self.checkBox.setText('2')
+        self.checkBox.stateChanged.connect(self.openChest)
         self.checkBox_2 = QtWidgets.QCheckBox(self.tab_3)
         self.checkBox_2.setGeometry(QtCore.QRect(10, 100, 181, 41))
         self.checkBox_2.setObjectName("checkBox_2")
+        self.checkBox_2.setText('2')
+        self.checkBox_2.stateChanged.connect(self.requestCard)
         self.comboBox = QtWidgets.QComboBox(self.tab_3)
         self.comboBox.setGeometry(QtCore.QRect(10, 30, 151, 21))
         self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItems(self.list_mode)
+        self.comboBox.currentTextChanged.connect(self.currentTextComboBox_1)
         self.label_5 = QtWidgets.QLabel(self.tab_3)
         self.label_5.setGeometry(QtCore.QRect(200, 30, 201, 16))
         self.label_5.setObjectName("label_5")
@@ -104,6 +135,8 @@ class Ui_MainWindow(object):
         self.comboBox_2 = QtWidgets.QComboBox(self.tab_3)
         self.comboBox_2.setGeometry(QtCore.QRect(10, 145, 151, 21))
         self.comboBox_2.setObjectName("comboBox_2")
+        self.comboBox_2.addItems(self.list_card_request)
+        self.comboBox_2.currentTextChanged.connect(self.currentTextComboBox_2)
         self.label_8 = QtWidgets.QLabel(self.tab_3)
         self.label_8.setGeometry(QtCore.QRect(200, 145, 211, 16))
         self.label_8.setObjectName("label_8")
@@ -113,9 +146,11 @@ class Ui_MainWindow(object):
         self.lineEdit = QtWidgets.QLineEdit(self.tab_4)
         self.lineEdit.setGeometry(QtCore.QRect(20, 20, 111, 31))
         self.lineEdit.setObjectName("lineEdit")
+        self.lineEdit.textChanged.connect(self.adbPort)
         self.spinBox = QtWidgets.QSpinBox(self.tab_4)
         self.spinBox.setGeometry(QtCore.QRect(20, 70, 111, 25))
         self.spinBox.setObjectName("spinBox")
+        self.spinBox.valueChanged.connect(self.debug)
         self.label_9 = QtWidgets.QLabel(self.tab_4)
         self.label_9.setGeometry(QtCore.QRect(170, 30, 231, 16))
         self.label_9.setObjectName("label_9")
@@ -128,6 +163,7 @@ class Ui_MainWindow(object):
         self.spinBox_2 = QtWidgets.QSpinBox(self.tab_4)
         self.spinBox_2.setGeometry(QtCore.QRect(20, 120, 111, 25))
         self.spinBox_2.setObjectName("spinBox_2")
+        self.spinBox_2.valueChanged.connect(self.debug)
         self.tabWidget.addTab(self.tab_4, "")
         self.tab_5 = QtWidgets.QWidget()
         self.tab_5.setObjectName("tab_5")
@@ -353,9 +389,6 @@ class Ui_MainWindow(object):
         self.label.setObjectName("label")
         self.tabWidget.addTab(self.tab_2, "")
         MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -487,13 +520,15 @@ class Ui_MainWindow(object):
         if self.farm:
             self.farm = False
             self.pushButton.setText(_translate("MainWindow", "Старт"))
-            self.thread.start()
         else:
             self.farm = True
             self.pushButton.setText(_translate("MainWindow", "Стоп"))
-            self.thread.run()
+        self.thread.run(self._mode, self.open_chest, self.request_card)
 
     def getTrigger(self):
+        if self.bot == None:
+            self.textBrowser_3.setText('На данный момент не запущен бот')
+            return 0
         x = ImageTriggers().getTriggerDEBUG(self.bot.bot.getScreen())
         s = ''
         for i in x:
@@ -504,6 +539,9 @@ class Ui_MainWindow(object):
         self.textBrowser_3.setText(self._textBrowser_3)
 
     def reboot(self):
+        if self.bot == None:
+            self.textBrowser_3.setText('На данный момент не запущен бот')
+            return 0
         self.bot.bot.reboot()
 
     def logCrown(self, crown):
@@ -514,3 +552,27 @@ class Ui_MainWindow(object):
 
     def logStatistic(self, stata):
         self.textBrowser.setText(stata)
+
+    def currentTextComboBox_1(self, text):
+        logger.debug(f'Был установлен режим: {text}')
+        self._mode = text
+        print(self._mode)
+
+    def currentTextComboBox_2(self, text):
+        logger.debug(f'Была установлен карта запроса: {text}')
+        self._card_request = text
+
+    def openChest(self, event):
+        logger.debug(f'Был изменен параметр открытия сундуков на: {event}')
+        self.open_chest = bool(event)
+
+    def requestCard(self, event):
+        logger.debug(f'Был изменен параметр запроса карт на: {event}')
+        self.request_card = bool(event)
+
+    def adbPort(self, value):
+        self.port = value
+        logger.debug(f'Был изменен параметр порт подключения на: {value}')
+
+    def debug(self, text):
+        print(text, type(text))

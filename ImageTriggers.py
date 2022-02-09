@@ -10,13 +10,15 @@ from loguru import logger
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
+recognitionCard = neural_networks.CardInBatlle()
+recognitionElixir = neural_networks.ElixirInBatlle()
 
 class ImageTriggers:
-    def __init__(self):
+    def __init__(self, open_chest, requested_card):
         self.index2X2 = False
         self.image = None
-        self.recognitionCard = neural_networks.CardInBatlle()
-        self.recognitionElixir = neural_networks.ElixirInBatlle()
+        self.open_chest = open_chest
+        self.requested_card = requested_card
 
     def _cheakTimeInBatlle(self):
         i = self.image.crop((450, 0, 538, 53))
@@ -94,7 +96,7 @@ class ImageTriggers:
         cards = []
         for card in imageCards:
             card = card.resize((26, 28))
-            card = self.recognitionCard.predict(card)
+            card = recognitionCard.predict(card)
             cards.append(card)
 
         return cards
@@ -102,7 +104,7 @@ class ImageTriggers:
     def _getElixir(self):
         elixir = self.image.crop((142, 912, 182, 940))
         elixir = elixir.resize((20, 14))
-        return self.recognitionElixir.predict(elixir)
+        return recognitionElixir.predict(elixir)
 
     def getTrigger(self, img):
         self.image = Image.open(io.BytesIO(img))
@@ -137,14 +139,14 @@ class ImageTriggers:
 
         if self.image.getpixel((530, 944))[0:3] == (64, 76, 95):  # пиксель на кропку эвента если она не активка
             if self.image.getpixel((272, 893))[0:3] == (216, 234, 246):  # пиксель на кропку эвента если она не активка
-                if self.image.getpixel((435, 876))[0:3] == (48, 185, 71):
+                if self.image.getpixel((435, 876))[0:3] == (48, 185, 71) and self.requested_card:
                     pass
                     # return 201, None  # тригер на отправку запроса карт
 
-                if self._getTriggerOpenChest():
+                if self._getTriggerOpenChest() and self.open_chest:
                     return 220 + self._getTriggerOpenChest(), None
 
-                if self._getTriggerOpenedChest():
+                if self._getTriggerOpenedChest() and self.open_chest:
                     return 230 + self._getTriggerOpenedChest(), None
 
                 return 200, None  # тригер на меню
