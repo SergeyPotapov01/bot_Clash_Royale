@@ -1,0 +1,21 @@
+Anfang
+Halt
+Holen Sie sich_einen Auslöser
+Spiel_neu laden
+Statistiken
+Kampfergebnisse:
+Ereignisprotokoll:
+Log
+Truhen öffnen
+Kartenanfrage
+Kampfmodus
+Sprachauswahl
+Auswählen einer Abfragezuordnung
+Bot Einstellungen
+Geben Sie den Port für den Adb-Server an
+Anzahl der Abschlüsse
+Pausenzeit ( in der Nähe )
+adb Einstellungen
+Debuggen
+Bot zum Farmen von Kronen in
+Über das Programm

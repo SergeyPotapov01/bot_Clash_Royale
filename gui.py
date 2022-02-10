@@ -37,8 +37,8 @@ class Ui_MainWindow(object):
 
     def __init__(self):
         self.farm = False
-        self._textBrowser_3 = ''
-        self._textBrowser_2 = ''
+        self._textBrowser_3 = 'А здесь у нас лог событий'
+        self._textBrowser_2 = 'Тут у нас последние результаты боев'
         self._textBrowser = 'Получено корон\nВремя игры\nКолличество боев\nИзменения по кубкам'
         self._mode = 'global'
         self._card_request = 'Skeletons'
@@ -48,6 +48,7 @@ class Ui_MainWindow(object):
         self.port = 5555
         self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port)
         self.list_mode = ['global', 'mode_1', 'mode_2', '2X2']
+        self.list_change_language = ['English', 'Русский', 'Deutsch', 'Spænska']
         self.list_card_request = [
                                     'Skeletons', 'Ice_Spirit', 'Fire_Spirit', 'Electro_Spirit',
                                     'Goblins', 'Bomber', 'Spear_Goblins', 'Bats',
@@ -64,6 +65,8 @@ class Ui_MainWindow(object):
                                     'Wizard', 'Royal_Hogs', 'Goblin_Hut', 'Inferno_Tower',
                                     'Elixir_Collector', 'Rocket', 'Barbarian_Hut', 'Three_Musketeers',
                                   ]
+        self.language = 'English'
+        self.language_set_words = []
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -80,12 +83,15 @@ class Ui_MainWindow(object):
         self.pushButton = QtWidgets.QPushButton(self.Log)
         self.pushButton.setGeometry(QtCore.QRect(20, 420, 182, 61))
         self.pushButton.setObjectName("pushButton")
+        self.pushButton.clicked.connect(lambda: self.startStopFarm())
         self.pushButton_2 = QtWidgets.QPushButton(self.Log)
         self.pushButton_2.setGeometry(QtCore.QRect(20, 490, 91, 61))
         self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.clicked.connect(lambda: self.getTrigger())
         self.pushButton_3 = QtWidgets.QPushButton(self.Log)
         self.pushButton_3.setGeometry(QtCore.QRect(110, 490, 91, 61))
         self.pushButton_3.setObjectName("pushButton_3")
+        self.pushButton_3.clicked.connect(lambda: self.reboot())
         self.textBrowser = QtWidgets.QTextBrowser(self.Log)
         self.textBrowser.setGeometry(QtCore.QRect(210, 440, 191, 111))
         self.textBrowser.setObjectName("textBrowser")
@@ -93,17 +99,20 @@ class Ui_MainWindow(object):
         self.textBrowser_2.setGeometry(QtCore.QRect(20, 291, 381, 111))
         self.textBrowser_2.setObjectName("textBrowser_2")
         self.textBrowser_3 = QtWidgets.QTextBrowser(self.Log)
-        self.textBrowser.setText(self._textBrowser)
         self.textBrowser_3.setGeometry(QtCore.QRect(20, 30, 381, 231))
         self.textBrowser_3.setObjectName("textBrowser_3")
+        self.textBrowser.setText(self._textBrowser)
+        self.textBrowser_2.setText(self._textBrowser_2)
+        self.textBrowser_3.setText(self._textBrowser_3)
+
         self.label_2 = QtWidgets.QLabel(self.Log)
-        self.label_2.setGeometry(QtCore.QRect(210, 420, 191, 16))
+        self.label_2.setGeometry(QtCore.QRect(210, 420, 191, 20))
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(self.Log)
-        self.label_3.setGeometry(QtCore.QRect(20, 270, 381, 16))
+        self.label_3.setGeometry(QtCore.QRect(20, 270, 381, 20))
         self.label_3.setObjectName("label_3")
         self.label_4 = QtWidgets.QLabel(self.Log)
-        self.label_4.setGeometry(QtCore.QRect(20, 10, 381, 20))
+        self.label_4.setGeometry(QtCore.QRect(20, 10, 381, 26))
         self.label_4.setObjectName("label_4")
         self.tabWidget.addTab(self.Log, "")
         self.tab_3 = QtWidgets.QWidget()
@@ -124,27 +133,35 @@ class Ui_MainWindow(object):
         self.comboBox.addItems(self.list_mode)
         self.comboBox.currentTextChanged.connect(self.currentTextComboBox_1)
         self.label_5 = QtWidgets.QLabel(self.tab_3)
-        self.label_5.setGeometry(QtCore.QRect(200, 30, 201, 16))
+        self.label_5.setGeometry(QtCore.QRect(200, 30, 201, 20))
         self.label_5.setObjectName("label_5")
         self.label_6 = QtWidgets.QLabel(self.tab_3)
-        self.label_6.setGeometry(QtCore.QRect(200, 100, 201, 16))
+        self.label_6.setGeometry(QtCore.QRect(200, 100, 201, 20))
         self.label_6.setObjectName("label_6")
         self.label_7 = QtWidgets.QLabel(self.tab_3)
-        self.label_7.setGeometry(QtCore.QRect(200, 160, 201, 16))
+        self.label_7.setGeometry(QtCore.QRect(200, 160, 201, 20))
         self.label_7.setObjectName("label_7")
         self.comboBox_2 = QtWidgets.QComboBox(self.tab_3)
         self.comboBox_2.setGeometry(QtCore.QRect(10, 145, 151, 21))
         self.comboBox_2.setObjectName("comboBox_2")
         self.comboBox_2.addItems(self.list_card_request)
         self.comboBox_2.currentTextChanged.connect(self.currentTextComboBox_2)
+        self.comboBox_change_language = QtWidgets.QComboBox(self.tab_3)
+        self.comboBox_change_language.setGeometry(QtCore.QRect(10, 200, 151, 21))
+        self.comboBox_change_language.setObjectName("comboBox_change_language")
+        self.comboBox_change_language.addItems(self.list_change_language)
+        self.comboBox_change_language.currentTextChanged.connect(self.currentTextComboBox_change_language)
+        self.label_change_language = QtWidgets.QLabel(self.tab_3)
+        self.label_change_language.setGeometry(QtCore.QRect(200, 200, 201, 20))
+        self.label_change_language.setObjectName("label_change_language")
         self.label_8 = QtWidgets.QLabel(self.tab_3)
-        self.label_8.setGeometry(QtCore.QRect(200, 145, 211, 16))
+        self.label_8.setGeometry(QtCore.QRect(200, 145, 211, 20))
         self.label_8.setObjectName("label_8")
         self.tabWidget.addTab(self.tab_3, "")
         self.tab_4 = QtWidgets.QWidget()
         self.tab_4.setObjectName("tab_4")
         self.lineEdit = QtWidgets.QLineEdit(self.tab_4)
-        self.lineEdit.setGeometry(QtCore.QRect(20, 20, 111, 31))
+        self.lineEdit.setGeometry(QtCore.QRect(20, 20, 111, 25))
         self.lineEdit.setObjectName("lineEdit")
         self.lineEdit.textChanged.connect(self.adbPort)
         self.spinBox = QtWidgets.QSpinBox(self.tab_4)
@@ -152,13 +169,13 @@ class Ui_MainWindow(object):
         self.spinBox.setObjectName("spinBox")
         self.spinBox.valueChanged.connect(self.debug)
         self.label_9 = QtWidgets.QLabel(self.tab_4)
-        self.label_9.setGeometry(QtCore.QRect(170, 30, 231, 16))
+        self.label_9.setGeometry(QtCore.QRect(170, 30, 231, 20))
         self.label_9.setObjectName("label_9")
         self.label_10 = QtWidgets.QLabel(self.tab_4)
-        self.label_10.setGeometry(QtCore.QRect(170, 80, 211, 16))
+        self.label_10.setGeometry(QtCore.QRect(170, 80, 211, 20))
         self.label_10.setObjectName("label_10")
         self.label_11 = QtWidgets.QLabel(self.tab_4)
-        self.label_11.setGeometry(QtCore.QRect(170, 130, 211, 16))
+        self.label_11.setGeometry(QtCore.QRect(170, 130, 211, 20))
         self.label_11.setObjectName("label_11")
         self.spinBox_2 = QtWidgets.QSpinBox(self.tab_4)
         self.spinBox_2.setGeometry(QtCore.QRect(20, 120, 111, 25))
@@ -397,28 +414,6 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Leninka Bot CR"))
         MainWindow.setWindowIcon(QtGui.QIcon('img/Leninka.ico'))
-        self.pushButton.setText(_translate("MainWindow", "Старт"))
-        self.pushButton.clicked.connect(lambda: self.startStopFarm())
-        self.pushButton_2.setText(_translate("MainWindow", "Получить \nтриггер"))
-        self.pushButton_2.clicked.connect(lambda: self.getTrigger())
-        self.pushButton_3.setText(_translate("MainWindow", "Перезагрузить"))
-        self.pushButton_3.clicked.connect(lambda: self.reboot())
-        self.label_2.setText(_translate("MainWindow", "Статистика:"))
-        self.label_3.setText(_translate("MainWindow", "Результаты боев:"))
-        self.label_4.setText(_translate("MainWindow", "Лог событий:"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Log), _translate("MainWindow", "Log"))
-        self.checkBox.setText(_translate("MainWindow", "Открытие сундуков"))
-        self.checkBox_2.setText(_translate("MainWindow", "Запрос карт"))
-        self.label_5.setText(_translate("MainWindow", "Режим боя"))
-        self.label_6.setText(_translate("MainWindow", ""))
-        self.label_7.setText(_translate("MainWindow", ""))
-        self.label_8.setText(_translate("MainWindow", "Выбор карты запроса"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Настройки бота"))
-        self.lineEdit.setText(_translate("MainWindow", "5555"))
-        self.label_9.setText(_translate("MainWindow", "Укажите порт для adb server"))
-        self.label_10.setText(_translate("MainWindow", "Колличество боев до перерыва"))
-        self.label_11.setText(_translate("MainWindow", "Время перерыва ( в минутах ) "))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", "Настройки adb"))
         self.pushButton_5.setText(_translate("MainWindow", "Open \nChest 1"))
         self.pushButton_6.setText(_translate("MainWindow", "Open \nChest 2"))
         self.pushButton_7.setText(_translate("MainWindow", "Open \nChest 3"))
@@ -490,9 +485,7 @@ class Ui_MainWindow(object):
         self.pushButton_112.setText(_translate("MainWindow", "112"))
         self.pushButton_113.setText(_translate("MainWindow", "113"))
         self.pushButton_114.setText(_translate("MainWindow", "114"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("MainWindow", "Дебаг"))
-        self.label.setText(_translate("MainWindow", "<body><p>Бот для фарма корон в Clash Royale</p><p>BugReport: t.me/leninka20</p></body>"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "О программе"))
+
 
     def debugButton(self):
         self.pushButton_5.clicked.connect(lambda: self.bot.bot.openChest(1))
@@ -519,17 +512,17 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         if self.farm:
             self.farm = False
-            self.pushButton.setText(_translate("MainWindow", "Старт"))
+            self.pushButton.setText(_translate("MainWindow", self.language_set_words[0]))
         else:
             self.farm = True
-            self.pushButton.setText(_translate("MainWindow", "Стоп"))
-        self.thread.run(self._mode, self.open_chest, self.request_card)
+            self.pushButton.setText(_translate("MainWindow", self.language_set_words[1]))
+        self.thread.run(self._mode, self.open_chest, self.request_card, self.port)
 
     def getTrigger(self):
         if self.bot == None:
             self.textBrowser_3.setText('На данный момент не запущен бот')
             return 0
-        x = ImageTriggers().getTriggerDEBUG(self.bot.bot.getScreen())
+        x = ImageTriggers(True).getTriggerDEBUG(self.bot.bot.getScreen())
         s = ''
         for i in x:
             for j in i:
@@ -556,7 +549,6 @@ class Ui_MainWindow(object):
     def currentTextComboBox_1(self, text):
         logger.debug(f'Был установлен режим: {text}')
         self._mode = text
-        print(self._mode)
 
     def currentTextComboBox_2(self, text):
         logger.debug(f'Была установлен карта запроса: {text}')
@@ -573,6 +565,47 @@ class Ui_MainWindow(object):
     def adbPort(self, value):
         self.port = value
         logger.debug(f'Был изменен параметр порт подключения на: {value}')
+
+    def currentTextComboBox_change_language(self, language):
+        if language == 'Русский':
+            self.language = 'Russian'
+        elif language == 'English':
+            self.language = 'English'
+        elif language == 'Deutsch':
+            self.language = 'German'
+        elif language == 'Spænska':
+            self.language = 'Spanish'
+
+        self.language_set_words = []
+        with open(f'Languages/{self.language}.txt', 'r', encoding='UTF-8') as f:
+            while True:
+                line = f.readline()
+                if not line:
+                    break
+                self.language_set_words.append(line)
+
+        _translate = QtCore.QCoreApplication.translate
+        self.pushButton.setText(_translate("MainWindow", self.language_set_words[0]))
+        self.pushButton_2.setText(_translate("MainWindow", self.language_set_words[2]).replace('_', '\n'))
+        self.pushButton_3.setText(_translate("MainWindow", self.language_set_words[3]).replace('_', '\n'))
+        self.label_2.setText(_translate("MainWindow", self.language_set_words[4]))
+        self.label_3.setText(_translate("MainWindow", self.language_set_words[5]))
+        self.label_4.setText(_translate("MainWindow", self.language_set_words[6]))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Log), _translate("MainWindow", self.language_set_words[7]))
+        self.checkBox.setText(_translate("MainWindow", self.language_set_words[8]))
+        self.checkBox_2.setText(_translate("MainWindow", self.language_set_words[9]))
+        self.label_5.setText(_translate("MainWindow", self.language_set_words[10]))
+        self.label_change_language.setText(_translate("MainWindow", self.language_set_words[11]))
+        self.label_8.setText(_translate("MainWindow", self.language_set_words[12]))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", self.language_set_words[13]))
+        self.lineEdit.setText(_translate("MainWindow", "5555"))
+        self.label_9.setText(_translate("MainWindow", self.language_set_words[14]))
+        self.label_10.setText(_translate("MainWindow", self.language_set_words[15]))
+        self.label_11.setText(_translate("MainWindow", self.language_set_words[16]))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", self.language_set_words[17]))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("MainWindow", self.language_set_words[18]))
+        self.label.setText(_translate("MainWindow", f"<body><p>{self.language_set_words[19]} Clash Royale</p><p>BugReport: t.me/leninka20</p></body>"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", self.language_set_words[20]))
 
     def debug(self, text):
         print(text, type(text))

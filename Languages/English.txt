@@ -1,0 +1,22 @@
+Start
+Stop
+Get_a trigger
+Reload_game
+Statistics
+Battle results:
+Event log:
+log
+Opening chests
+Map request
+Combat mode
+Language selection
+Selecting a Query Map
+Bot settings
+Specify the port for the adb server
+Number of finishes
+Break time ( in the vicinity )
+adb settings
+Debug
+Bot for farming crowns in
+About the program
+About the program

@@ -24,5 +24,6 @@ if __name__ == '__main__':
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     ui.debugButton()
+    ui.currentTextComboBox_change_language('English')
     MainWindow.show()
     sys.exit(app.exec_())
