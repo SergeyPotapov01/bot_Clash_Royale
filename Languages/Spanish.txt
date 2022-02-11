@@ -1,21 +1,21 @@
 Comienzo
 Detener
-Consigue_un gatillo
-recargar_juego
+Obtener Desencadenadors
+Recargar Juego
 Estadísticas
-Resultados de la batalla:
-Registro de eventos:
-Log
-abrir cofres
-Solicitud de mapa
-modo de combate
-Selección de idioma
-Selección de un mapa de consulta
-Configuración de bots
-Especifique el puerto para el servidor adb
-Número de peleas antes del descanso
-Tiempo de descanso (en minutos)
-configuración adb
+Resultados de la Batalla
+Registro de Eventos
+Registro
+Abrir Cofres
+Solicitar Mapa
+Modo Combatar
+Selecciónar Idioma
+Selección de Mapa de Consulta
+Configuración de Bot
+Especifique el Puerto para el Servidor ADB
+Número de Peleas Antes del Descanso
+Tiempo de Descanso (minutos)
+Configuración ADB
 Depurar
-Bot para farmear coronas en
-Sobre el programa
+Bot para Cultivar Coronas
+Sobre el Programa
