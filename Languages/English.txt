@@ -1,22 +1,21 @@
 Start
 Stop
-Get_a trigger
-Reload_game
+Get Triggers
+Reload Game
 Statistics
-Battle results:
-Event log:
-log
-Opening chests
-Map request
-Combat mode
-Language selection
-Selecting a Query Map
-Bot settings
-Specify the port for the adb server
-Number of finishes
-Break time ( in the vicinity )
-adb settings
+Battle Results
+Event Log
+Log
+Open Chests
+Map Request
+Combat Mode
+Language Selection
+Select Query Map
+Bot Settings
+Specify ADB Server Port Number
+Number of Finishes
+Break Time (minutes)
+ADB Settings
 Debug
-Bot for farming crowns in
-About the program
-About the program
+Bot for Farming Crowns
+About the Program
