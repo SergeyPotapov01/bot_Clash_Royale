@@ -675,7 +675,7 @@ class Ui_MainWindow(object):
         else:
             self.farm = True
             self.pushButton.setText(_translate("MainWindow", self.language_set_words[1]))
-        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port)
+        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts)
         self.bot = self.thread.bot
 
     def getTrigger(self):
