@@ -118,7 +118,7 @@ class ImageTriggers:
                 if self.index2X2:
                     self.index2X2 = False
                     logger.info(self._getNumeberCrown())
-                    return 121, None  # тригер на закрытие чата в после боя 2х2
+                    return 121, self._getNumeberCrown()  # тригер на закрытие чата в после боя 2х2
                 else:
                     self.index2X2 = True
                     return 124, None  # тригер на конец боя 1х1
@@ -127,7 +127,7 @@ class ImageTriggers:
             if self.index2X2:
                 self.index2X2 = False
                 logger.info(self._getNumeberCrown())
-                return 122, None  # тригер на закрытие чата в после боя 2х2
+                return 122, self._getNumeberCrown()  # тригер на закрытие чата в после боя 2х2
             else:
                 self.index2X2 = True
                 return 124, None  # тригер на конец боя 2х2
@@ -141,7 +141,7 @@ class ImageTriggers:
             if self.image.getpixel((272, 893))[0:3] == (216, 234, 246):  # пиксель на кропку эвента если она не активка
                 if self.image.getpixel((435, 876))[0:3] == (48, 185, 71) and self.requested_card:
                     pass
-                    # return 201, None  # тригер на отправку запроса карт
+                    # return 210, None  # тригер на отправку запроса карт
 
                 if self._getTriggerOpenChest() and self.open_chest:
                     return 220 + self._getTriggerOpenChest(), None
@@ -171,7 +171,6 @@ class ImageTriggers:
 
     def getTriggerDEBUG(self, img):
         self.image = Image.open(io.BytesIO(img))
-
         return(
             (124, self.image.getpixel((40, 790)), self.image.getpixel((40, 790))[0:3] == (255, 255, 255)),
             (100, self.image.getpixel((529, 950)), self.image.getpixel((529, 950))[0:3] == (7, 71, 144)),
@@ -181,4 +180,5 @@ class ImageTriggers:
             (300, self.image.getpixel((442, 906)), self.image.getpixel((442, 906))[0:3] == (154, 205, 255)),
             (301, self.image.getpixel((14, 945)), self.image.getpixel((14, 945))[0:3] == (24, 113, 216)),
             (400, self.image.getpixel((280, 500)), self.image.getpixel((280, 500))[0:3] == (66, 66, 66)),
+            self.getTrigger(img)
         )

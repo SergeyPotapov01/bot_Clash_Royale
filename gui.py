@@ -18,23 +18,42 @@ from keras.models import load_model
 
 
 class MyThread(QtCore.QThread):
-    def __init__(self, mode, open_chest, requested_card, port, parent=None):
+    mysignal = QtCore.pyqtSignal(str)
+    mysignal2 = QtCore.pyqtSignal(str)
+    mysignal3 = QtCore.pyqtSignal(str)
+    mysignal4 = QtCore.pyqtSignal(str)
+
+
+    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, parent=None):
         QtCore.QThread.__init__(self, parent)
         self.farm = False
-        self.bot = Strategics(mode, open_chest, requested_card, port)
+        self.number_account = '0'
+        self._textBrowser_3 = ''
+        self._textBrowser_2 = ''
+        self.c = 0
+        self.c1 = 0
+        self.c2 = 0
+        self.c3 = 0
+        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, self)
 
-    def run(self, mode, open_chest, requested_card, port):
+    def run(self):
+        while True:
+            self.sleep(2)
+            self.mysignal.emit(str(self.number_account))
+            self.mysignal2.emit(str(self._textBrowser_3))
+            self.mysignal3.emit(str(self._textBrowser_2))
+            self.mysignal4.emit(str(f'Got Crowns {self.c}\nTime in Game(Does not work) {self.c1}\nTotall batlles {self.c2}\nCup changes(Does not work) {self.c3}'))
+
+    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts):
         if self.farm:
             self.farm = False
             self.bot.stopFarm()
         else:
             self.farm = True
-            self.bot = Strategics(mode, open_chest, requested_card, port)
+            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, self)
             threading.Thread(target=self.bot.startFarm).start()
 
 class Ui_MainWindow(object):
-    mySignal = QtCore.pyqtSignal(str)
-
     def __init__(self):
         self.farm = False
         self._textBrowser_3 = 'А здесь у нас лог событий'
@@ -44,9 +63,18 @@ class Ui_MainWindow(object):
         self._card_request = 'Skeletons'
         self.request_card = False
         self.open_chest = False
-        self.bot = None
+        self._changed_account = False
         self.port = 5555
-        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port)
+        self._total_accounts = 3
+        self._change_account = 0
+        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts)
+        self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)
+        self.thread.mysignal2.connect(self.logEvent, QtCore.Qt.QueuedConnection)
+        self.thread.mysignal3.connect(self.logCrown, QtCore.Qt.QueuedConnection)
+        self.thread.mysignal4.connect(self.logStatistic, QtCore.Qt.QueuedConnection)
+
+        self.thread.start()
+        self.bot = self.thread.bot
         self.list_mode = ['global', 'mode_1', 'mode_2', '2X2']
         self.list_change_language = ['English', 'Русский', 'Deutsch', 'Spænska']
         self.list_card_request = [
@@ -72,338 +100,468 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(440, 615)
         MainWindow.setFixedSize(440, 615)
+
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
         self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(10, 10, 421, 601))
         self.tabWidget.setObjectName("tabWidget")
+
         self.Log = QtWidgets.QWidget()
         self.Log.setMinimumSize(QtCore.QSize(0, 571))
         self.Log.setObjectName("Log")
+
         self.pushButton = QtWidgets.QPushButton(self.Log)
         self.pushButton.setGeometry(QtCore.QRect(20, 420, 182, 61))
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(lambda: self.startStopFarm())
+
         self.pushButton_2 = QtWidgets.QPushButton(self.Log)
         self.pushButton_2.setGeometry(QtCore.QRect(20, 490, 91, 61))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(lambda: self.getTrigger())
+
         self.pushButton_3 = QtWidgets.QPushButton(self.Log)
         self.pushButton_3.setGeometry(QtCore.QRect(110, 490, 91, 61))
         self.pushButton_3.setObjectName("pushButton_3")
         self.pushButton_3.clicked.connect(lambda: self.reboot())
+
         self.textBrowser = QtWidgets.QTextBrowser(self.Log)
         self.textBrowser.setGeometry(QtCore.QRect(210, 440, 191, 111))
         self.textBrowser.setObjectName("textBrowser")
+
         self.textBrowser_2 = QtWidgets.QTextBrowser(self.Log)
         self.textBrowser_2.setGeometry(QtCore.QRect(20, 291, 381, 111))
         self.textBrowser_2.setObjectName("textBrowser_2")
+
         self.textBrowser_3 = QtWidgets.QTextBrowser(self.Log)
         self.textBrowser_3.setGeometry(QtCore.QRect(20, 30, 381, 231))
         self.textBrowser_3.setObjectName("textBrowser_3")
-        self.textBrowser.setText(self._textBrowser)
-        self.textBrowser_2.setText(self._textBrowser_2)
-        self.textBrowser_3.setText(self._textBrowser_3)
 
         self.label_2 = QtWidgets.QLabel(self.Log)
         self.label_2.setGeometry(QtCore.QRect(210, 420, 191, 20))
         self.label_2.setObjectName("label_2")
+
         self.label_3 = QtWidgets.QLabel(self.Log)
         self.label_3.setGeometry(QtCore.QRect(20, 270, 381, 20))
         self.label_3.setObjectName("label_3")
+
         self.label_4 = QtWidgets.QLabel(self.Log)
         self.label_4.setGeometry(QtCore.QRect(20, 10, 381, 26))
         self.label_4.setObjectName("label_4")
+
         self.tabWidget.addTab(self.Log, "")
         self.tab_3 = QtWidgets.QWidget()
         self.tab_3.setObjectName("tab_3")
+
         self.checkBox = QtWidgets.QCheckBox(self.tab_3)
         self.checkBox.setGeometry(QtCore.QRect(10, 55, 181, 41))
         self.checkBox.setObjectName("checkBox")
         self.checkBox.setText('2')
         self.checkBox.stateChanged.connect(self.openChest)
+
         self.checkBox_2 = QtWidgets.QCheckBox(self.tab_3)
         self.checkBox_2.setGeometry(QtCore.QRect(10, 100, 181, 41))
         self.checkBox_2.setObjectName("checkBox_2")
         self.checkBox_2.setText('2')
         self.checkBox_2.stateChanged.connect(self.requestCard)
+
         self.comboBox = QtWidgets.QComboBox(self.tab_3)
         self.comboBox.setGeometry(QtCore.QRect(10, 30, 151, 21))
         self.comboBox.setObjectName("comboBox")
         self.comboBox.addItems(self.list_mode)
         self.comboBox.currentTextChanged.connect(self.currentTextComboBox_1)
+
         self.label_5 = QtWidgets.QLabel(self.tab_3)
         self.label_5.setGeometry(QtCore.QRect(200, 30, 201, 20))
         self.label_5.setObjectName("label_5")
+
         self.label_6 = QtWidgets.QLabel(self.tab_3)
         self.label_6.setGeometry(QtCore.QRect(200, 100, 201, 20))
         self.label_6.setObjectName("label_6")
+
         self.label_7 = QtWidgets.QLabel(self.tab_3)
         self.label_7.setGeometry(QtCore.QRect(200, 160, 201, 20))
         self.label_7.setObjectName("label_7")
+
         self.comboBox_2 = QtWidgets.QComboBox(self.tab_3)
         self.comboBox_2.setGeometry(QtCore.QRect(10, 145, 151, 21))
         self.comboBox_2.setObjectName("comboBox_2")
         self.comboBox_2.addItems(self.list_card_request)
         self.comboBox_2.currentTextChanged.connect(self.currentTextComboBox_2)
+
         self.comboBox_change_language = QtWidgets.QComboBox(self.tab_3)
         self.comboBox_change_language.setGeometry(QtCore.QRect(10, 200, 151, 21))
         self.comboBox_change_language.setObjectName("comboBox_change_language")
         self.comboBox_change_language.addItems(self.list_change_language)
         self.comboBox_change_language.currentTextChanged.connect(self.currentTextComboBox_change_language)
+
         self.label_change_language = QtWidgets.QLabel(self.tab_3)
         self.label_change_language.setGeometry(QtCore.QRect(200, 200, 201, 20))
         self.label_change_language.setObjectName("label_change_language")
+
         self.label_8 = QtWidgets.QLabel(self.tab_3)
         self.label_8.setGeometry(QtCore.QRect(200, 145, 211, 20))
         self.label_8.setObjectName("label_8")
+
         self.tabWidget.addTab(self.tab_3, "")
+
         self.tab_4 = QtWidgets.QWidget()
         self.tab_4.setObjectName("tab_4")
+
         self.lineEdit = QtWidgets.QLineEdit(self.tab_4)
         self.lineEdit.setGeometry(QtCore.QRect(20, 20, 111, 25))
         self.lineEdit.setObjectName("lineEdit")
         self.lineEdit.textChanged.connect(self.adbPort)
+
         self.spinBox = QtWidgets.QSpinBox(self.tab_4)
         self.spinBox.setGeometry(QtCore.QRect(20, 70, 111, 25))
         self.spinBox.setObjectName("spinBox")
         self.spinBox.valueChanged.connect(self.debug)
+
         self.label_9 = QtWidgets.QLabel(self.tab_4)
         self.label_9.setGeometry(QtCore.QRect(170, 30, 231, 20))
         self.label_9.setObjectName("label_9")
+
         self.label_10 = QtWidgets.QLabel(self.tab_4)
         self.label_10.setGeometry(QtCore.QRect(170, 80, 211, 20))
         self.label_10.setObjectName("label_10")
+
         self.label_11 = QtWidgets.QLabel(self.tab_4)
         self.label_11.setGeometry(QtCore.QRect(170, 130, 211, 20))
         self.label_11.setObjectName("label_11")
+
         self.spinBox_2 = QtWidgets.QSpinBox(self.tab_4)
         self.spinBox_2.setGeometry(QtCore.QRect(20, 120, 111, 25))
         self.spinBox_2.setObjectName("spinBox_2")
         self.spinBox_2.valueChanged.connect(self.debug)
+
+        self.checkBox_changed_account = QtWidgets.QCheckBox(self.tab_4)
+        self.checkBox_changed_account.setGeometry(QtCore.QRect(20, 170, 181, 41))
+        self.checkBox_changed_account.setObjectName("checkBox_2")
+        self.checkBox_changed_account.stateChanged.connect(self.changed_account)
+
+        self.label_changed_account = QtWidgets.QLabel(self.tab_4)
+        self.label_changed_account.setGeometry(QtCore.QRect(170, 170, 211, 20))
+        self.label_changed_account.setObjectName("label_change_account")
+
+        self.spinBox_change_account = QtWidgets.QSpinBox(self.tab_4)
+        self.spinBox_change_account.setGeometry(QtCore.QRect(20, 220, 111, 25))
+        self.spinBox_change_account.setObjectName("spinBox_2")
+        self.spinBox_change_account.valueChanged.connect(self.change_account)
+
+        self.label_change_account = QtWidgets.QLabel(self.tab_4)
+        self.label_change_account.setGeometry(QtCore.QRect(170, 220, 211, 20))
+        self.label_change_account.setObjectName("label_change_account")
+
+        self.spinBox_total_accounts = QtWidgets.QSpinBox(self.tab_4)
+        self.spinBox_total_accounts.setGeometry(QtCore.QRect(20, 270, 111, 25))
+        self.spinBox_total_accounts.setObjectName("spinBox_2")
+        self.spinBox_total_accounts.valueChanged.connect(self.total_accounts)
+
+        self.label_total_accounts = QtWidgets.QLabel(self.tab_4)
+        self.label_total_accounts.setGeometry(QtCore.QRect(170, 270, 211, 20))
+        self.label_total_accounts.setObjectName("label_changeAccount")
+
+
         self.tabWidget.addTab(self.tab_4, "")
         self.tab_5 = QtWidgets.QWidget()
         self.tab_5.setObjectName("tab_5")
+
         self.pushButton_5 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_5.setGeometry(QtCore.QRect(10, 10, 71, 31))
         self.pushButton_5.setObjectName("pushButton_5")
+
         self.pushButton_6 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_6.setGeometry(QtCore.QRect(90, 10, 71, 31))
         self.pushButton_6.setObjectName("pushButton_6")
+
         self.pushButton_7 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_7.setGeometry(QtCore.QRect(170, 10, 71, 31))
         self.pushButton_7.setObjectName("pushButton_7")
+
         self.pushButton_8 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_8.setGeometry(QtCore.QRect(250, 10, 71, 31))
         self.pushButton_8.setObjectName("pushButton_8")
+
         self.pushButton_9 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_9.setGeometry(QtCore.QRect(330, 10, 71, 31))
         self.pushButton_9.setObjectName("pushButton_9")
+
         self.pushButton_10 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_10.setGeometry(QtCore.QRect(10, 50, 71, 31))
         self.pushButton_10.setObjectName("pushButton_10")
+
         self.pushButton_11 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_11.setGeometry(QtCore.QRect(90, 50, 71, 31))
         self.pushButton_11.setObjectName("pushButton_11")
+
         self.pushButton_12 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_12.setGeometry(QtCore.QRect(170, 50, 71, 31))
         self.pushButton_12.setObjectName("pushButton_12")
+
         self.pushButton_13 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_13.setGeometry(QtCore.QRect(250, 50, 71, 31))
         self.pushButton_13.setObjectName("pushButton_13")
+
         self.pushButton_14 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_14.setGeometry(QtCore.QRect(330, 50, 71, 31))
         self.pushButton_14.setObjectName("pushButton_14")
+
         self.pushButton_15 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_15.setGeometry(QtCore.QRect(10, 90, 71, 31))
         self.pushButton_15.setObjectName("pushButton_15")
+
         self.pushButton_16 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_16.setGeometry(QtCore.QRect(90, 90, 71, 31))
         self.pushButton_16.setObjectName("pushButton_16")
+
         self.pushButton_17 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_17.setGeometry(QtCore.QRect(170, 90, 71, 31))
         self.pushButton_17.setObjectName("pushButton_17")
+
         self.pushButton_18 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_18.setGeometry(QtCore.QRect(250, 90, 71, 31))
         self.pushButton_18.setObjectName("pushButton_18")
+
         self.pushButton_19 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_19.setGeometry(QtCore.QRect(330, 90, 71, 31))
         self.pushButton_19.setObjectName("pushButton_19")
+
         self.pushButton_20 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_20.setGeometry(QtCore.QRect(10, 130, 71, 31))
         self.pushButton_20.setObjectName("pushButton_20")
+
         self.pushButton_21 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_21.setGeometry(QtCore.QRect(90, 130, 71, 31))
         self.pushButton_21.setObjectName("pushButton_21")
+
         self.pushButton_22 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_22.setGeometry(QtCore.QRect(170, 130, 71, 31))
         self.pushButton_22.setObjectName("pushButton_22")
+
         self.pushButton_23 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_23.setGeometry(QtCore.QRect(250, 130, 71, 31))
         self.pushButton_23.setObjectName("pushButton_23")
+
         self.pushButton_24 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_24.setGeometry(QtCore.QRect(330, 130, 71, 31))
         self.pushButton_24.setObjectName("pushButton_24")
+
         self.pushButton_25 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_25.setGeometry(QtCore.QRect(10, 170, 71, 31))
         self.pushButton_25.setObjectName("pushButton_25")
+
         self.pushButton_26 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_26.setGeometry(QtCore.QRect(90, 170, 71, 31))
         self.pushButton_26.setObjectName("pushButton_26")
+
         self.pushButton_27 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_27.setGeometry(QtCore.QRect(170, 170, 71, 31))
         self.pushButton_27.setObjectName("pushButton_27")
+
         self.pushButton_28 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_28.setGeometry(QtCore.QRect(250, 170, 71, 31))
         self.pushButton_28.setObjectName("pushButton_28")
+
         self.pushButton_29 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_29.setGeometry(QtCore.QRect(330, 170, 71, 31))
         self.pushButton_29.setObjectName("pushButton_29")
+
         self.pushButton_30 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_30.setGeometry(QtCore.QRect(10, 210, 71, 31))
         self.pushButton_30.setObjectName("pushButton_30")
+
         self.pushButton_31 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_31.setGeometry(QtCore.QRect(90, 210, 71, 31))
         self.pushButton_31.setObjectName("pushButton_31")
+
         self.pushButton_32 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_32.setGeometry(QtCore.QRect(170, 210, 71, 31))
         self.pushButton_32.setObjectName("pushButton_32")
+
         self.pushButton_33 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_33.setGeometry(QtCore.QRect(250, 210, 71, 31))
         self.pushButton_33.setObjectName("pushButton_33")
+
         self.pushButton_34 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_34.setGeometry(QtCore.QRect(330, 210, 71, 31))
         self.pushButton_34.setObjectName("pushButton_34")
+
         self.pushButton_69 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_69.setGeometry(QtCore.QRect(250, 250, 71, 31))
         self.pushButton_69.setObjectName("pushButton_69")
+
         self.pushButton_70 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_70.setGeometry(QtCore.QRect(10, 250, 71, 31))
         self.pushButton_70.setObjectName("pushButton_70")
+
         self.pushButton_71 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_71.setGeometry(QtCore.QRect(90, 250, 71, 31))
         self.pushButton_71.setObjectName("pushButton_71")
+
         self.pushButton_72 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_72.setGeometry(QtCore.QRect(170, 250, 71, 31))
         self.pushButton_72.setObjectName("pushButton_72")
+
         self.pushButton_73 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_73.setGeometry(QtCore.QRect(250, 250, 71, 31))
         self.pushButton_73.setObjectName("pushButton_73")
+
         self.pushButton_74 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_74.setGeometry(QtCore.QRect(330, 250, 71, 31))
         self.pushButton_74.setObjectName("pushButton_74")
+
         self.pushButton_75 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_75.setGeometry(QtCore.QRect(10, 290, 71, 31))
         self.pushButton_75.setObjectName("pushButton_75")
+
         self.pushButton_76 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_76.setGeometry(QtCore.QRect(90, 290, 71, 31))
         self.pushButton_76.setObjectName("pushButton_76")
+
         self.pushButton_77 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_77.setGeometry(QtCore.QRect(170, 290, 71, 31))
         self.pushButton_77.setObjectName("pushButton_77")
+
         self.pushButton_78 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_78.setGeometry(QtCore.QRect(250, 290, 71, 31))
         self.pushButton_78.setObjectName("pushButton_78")
+
         self.pushButton_79 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_79.setGeometry(QtCore.QRect(330, 290, 71, 31))
         self.pushButton_79.setObjectName("pushButton_79")
+
         self.pushButton_80 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_80.setGeometry(QtCore.QRect(10, 330, 71, 31))
         self.pushButton_80.setObjectName("pushButton_80")
+
         self.pushButton_81 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_81.setGeometry(QtCore.QRect(90, 330, 71, 31))
         self.pushButton_81.setObjectName("pushButton_81")
+
         self.pushButton_82 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_82.setGeometry(QtCore.QRect(170, 330, 71, 31))
         self.pushButton_82.setObjectName("pushButton_82")
+
         self.pushButton_83 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_83.setGeometry(QtCore.QRect(250, 330, 71, 31))
         self.pushButton_83.setObjectName("pushButton_83")
+
         self.pushButton_84 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_84.setGeometry(QtCore.QRect(330, 330, 71, 31))
         self.pushButton_84.setObjectName("pushButton_84")
+
         self.pushButton_85 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_85.setGeometry(QtCore.QRect(10, 370, 71, 31))
         self.pushButton_85.setObjectName("pushButton_85")
+
         self.pushButton_86 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_86.setGeometry(QtCore.QRect(90, 370, 71, 31))
         self.pushButton_86.setObjectName("pushButton_86")
+
         self.pushButton_87 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_87.setGeometry(QtCore.QRect(170, 370, 71, 31))
         self.pushButton_87.setObjectName("pushButton_87")
+
         self.pushButton_88 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_88.setGeometry(QtCore.QRect(250, 370, 71, 31))
         self.pushButton_88.setObjectName("pushButton_88")
+
         self.pushButton_89 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_89.setGeometry(QtCore.QRect(330, 370, 71, 31))
         self.pushButton_89.setObjectName("pushButton_89")
+
         self.pushButton_90 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_90.setGeometry(QtCore.QRect(10, 410, 71, 31))
         self.pushButton_90.setObjectName("pushButton_90")
+
         self.pushButton_91 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_91.setGeometry(QtCore.QRect(90, 410, 71, 31))
         self.pushButton_91.setObjectName("pushButton_91")
+
         self.pushButton_92 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_92.setGeometry(QtCore.QRect(170, 410, 71, 31))
         self.pushButton_92.setObjectName("pushButton_92")
+
         self.pushButton_93 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_93.setGeometry(QtCore.QRect(250, 410, 71, 31))
         self.pushButton_93.setObjectName("pushButton_93")
+
         self.pushButton_99 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_99.setGeometry(QtCore.QRect(330, 410, 71, 31))
         self.pushButton_99.setObjectName("pushButton_99")
+
         self.pushButton_100 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_100.setGeometry(QtCore.QRect(10, 450, 71, 31))
         self.pushButton_100.setObjectName("pushButton_100")
+
         self.pushButton_101 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_101.setGeometry(QtCore.QRect(90, 450, 71, 31))
         self.pushButton_101.setObjectName("pushButton_101")
+
         self.pushButton_102 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_102.setGeometry(QtCore.QRect(170, 450, 71, 31))
         self.pushButton_102.setObjectName("pushButton_102")
+
         self.pushButton_103 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_103.setGeometry(QtCore.QRect(250, 450, 71, 31))
         self.pushButton_103.setObjectName("pushButton_103")
+
         self.pushButton_104 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_104.setGeometry(QtCore.QRect(330, 450, 71, 31))
         self.pushButton_104.setObjectName("pushButton_104")
+
         self.pushButton_105 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_105.setGeometry(QtCore.QRect(10, 490, 71, 31))
         self.pushButton_105.setObjectName("pushButton_105")
+
         self.pushButton_106 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_106.setGeometry(QtCore.QRect(90, 490, 71, 31))
         self.pushButton_106.setObjectName("pushButton_106")
+
         self.pushButton_107 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_107.setGeometry(QtCore.QRect(170, 490, 71, 31))
         self.pushButton_107.setObjectName("pushButton_107")
+
         self.pushButton_108 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_108.setGeometry(QtCore.QRect(250, 490, 71, 31))
         self.pushButton_108.setObjectName("pushButton_108")
+
         self.pushButton_109 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_109.setGeometry(QtCore.QRect(330, 490, 71, 31))
         self.pushButton_109.setObjectName("pushButton_109")
+
         self.pushButton_110 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_110.setGeometry(QtCore.QRect(10, 530, 71, 31))
         self.pushButton_110.setObjectName("pushButton_110")
+
         self.pushButton_111 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_111.setGeometry(QtCore.QRect(90, 530, 71, 31))
         self.pushButton_111.setObjectName("pushButton_111")
+
         self.pushButton_112 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_112.setGeometry(QtCore.QRect(170, 530, 71, 31))
         self.pushButton_112.setObjectName("pushButton_112")
+
         self.pushButton_113 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_113.setGeometry(QtCore.QRect(250, 530, 71, 31))
         self.pushButton_113.setObjectName("pushButton_113")
+
         self.pushButton_114 = QtWidgets.QPushButton(self.tab_5)
         self.pushButton_114.setGeometry(QtCore.QRect(330, 530, 71, 31))
         self.pushButton_114.setObjectName("pushButton_114")
+
         self.tabWidget.addTab(self.tab_5, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
+
         self.label = QtWidgets.QLabel(self.tab_2)
         self.label.setGeometry(QtCore.QRect(20, 40, 381, 401))
         self.label.setStyleSheet("font: 10pt \"Segoe UI\";")
         self.label.setObjectName("label")
+
         self.tabWidget.addTab(self.tab_2, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.retranslateUi(MainWindow)
@@ -507,6 +665,7 @@ class Ui_MainWindow(object):
         self.pushButton_21.clicked.connect(lambda: self.bot.bot.runBattleGlobal())
         self.pushButton_22.clicked.connect(lambda: self.bot.bot.runBattleMode(1))
         self.pushButton_23.clicked.connect(lambda: self.bot.bot.runBattleMode(2))
+        self.pushButton_24.clicked.connect(lambda: self.bot.bot.changeAccount(self.thread.number_account, self._total_accounts))
 
     def startStopFarm(self):
         _translate = QtCore.QCoreApplication.translate
@@ -516,19 +675,17 @@ class Ui_MainWindow(object):
         else:
             self.farm = True
             self.pushButton.setText(_translate("MainWindow", self.language_set_words[1]))
-        self.thread.run(self._mode, self.open_chest, self.request_card, self.port)
+        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port)
+        self.bot = self.thread.bot
 
     def getTrigger(self):
-        if self.bot == None:
-            self.textBrowser_3.setText('На данный момент не запущен бот')
-            return 0
-        x = ImageTriggers(True).getTriggerDEBUG(self.bot.bot.getScreen())
-        s = ''
-        for i in x:
+        trigger = ImageTriggers(True, True).getTriggerDEBUG(self.bot.bot.getScreen())
+        string_debug = ''
+        for i in trigger:
             for j in i:
-                s += str(j)
-            s += '\n'
-        self._textBrowser_3 += 'Получен тригер: ' + s + '\n'
+                string_debug += str(j)
+            string_debug += '\n'
+        self._textBrowser_3 += 'Получен тригер: ' + string_debug + '\n'
         self.textBrowser_3.setText(self._textBrowser_3)
 
     def reboot(self):
@@ -564,6 +721,14 @@ class Ui_MainWindow(object):
 
     def adbPort(self, value):
         self.port = value
+        logger.debug(f'Был изменен параметр порт подключения на: {value}')
+
+    def set_change_account(self, value):
+        self.change_account = value
+        logger.debug(f'Был изменен параметр порт подключения на: {value}')
+
+    def set_total_accounts(self, value):
+        self.total_accounts = value
         logger.debug(f'Был изменен параметр порт подключения на: {value}')
 
     def currentTextComboBox_change_language(self, language):
@@ -606,6 +771,30 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("MainWindow", self.language_set_words[18]))
         self.label.setText(_translate("MainWindow", f"<body><p>{self.language_set_words[19]} Clash Royale</p><p>BugReport: t.me/leninka20</p></body>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", self.language_set_words[20]))
+        self.label_changed_account.setText(_translate("MainWindow", 'Changed Account'))
+        self.label_change_account.setText(_translate("MainWindow", 'Change Account'))
+        self.label_total_accounts.setText(_translate("MainWindow", 'Total Accounts'))
+
+    def on_change(self, v):
+        self.spinBox_change_account.setValue(int(self.thread.number_account))
+
+    def on_change2(self, v):
+        self.textBrowser_2.setText(self._textBrowser_2)
+
+    def on_change3(self, v):
+        self.textBrowser_3.setText(self._textBrowser_3)
+
+    def on_change4(self, v):
+        self.textBrowser.setText(self._textBrowser)
+
+    def changed_account(self, v):
+        self._changed_account = v
+
+    def change_account(self, v):
+        self.thread.number_account = v
+
+    def total_accounts(self, v):
+        self._total_accounts = v
 
     def debug(self, text):
         print(text, type(text))

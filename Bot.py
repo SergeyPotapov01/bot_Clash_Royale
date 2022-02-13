@@ -34,6 +34,12 @@ class Bot:
         logger.debug('Bot.rewardLimit')
         self.ADB.click(276, 600)
 
+    def skipLimit(self):
+        logger.debug('Bot.skipLimit')
+        self.ADB.click(482, 316)
+        sleep(1)
+        self.ADB.click(280, 900)
+
     def getRewardChest(self, number):
         logger.debug(f'Bot.getRewardChest {number}')
         self.ADB.click(-25 + number * 120, 780)
@@ -130,5 +136,39 @@ class Bot:
         logger.debug('Bot.getScreen')
         return self.ADB.getScreen()
 
-    def x(self):
-        print('Рандомная карта')
+    def changeAccount(self, number, total_accounts):
+        self.ADB.click(270, 930)
+        sleep(2)
+        self.ADB.click(270, 930)
+        sleep(3)
+        self.ADB.click(500, 90)
+        sleep(3)
+        self.ADB.click(250, 575)
+        sleep(3)
+        number = int(number)
+        total_accounts = int(total_accounts)
+        slide = number // 3
+        _number = number % 3
+        if slide == 0:
+            if _number == 0:
+                self.ADB.click(250, 552)
+            if _number == 1:
+                self.ADB.click(250, 690)
+            if _number == 2:
+                self.ADB.click(250, 834)
+            return
+        if not (number % 3 == 2):
+            if number == total_accounts - 1 or number == total_accounts - 2:
+                if number == total_accounts - 1:
+                    _number = 2
+                if number == total_accounts - 2:
+                    _number = 1
+        for i in range(slide):
+            self.ADB.swipe(250, 860, 250, 398)
+            sleep(3)
+        if _number == 0:
+            self.ADB.click(250, 552)
+        if _number == 1:
+            self.ADB.click(250, 690)
+        if _number == 2:
+            self.ADB.click(250, 834)
