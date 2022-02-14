@@ -138,7 +138,7 @@ class ImageTriggers:
         self.index2X2 = False
 
         if self.image.getpixel((530, 944))[0:3] == (64, 76, 95):  # пиксель на кропку эвента если она не активка
-            if self.image.getpixel((272, 893))[0:3] == (216, 234, 246):  # пиксель на кропку эвента если она не активка
+            if self.image.getpixel((272, 893))[0:3] == (216, 234, 246) or self.image.getpixel((272, 893))[0:3] == (216, 234, 245):  # пиксель на кропку эвента если она не активка
                 if self.image.getpixel((435, 876))[0:3] == (48, 185, 71) and self.requested_card:
                     pass
                     # return 210, None  # тригер на отправку запроса карт

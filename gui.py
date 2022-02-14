@@ -685,7 +685,7 @@ class Ui_MainWindow(object):
             for j in i:
                 string_debug += str(j)
             string_debug += '\n'
-        self._textBrowser_3 += 'Получен тригер: ' + string_debug + '\n'
+        self.thread._textBrowser_3 = 'Получен тригер: ' + string_debug + '\n'
         self.textBrowser_3.setText(self._textBrowser_3)
 
     def reboot(self):
