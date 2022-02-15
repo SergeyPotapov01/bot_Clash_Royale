@@ -7,12 +7,12 @@ Battle Results
 Event Log
 Log
 Open Chests
-Map Request
-Combat Mode
+Request Cards
+Battle Mode
 Language Selection
-Select Query Map
+Regular Card to Request
 Bot Settings
-Specify ADB Server Port Number
+ADB Server Port Number
 Number of Finishes
 Break Time (minutes)
 ADB Settings
