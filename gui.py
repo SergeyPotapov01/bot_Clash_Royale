@@ -740,6 +740,8 @@ class Ui_MainWindow(object):
             self.language = 'German'
         elif language == 'Spænska':
             self.language = 'Spanish'
+        elif language == '中国人':
+            self.language = 'Chinese'
 
         self.language_set_words = []
         with open(f'Languages/{self.language}.txt', 'r', encoding='UTF-8') as f:
