@@ -1,19 +1,19 @@
-Comienzo
-Detener
+Iniciar
+Apagar
 Obtener Desencadenadors
-Recargar Juego
+Reiniciar App
 Estadísticas
 Resultados de la Batalla
 Registro de Eventos
 Registro
 Abrir Cofres
-Solicitar Mapa
-Modo Combatar
+Pedir Cartas
+Modo Batalla
 Selecciónar Idioma
-Selección de Mapa de Consulta
-Configuración de Bot
-Especifique el Puerto para el Servidor ADB
-Número de Peleas Antes del Descanso
+Pedir Carta Regular
+Configuración del Bot
+Numero Puerto Servidor ADB
+Número de Batallas Antes del Descanso
 Tiempo de Descanso (minutos)
 Configuración ADB
 Depurar
