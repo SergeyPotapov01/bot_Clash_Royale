@@ -1,18 +1,18 @@
 Anfang
 Halt
-Auslöser Bekommen
-Spiel neu laden
+Bekommen
+App Neu Laden
 Statistiken
 Kampfergebnisse
 Ereignisprotokoll
 Protokoll
 Öffnen Truhen
-Karten anfordern
+Karten Gesuchten
 Kampfmodus
 Sprachauswahl
 Auswählen einer Abfragezuordnung
 Bot Einstellungen
-Geben Sie den Port für den ADB-Server an
+Portnummer ADB-Server
 Anzahl der Fertigen
 Pausenzeit (Minuten)
 ADB-Einstellungen
