@@ -5,6 +5,8 @@ from gui import Ui_MainWindow
 from loguru import logger
 from PyQt5 import QtWidgets
 
+import strategics, threading
+
 
 DEBUG = False
 
@@ -15,7 +17,6 @@ if DEBUG:
                 level='DEBUG', rotation='1 week', compression='zip')
 
 __version__ = '0.2.5'
-
 
 if __name__ == '__main__':
     print(sys.version)

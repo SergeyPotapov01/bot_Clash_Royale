@@ -30,19 +30,19 @@ class MyThread(QtCore.QThread):
         self.number_account = '0'
         self._textBrowser_3 = ''
         self._textBrowser_2 = ''
-        self.c = 0
-        self.c1 = 0
-        self.c2 = 0
-        self.c3 = 0
+        self.got_crowns = 0
+        self.time_in_game = 0
+        self.totall_batlles = 0
+        self.cup_changes = 0
         self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, self)
 
     def run(self):
         while True:
-            self.sleep(2)
+            self.sleep(5)
             self.mysignal.emit(str(self.number_account))
             self.mysignal2.emit(str(self._textBrowser_3))
             self.mysignal3.emit(str(self._textBrowser_2))
-            self.mysignal4.emit(str(f'Got Crowns {self.c}\nTime in Game(Does not work) {self.c1}\nTotall batlles {self.c2}\nCup changes(Does not work) {self.c3}'))
+            self.mysignal4.emit(str(f'Got Crowns {self.got_crowns}\nTime in Game(Does not work) {self.time_in_game}\nTotall batlles {self.totall_batlles}\nCup changes(Does not work) {self.cup_changes}'))
 
     def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts):
         if self.farm:
@@ -52,6 +52,10 @@ class MyThread(QtCore.QThread):
             self.farm = True
             self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, self)
             threading.Thread(target=self.bot.startFarm).start()
+
+    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts):
+        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, self)
+
 
 class Ui_MainWindow(object):
     def __init__(self):
@@ -65,7 +69,7 @@ class Ui_MainWindow(object):
         self.open_chest = False
         self._changed_account = False
         self.port = 5555
-        self._total_accounts = 3
+        self._total_accounts = 0
         self._change_account = 0
         self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts)
         self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)
@@ -76,7 +80,11 @@ class Ui_MainWindow(object):
         self.thread.start()
         self.bot = self.thread.bot
         self.list_mode = ['global', 'mode_1', 'mode_2', '2X2']
-        self.list_change_language = ['English', 'Русский', 'Deutsch', 'Spænska']
+        self.list_change_language = [
+                                     'English', 'Русский', 'Deutsch', 'Spænska',
+                                     'français', '日本', 'Italiano', 'čeština',
+                                     'Português'
+                                     ]
         self.list_card_request = [
                                     'Skeletons', 'Ice_Spirit', 'Fire_Spirit', 'Electro_Spirit',
                                     'Goblins', 'Bomber', 'Spear_Goblins', 'Bats',
@@ -591,7 +599,7 @@ class Ui_MainWindow(object):
         self.pushButton_21.setText(_translate("MainWindow", "run Battle\nGlobal"))
         self.pushButton_22.setText(_translate("MainWindow", "run Battle \n Mode 1"))
         self.pushButton_23.setText(_translate("MainWindow", "run Battle \n Mode 2"))
-        self.pushButton_24.setText(_translate("MainWindow", "24"))
+        self.pushButton_24.setText(_translate("MainWindow", "change account"))
         self.pushButton_25.setText(_translate("MainWindow", "25"))
         self.pushButton_26.setText(_translate("MainWindow", "26"))
         self.pushButton_27.setText(_translate("MainWindow", "27"))
@@ -644,7 +652,6 @@ class Ui_MainWindow(object):
         self.pushButton_113.setText(_translate("MainWindow", "113"))
         self.pushButton_114.setText(_translate("MainWindow", "114"))
 
-
     def debugButton(self):
         self.pushButton_5.clicked.connect(lambda: self.bot.bot.openChest(1))
         self.pushButton_6.clicked.connect(lambda: self.bot.bot.openChest(2))
@@ -679,6 +686,7 @@ class Ui_MainWindow(object):
         self.bot = self.thread.bot
 
     def getTrigger(self):
+        self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts)
         trigger = ImageTriggers(True, True).getTriggerDEBUG(self.bot.bot.getScreen())
         string_debug = ''
         for i in trigger:
@@ -742,6 +750,16 @@ class Ui_MainWindow(object):
             self.language = 'Spanish'
         elif language == '中国人':
             self.language = 'Chinese'
+        elif language == 'français':
+            self.language = 'French'
+        elif language == '日本':
+            self.language = 'Japanese'
+        elif language == 'Italiano':
+            self.language = 'Italian'
+        elif language == 'čeština':
+            self.language = 'Czech'
+        elif language == 'Português':
+            self.language = 'Portuguese'
 
         self.language_set_words = []
         with open(f'Languages/{self.language}.txt', 'r', encoding='UTF-8') as f:
@@ -774,7 +792,7 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", f"<body><p>{self.language_set_words[19]} Clash Royale</p><p>BugReport: t.me/leninka20</p></body>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", self.language_set_words[20]))
         self.label_changed_account.setText(_translate("MainWindow", 'Changed Account'))
-        self.label_change_account.setText(_translate("MainWindow", 'Change Account'))
+        self.label_change_account.setText(_translate("MainWindow", 'Selected  Account'))
         self.label_total_accounts.setText(_translate("MainWindow", 'Total Accounts'))
 
     def on_change(self, v):

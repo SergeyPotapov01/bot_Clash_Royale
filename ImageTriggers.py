@@ -2,13 +2,8 @@ import io
 
 import neural_networks
 
-import pytesseract
-
 from PIL import Image
 from loguru import logger
-
-
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 recognitionCard = neural_networks.CardInBatlle()
 recognitionElixir = neural_networks.ElixirInBatlle()
@@ -83,8 +78,8 @@ class ImageTriggers:
 
     def _getTextError(self):
         i = self.image.crop((40, 370, 495, 540))
-        return pytesseract.image_to_string(i).strip()
-    
+        return "Text Error"
+
     def _getCardsInBatlle(self):
         imageCards = [
             self.image.crop((142, 815, 194, 871)),
@@ -105,6 +100,16 @@ class ImageTriggers:
         elixir = self.image.crop((142, 912, 182, 940))
         elixir = elixir.resize((20, 14))
         return recognitionElixir.predict(elixir)
+
+    def _get_tower_health(self):
+        tower_healths = [
+                self.image.crop((247, 16, 322, 34)),
+                self.image.crop((104, 131, 153, 151)),
+                self.image.crop((389, 131, 436, 151)),
+                self.image.crop((273, 726, 323, 742)),
+                self.image.crop((104, 590, 145, 606)),
+                self.image.crop((386, 590, 430, 606)),
+                ]
 
     def getTrigger(self, img):
         self.image = Image.open(io.BytesIO(img))
@@ -141,7 +146,10 @@ class ImageTriggers:
             if self.image.getpixel((272, 893))[0:3] == (216, 234, 246) or self.image.getpixel((272, 893))[0:3] == (216, 234, 245):  # пиксель на кропку эвента если она не активка
                 if self.image.getpixel((435, 876))[0:3] == (48, 185, 71) and self.requested_card:
                     pass
-                    # return 210, None  # тригер на отправку запроса карт
+                    #return 210, None  # тригер на отправку запроса карт
+                if self.image.getpixel((435, 876))[0:3] == (236, 8, 56) and self.requested_card:
+                    pass
+                    #return 211, None
 
                 if self._getTriggerOpenChest() and self.open_chest:
                     return 220 + self._getTriggerOpenChest(), None
@@ -176,9 +184,14 @@ class ImageTriggers:
             (100, self.image.getpixel((529, 950)), self.image.getpixel((529, 950))[0:3] == (7, 71, 144)),
             (121, self.image.getpixel((300, 840)), self.image.getpixel((300, 840))[0:3] == (104, 187, 255)),
             (200, self.image.getpixel((530, 944)), self.image.getpixel((530, 944))[0:3] == (64, 76, 95)),
+            (200, self.image.getpixel((272, 893)), self.image.getpixel((272, 893))[0:3] == (216, 234, 245)),
+            (200, self.image.getpixel((272, 893)), self.image.getpixel((272, 893))[0:3] == (216, 234, 246)),
+            (210, self.image.getpixel((435, 876)), self.image.getpixel((435, 876))[0:3] == (48, 185, 71)),
+            (211, self.image.getpixel((435, 876)), self.image.getpixel((435, 876))[0:3] == (236, 8, 56)),
+            (212, self.image.getpixel((501, 812)), self.image.getpixel((501, 812))[0:3] == (76, 172, 255)),
             (200, self.image.getpixel((272, 893)), self.image.getpixel((272, 893))[0:3] == (216, 234, 246)),
             (300, self.image.getpixel((442, 906)), self.image.getpixel((442, 906))[0:3] == (154, 205, 255)),
             (301, self.image.getpixel((14, 945)), self.image.getpixel((14, 945))[0:3] == (24, 113, 216)),
             (400, self.image.getpixel((280, 500)), self.image.getpixel((280, 500))[0:3] == (66, 66, 66)),
-            self.getTrigger(img)
+            self.getTrigger(img),
         )

@@ -8,16 +8,16 @@ from loguru import logger
 
 
 class Strategics:
-    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account,  total_accounts, con):
+    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, connection_to_parent):
         self.bot = Bot(port=port)
         self.triggers = ImageTriggers(open_chest, requested_card)
         self.index = 0
-        self.cycleStart = False
+        self.cycleStart = True
         self.batlle_mode = batlle_mode
         self.number_account = number_account
         self.changed_account = changed_account
         self.total_accounts = total_accounts
-        self.con = con
+        self.connection_to_parent = connection_to_parent
 
     def main(self):
         if self.bot.ADB.cheakInstallCR() == False:
@@ -28,12 +28,12 @@ class Strategics:
 
         index_batlle = 0
         t = time.time()
-        while self.cycleStart:
+        while True:
             image = self.bot.getScreen()
             triggers = self.triggers.getTrigger(image)
             trigger = triggers[0]
             logger.debug(str(triggers) + ' ' + str(time.time() - t))
-            self.con._textBrowser_3 = f'{triggers}\n' + self.con._textBrowser_3
+            self.connection_to_parent._textBrowser_3 = f'{triggers}\n' + self.connection_to_parent._textBrowser_3
             if self.index == 30:
                 self.bot.returnHome()
                 self.bot.reboot()
@@ -118,10 +118,10 @@ class Strategics:
             elif trigger == 121:
                 index_batlle += 1
                 self.bot.exitBatle1X1()
-                self.con.c2 += 1
-                self.con.c += triggers[1]
-                self.con._textBrowser_2 = f'{triggers[1]}' + self.con._textBrowser_2
-                self.con._textBrowser_3 = f'{triggers}\n'
+                self.connection_to_parent.totall_batlles += 1
+                self.connection_to_parent.got_crowns += triggers[1]
+                self.connection_to_parent._textBrowser_2 = f'{triggers[1]}' + self.connection_to_parent._textBrowser_2
+                self.connection_to_parent._textBrowser_3 = f'{triggers}\n'
 
                 if index_batlle == 10:
                     self.bot.reboot()
@@ -131,10 +131,10 @@ class Strategics:
             elif trigger == 122:
                 self.bot.exitBatle2X2()
                 index_batlle += 1
-                self.con.c2 += 1
-                self.con.c += triggers[1]
-                self.con._textBrowser_2 = f'{triggers[1]}' + self.con._textBrowser_2
-                self.con._textBrowser_3 = f'{triggers}\n'
+                self.connection_to_parent.totall_batlles += 1
+                self.connection_to_parent.got_crowns += triggers[1]
+                self.connection_to_parent._textBrowser_2 = f'{triggers[1]}' + self.connection_to_parent._textBrowser_2
+                self.connection_to_parent._textBrowser_3 = f'{triggers}\n'
                 if index_batlle == 10:
                     self.bot.reboot()
                     index_batlle = 0
@@ -146,9 +146,34 @@ class Strategics:
             elif trigger == 200:
                 if self.batlle_mode == 'global':
                     self.bot.runBattleGlobal()
+                if self.batlle_mode == 'disabled':
+                    self.increasing_account_number()
+                    self.bot.changeAccount(self.number_account, self.total_accounts)
+                    self.connection_to_parent.number_account = self.number_account
                 else:
                     self.bot.runBattleMode(self.batlle_mode)
                 time.sleep(1)
+
+            elif trigger == 210:
+                self.bot.goToClanChat()
+                image = self.bot.getScreen()
+                triggers = self.triggers.getTrigger(image)
+                trigger = triggers[0]
+                if trigger != 212:
+                    self.bot.goToClanChat()
+                self.bot.requestCard(id_card)
+
+
+            elif trigger == 211:
+                self.bot.goToClanChat()
+                image = self.bot.getScreen()
+                triggers = self.triggers.getTrigger(image)
+                trigger = triggers[0]
+                if trigger != 212:
+                    self.bot.goToClanChat()
+                if not 'ДОНАТ КАРТ':
+                    pass # Тут будет ебанутый алгоритм для доната карт потом придумаю
+                self.bot.returnHome()
 
             elif trigger > 220 and trigger < 225:
                 self.bot.getRewardChest(trigger - 220)
@@ -163,8 +188,9 @@ class Strategics:
             elif trigger == 250:
                 if self.changed_account:
                     self.increasing_account_number()
+                    self.bot.returnHome()
                     self.bot.changeAccount(self.number_account, self.total_accounts)
-                    self.con.number_account = self.number_account
+                    self.connection_to_parent.number_account = self.number_account
                 else:
                     self.bot.rewardLimit()
 

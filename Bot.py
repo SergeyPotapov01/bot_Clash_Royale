@@ -65,7 +65,7 @@ class Bot:
         logger.debug('Bot.openCloseClanChat')
         self.ADB.click(490, 61)
 
-    def requestCard(self):
+    def requestCard(self, id_card, total_card):
         logger.debug('Bot.requestCard')
         self.ADB.click(70, 805)
 
@@ -137,9 +137,6 @@ class Bot:
         return self.ADB.getScreen()
 
     def changeAccount(self, number, total_accounts):
-        self.ADB.click(270, 930)
-        sleep(2)
-        self.ADB.click(270, 930)
         sleep(3)
         self.ADB.click(500, 90)
         sleep(3)
