@@ -23,7 +23,6 @@ class CardInBatlle:
                             'Skeleton_Army', 'Skeleton_Barrel', 'Skeleton_Dragons', 'Skeleton_King', 'Skeletons',
                             'Sparky', 'Spear_Goblins', 'Tesla', 'The_Log', 'Three_Musketeers', 'Tombstone', 'Tornado',
                             'Valkyrie', 'Wall_Breakers', 'Witch', 'Wizard', 'X-Bow', 'Zap', 'Zappies', 'МУСОР']
-
     def predict(self, image):
         image = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGBA2RGB)
         image = image.astype("float") / 255.0

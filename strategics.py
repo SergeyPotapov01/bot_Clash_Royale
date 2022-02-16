@@ -1,5 +1,5 @@
 import time
-from random import randint
+from random import randint, choice
 
 from Bot import Bot
 from ImageTriggers import ImageTriggers
@@ -28,7 +28,7 @@ class Strategics:
 
         index_batlle = 0
         t = time.time()
-        while True:
+        while self.cycleStart:
             image = self.bot.getScreen()
             triggers = self.triggers.getTrigger(image)
             trigger = triggers[0]
@@ -50,13 +50,82 @@ class Strategics:
 
             elif trigger == 100:
 
+                if 'Goblin_Barrel' in triggers[2]:
+                    if triggers[1] >= 3:
+                        self.bot.selectCard(triggers[2].index('Goblin_Barrel'))
+                        self.bot.placingCard1X1(choice((410, 105)), 202)
+                    else:
+                        continue
+
+                if 'Goblin_Drill' in triggers[2]:
+                    if triggers[1] >= 3:
+                        self.bot.selectCard(triggers[2].index('Goblin_Drill'))
+                        self.bot.placingCard1X1(choice((410, 105)), 256)
+                    else:
+                        continue
+
+                if 'Balloon' in triggers[2]:
+                    if triggers[1] >= 6:
+                        self.bot.selectCard(triggers[2].index('Balloon'))
+                        self.bot.placingCard1X1(choice((410, 105)), 202)
+                    else:
+                        continue
+
+                if 'Skeleton_Barrel' in triggers[2]:
+                    if triggers[1] >= 4:
+                        self.bot.selectCard(triggers[2].index('Skeleton_Barrel'))
+                        self.bot.placingCard1X1(choice((410, 105)), 202)
+                    else:
+                        continue
+
+                if 'Three_Musketeers' in triggers[2]:
+                    if triggers[1] >= 9:
+                        self.bot.selectCard(triggers[2].index('Three_Musketeers'))
+                        self.bot.placingCard1X1(723, 723)
+                    else:
+                        continue
+
+                if 'Zappies' in triggers[2]:
+                    if triggers[1] >= 4:
+                        self.bot.selectCard(triggers[2].index('Zappies'))
+                        self.bot.placingCard1X1(723, 723)
+                    else:
+                        continue
+
+                if 'Ram_Rider' in triggers[2]:
+                    if triggers[1] >= 6:
+                        self.bot.selectCard(triggers[2].index('Ram_Rider'))
+                        self.bot.placingCard1X1(choice((410, 105)), 202)
+                    else:
+                        continue
+
+                if 'Prince' in triggers[2]:
+                    if triggers[1] >= 6:
+                        self.bot.selectCard(triggers[2].index('Prince'))
+                        self.bot.placingCard1X1(choice((410, 105)), 202)
+                    else:
+                        continue
+
+                if 'Dark_Prince' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Dark_Prince'))
+                        self.bot.placingCard1X1(choice((410, 105)), 202)
+                    else:
+                        continue
+
+                if 'Royal_Hogs' in triggers[2]:
+                    if triggers[1] >= 6:
+                        self.bot.selectCard(triggers[2].index('Royal_Hogs'))
+                        self.bot.placingCard1X1(choice((410, 268, 105)), 202)
+                    else:
+                        continue
+
                 if 'Golem' in triggers[2]:
                     if triggers[1] >= 8:
                         self.bot.selectCard(triggers[2].index('Golem'))
                         self.bot.placingCard1X1(275, 700)
                     else:
-                        time.sleep(8 - triggers[1])
-                        self.bot.placingCard1X1(275, 700)
+                        continue
                     time.sleep(7)
                     if 'Witch' in triggers[2]:
                         self.bot.selectCard(triggers[2].index('Witch'))
@@ -81,6 +150,156 @@ class Strategics:
                     self.bot.placingCard1X1(390, 450)
                     continue
 
+                if 'Giant' in triggers[2]:
+                    if triggers[1] >= 6:
+                        self.bot.selectCard(triggers[2].index('Giant'))
+                        self.bot.placingCard1X1(275, 700)
+                    else:
+                        continue
+                    time.sleep(7)
+                    if 'Witch' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Witch'))
+                        self.bot.placingCard1X1(275, 700)
+                    elif 'Night_Witch' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Night_Witch'))
+                        self.bot.placingCard1X1(275, 700)
+                    else:
+                        self.bot.selectCard(triggers[2].index('Giant'))
+                        self.bot.placingCard1X1(275, 700)
+                    time.sleep(5)
+                    image = self.bot.getScreen()
+                    if self.triggers.getTrigger(image)[0] != 100:
+                        continue
+                    self.bot.selectCard(randint(0, 3))
+                    self.bot.placingCard1X1(475, 550)
+                    time.sleep(6)
+                    image = self.bot.getScreen()
+                    if self.triggers.getTrigger(image)[0] != 100:
+                        continue
+                    self.bot.selectCard(randint(0, 3))
+                    self.bot.placingCard1X1(390, 450)
+                    continue
+
+                if 'Goblin_Giant' in triggers[2]:
+                    if triggers[1] >= 7:
+                        self.bot.selectCard(triggers[2].index('Goblin_Giant'))
+                        self.bot.placingCard1X1(275, 700)
+                    else:
+                        continue
+                    time.sleep(7)
+                    if 'Witch' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Witch'))
+                        self.bot.placingCard1X1(275, 700)
+                    elif 'Night_Witch' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Night_Witch'))
+                        self.bot.placingCard1X1(275, 700)
+                    else:
+                        self.bot.selectCard(triggers[2].index('Goblin_Giant'))
+                        self.bot.placingCard1X1(275, 700)
+                    time.sleep(5)
+                    image = self.bot.getScreen()
+                    if self.triggers.getTrigger(image)[0] != 100:
+                        continue
+                    self.bot.selectCard(randint(0, 3))
+                    self.bot.placingCard1X1(475, 550)
+                    time.sleep(6)
+                    image = self.bot.getScreen()
+                    if self.triggers.getTrigger(image)[0] != 100:
+                        continue
+                    self.bot.selectCard(randint(0, 3))
+                    self.bot.placingCard1X1(390, 450)
+                    continue
+
+                if 'Lava_Hound' in triggers[2]:
+                    if triggers[1] >= 8:
+                        self.bot.selectCard(triggers[2].index('Lava_Hound'))
+                        self.bot.placingCard1X1(275, 700)
+                    else:
+                        continue
+                    time.sleep(7)
+                    if 'Witch' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Witch'))
+                        self.bot.placingCard1X1(275, 700)
+                    elif 'Night_Witch' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Night_Witch'))
+                        self.bot.placingCard1X1(275, 700)
+                    else:
+                        self.bot.selectCard(triggers[2].index('Lava_Hound'))
+                        self.bot.placingCard1X1(275, 700)
+                    time.sleep(5)
+                    image = self.bot.getScreen()
+                    if self.triggers.getTrigger(image)[0] != 100:
+                        continue
+                    self.bot.selectCard(randint(0, 3))
+                    self.bot.placingCard1X1(475, 550)
+                    time.sleep(6)
+                    image = self.bot.getScreen()
+                    if self.triggers.getTrigger(image)[0] != 100:
+                        continue
+                    self.bot.selectCard(randint(0, 3))
+                    self.bot.placingCard1X1(390, 450)
+                    continue
+
+                if 'Electro_Giant' in triggers[2]:
+                    if triggers[1] >= 8:
+                        self.bot.selectCard(triggers[2].index('Electro_Giant'))
+                        self.bot.placingCard1X1(275, 700)
+                    else:
+                        continue
+                    time.sleep(7)
+                    if 'Witch' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Witch'))
+                        self.bot.placingCard1X1(275, 700)
+                    elif 'Night_Witch' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Night_Witch'))
+                        self.bot.placingCard1X1(275, 700)
+                    else:
+                        self.bot.selectCard(triggers[2].index('Electro_Giant'))
+                        self.bot.placingCard1X1(275, 700)
+                    time.sleep(5)
+                    image = self.bot.getScreen()
+                    if self.triggers.getTrigger(image)[0] != 100:
+                        continue
+                    self.bot.selectCard(randint(0, 3))
+                    self.bot.placingCard1X1(475, 550)
+                    time.sleep(6)
+                    image = self.bot.getScreen()
+                    if self.triggers.getTrigger(image)[0] != 100:
+                        continue
+                    self.bot.selectCard(randint(0, 3))
+                    self.bot.placingCard1X1(390, 450)
+                    continue
+
+                if 'Elixir_Golem' in triggers[2]:
+                    if triggers[1] >= 7:
+                        self.bot.selectCard(triggers[2].index('Elixir_Golem'))
+                        self.bot.placingCard1X1(275, 700)
+                    else:
+                        continue
+                    time.sleep(4)
+                    if 'Witch' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Witch'))
+                        self.bot.placingCard1X1(275, 700)
+                    elif 'Night_Witch' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Night_Witch'))
+                        self.bot.placingCard1X1(275, 700)
+                    else:
+                        self.bot.selectCard(triggers[2].index('Elixir_Golem'))
+                        self.bot.placingCard1X1(275, 700)
+                    time.sleep(5)
+                    image = self.bot.getScreen()
+                    if self.triggers.getTrigger(image)[0] != 100:
+                        continue
+                    self.bot.selectCard(randint(0, 3))
+                    self.bot.placingCard1X1(475, 550)
+                    time.sleep(6)
+                    image = self.bot.getScreen()
+                    if self.triggers.getTrigger(image)[0] != 100:
+                        continue
+                    self.bot.selectCard(randint(0, 3))
+                    self.bot.placingCard1X1(390, 450)
+                    continue
+
                 if 'Goblin_Gang' in triggers[2]:
                     self.bot.selectCard(triggers[2].index('Goblin_Gang'))
                     if triggers[1] >= 3:
@@ -89,22 +308,64 @@ class Strategics:
                         continue
 
                 if 'Princess' in triggers[2]:
-                    self.bot.selectCard(triggers[2].index('Princess'))
                     if triggers[1] >= 3:
+                        self.bot.selectCard(triggers[2].index('Princess'))
                         self.bot.placingCard1X1(260, 700)
                     else:
                         continue
 
                 if 'Hog_Rider' in triggers[2]:
-                    self.bot.selectCard(triggers[2].index('Hog_Rider'))
                     if triggers[1] >= 4:
-                        self.bot.placingCard1X1(475, 426)
+                        self.bot.selectCard(triggers[2].index('Hog_Rider'))
+                        self.bot.placingCard1X1(choice((410, 105)), 202)
                     else:
                         continue
 
                 if 'Cannon' in triggers[2]:
-                    self.bot.selectCard(triggers[2].index('Cannon'))
                     if triggers[1] >= 4:
+                        self.bot.selectCard(triggers[2].index('Cannon'))
+                        self.bot.placingCard1X1(250, 515)
+                    else:
+                        continue
+
+                if 'Goblin_Hut' in triggers[2]:
+                    if triggers[1] >= 4:
+                        self.bot.selectCard(triggers[2].index('Goblin_Hut'))
+                        self.bot.placingCard1X1(250, 515)
+                    else:
+                        continue
+
+                if 'Goblin_Cage' in triggers[2]:
+                    if triggers[1] >= 4:
+                        self.bot.selectCard(triggers[2].index('Goblin_Cage'))
+                        self.bot.placingCard1X1(250, 515)
+                    else:
+                        continue
+
+                if 'Barbarian_Hut' in triggers[2]:
+                    if triggers[1] >= 4:
+                        self.bot.selectCard(triggers[2].index('Barbarian_Hut'))
+                        self.bot.placingCard1X1(250, 515)
+                    else:
+                        continue
+
+                if 'Furnace' in triggers[2]:
+                    if triggers[1] >= 4:
+                        self.bot.selectCard(triggers[2].index('Furnace'))
+                        self.bot.placingCard1X1(250, 515)
+                    else:
+                        continue
+
+                if 'Bomb_Tower' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Bomb_Tower'))
+                        self.bot.placingCard1X1(250, 515)
+                    else:
+                        continue
+
+                if 'Tesla' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Bomb_Tower'))
                         self.bot.placingCard1X1(250, 515)
                     else:
                         continue
@@ -161,7 +422,7 @@ class Strategics:
                 trigger = triggers[0]
                 if trigger != 212:
                     self.bot.goToClanChat()
-                self.bot.requestCard(id_card)
+                self.bot.requestCard('id_card')
 
 
             elif trigger == 211:
@@ -211,10 +472,9 @@ class Strategics:
             t = time.time()
 
     def increasing_account_number(self):
+        self.number_account += 1
         if self.number_account == self.total_accounts:
             self.number_account = 0
-        else:
-            self.number_account += 1
 
     def startFarm(self):
         self.cycleStart = True

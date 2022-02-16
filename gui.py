@@ -79,11 +79,11 @@ class Ui_MainWindow(object):
 
         self.thread.start()
         self.bot = self.thread.bot
-        self.list_mode = ['global', 'mode_1', 'mode_2', '2X2']
+        self.list_mode = ['global', 'mode_1', 'mode_2', '2X2', 'disabled']
         self.list_change_language = [
                                      'English', 'Русский', 'Deutsch', 'Spænska',
                                      'français', '日本', 'Italiano', 'čeština',
-                                     'Português'
+                                     'Português', '中国人'
                                      ]
         self.list_card_request = [
                                     'Skeletons', 'Ice_Spirit', 'Fire_Spirit', 'Electro_Spirit',
