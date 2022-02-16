@@ -1,21 +1,21 @@
-Comienzo
-Detener
-Consigue_un gatillo
-recargar_juego
+Iniciar
+Apagar
+Obtener Desencadenadors
+Reiniciar App
 Estadísticas
-Resultados de la batalla:
-Registro de eventos:
-Log
-abrir cofres
-Solicitud de mapa
-modo de combate
-Selección de idioma
-Selección de un mapa de consulta
-Configuración de bots
-Especifique el puerto para el servidor adb
-Número de peleas antes del descanso
-Tiempo de descanso (en minutos)
-configuración adb
+Resultados de la Batalla
+Registro de Eventos
+Registro
+Abrir Cofres
+Pedir Cartas
+Modo Batalla
+Selecciónar Idioma
+Pedir Carta Regular
+Configuración del Bot
+Numero Puerto Servidor ADB
+Número de Batallas Antes del Descanso
+Tiempo de Descanso (minutos)
+Configuración ADB
 Depurar
-Bot para farmear coronas en
-Sobre el programa
+Bot para Cultivar Coronas
+Sobre el Programa
