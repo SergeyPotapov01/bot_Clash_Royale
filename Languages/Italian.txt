@@ -1,0 +1,21 @@
+Inizio
+Fermare
+Ottieni trigger
+Ricarica gioco
+Statistiche
+Risultati della battaglia
+Registro eventi
+Tronco d'albero
+Casse aperte
+Richiedi carte
+Modalità battaglia
+Selezione della lingua
+Carta normale da richiedere
+Impostazioni del bot
+Numero di porta del server ADB
+Numero di finiture
+Pausa (minuti)
+Impostazioni ADB
+Debug
+Bot per corone agricole
+Informazioni sul programma

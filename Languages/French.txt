@@ -1,0 +1,21 @@
+Démarrer
+Arrêter
+Obtenir des déclencheurs
+Recharger le jeu
+Statistiques
+Résultats de la bataille
+Journal des événements
+Enregistrer
+Coffres ouverts
+Demander des cartes
+Mode de combat
+Sélection de la langue
+Carte régulière à demander
+Paramètres du robot
+Numéro de port du serveur ADB
+Nombre de finitions
+Temps de pause (minutes)
+Paramètres ADB
+Déboguer
+Bot pour les couronnes agricoles
+À propos du programme

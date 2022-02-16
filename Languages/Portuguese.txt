@@ -1,0 +1,21 @@
+Começar
+Pare
+Obter gatilhos
+Recarregar jogo
+Estatisticas
+Resultados da Batalha
+Registro de eventos
+Registro
+Baús Abertos
+Solicitar cartões
+Modo de batalha
+Seleção de idioma
+Cartão Regular a Solicitar
+Configurações de bot
+Número da porta do servidor ADB
+Número de acabamentos
+Tempo de pausa (minutos)
+Configurações ADB
+Depurar
+Bot para coroas agrícolas
+Sobre o Programa
