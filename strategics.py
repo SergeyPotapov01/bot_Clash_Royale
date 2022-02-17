@@ -365,7 +365,7 @@ class Strategics:
 
                 if 'Tesla' in triggers[2]:
                     if triggers[1] >= 5:
-                        self.bot.selectCard(triggers[2].index('Bomb_Tower'))
+                        self.bot.selectCard(triggers[2].index('Tesla'))
                         self.bot.placingCard1X1(250, 515)
                     else:
                         continue
