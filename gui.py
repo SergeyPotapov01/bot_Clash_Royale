@@ -38,7 +38,7 @@ class MyThread(QtCore.QThread):
 
     def run(self):
         while True:
-            self.sleep(2.5)
+            self.sleep(2)
             self.mysignal.emit(str(self.number_account))
             self.mysignal2.emit(str(self._textBrowser_3))
             self.mysignal3.emit(str(self._textBrowser_2))
