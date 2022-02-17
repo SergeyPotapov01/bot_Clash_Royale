@@ -24,7 +24,7 @@ class MyThread(QtCore.QThread):
     mysignal4 = QtCore.pyqtSignal(str)
 
 
-    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, parent=None):
+    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, parent=None):
         QtCore.QThread.__init__(self, parent)
         self.farm = False
         self.number_account = '0'
@@ -34,27 +34,27 @@ class MyThread(QtCore.QThread):
         self.time_in_game = 0
         self.totall_batlles = 0
         self.cup_changes = 0
-        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, self)
+        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, self)
 
     def run(self):
         while True:
-            self.sleep(5)
+            self.sleep(2.5)
             self.mysignal.emit(str(self.number_account))
             self.mysignal2.emit(str(self._textBrowser_3))
             self.mysignal3.emit(str(self._textBrowser_2))
             self.mysignal4.emit(str(f'Got Crowns {self.got_crowns}\nTime in Game(Does not work) {self.time_in_game}\nTotall batlles {self.totall_batlles}\nCup changes(Does not work) {self.cup_changes}'))
 
-    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts):
+    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card):
         if self.farm:
             self.farm = False
             self.bot.stopFarm()
         else:
             self.farm = True
-            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, self)
+            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, self)
             threading.Thread(target=self.bot.startFarm).start()
 
-    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts):
-        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, self)
+    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, request_card, id_card):
+        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, request_card, id_card, self)
 
 
 class Ui_MainWindow(object):
@@ -71,7 +71,8 @@ class Ui_MainWindow(object):
         self.port = 5555
         self._total_accounts = 0
         self._change_account = 0
-        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts)
+        self.id_card = 0
+        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card)
         self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)
         self.thread.mysignal2.connect(self.logEvent, QtCore.Qt.QueuedConnection)
         self.thread.mysignal3.connect(self.logCrown, QtCore.Qt.QueuedConnection)
@@ -599,8 +600,8 @@ class Ui_MainWindow(object):
         self.pushButton_21.setText(_translate("MainWindow", "run Battle\nGlobal"))
         self.pushButton_22.setText(_translate("MainWindow", "run Battle \n Mode 1"))
         self.pushButton_23.setText(_translate("MainWindow", "run Battle \n Mode 2"))
-        self.pushButton_24.setText(_translate("MainWindow", "change account"))
-        self.pushButton_25.setText(_translate("MainWindow", "25"))
+        self.pushButton_24.setText(_translate("MainWindow", "change \n account"))
+        self.pushButton_25.setText(_translate("MainWindow", "Request\nCard"))
         self.pushButton_26.setText(_translate("MainWindow", "26"))
         self.pushButton_27.setText(_translate("MainWindow", "27"))
         self.pushButton_28.setText(_translate("MainWindow", "28"))
@@ -673,6 +674,7 @@ class Ui_MainWindow(object):
         self.pushButton_22.clicked.connect(lambda: self.bot.bot.runBattleMode(1))
         self.pushButton_23.clicked.connect(lambda: self.bot.bot.runBattleMode(2))
         self.pushButton_24.clicked.connect(lambda: self.bot.bot.changeAccount(self.thread.number_account, self._total_accounts))
+        self.pushButton_25.clicked.connect(lambda: self.bot.bot.requestCard(self.id_card))
 
     def startStopFarm(self):
         _translate = QtCore.QCoreApplication.translate
@@ -682,11 +684,11 @@ class Ui_MainWindow(object):
         else:
             self.farm = True
             self.pushButton.setText(_translate("MainWindow", self.language_set_words[1]))
-        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts)
+        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card)
         self.bot = self.thread.bot
 
     def getTrigger(self):
-        self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts)
+        self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card)
         trigger = ImageTriggers(True, True).getTriggerDEBUG(self.bot.bot.getScreen())
         string_debug = ''
         for i in trigger:
@@ -716,8 +718,10 @@ class Ui_MainWindow(object):
         self._mode = text
 
     def currentTextComboBox_2(self, text):
-        logger.debug(f'Была установлен карта запроса: {text}')
         self._card_request = text
+        self.id_card = self.list_card_request.index(text)
+        logger.debug(f'Была установлен карта запроса: {text}, {self.id_card}')
+
 
     def openChest(self, event):
         logger.debug(f'Был изменен параметр открытия сундуков на: {event}')

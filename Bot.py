@@ -65,9 +65,49 @@ class Bot:
         logger.debug('Bot.openCloseClanChat')
         self.ADB.click(490, 61)
 
-    def requestCard(self, id_card, total_card):
+    def requestCard(self, id_card):
         logger.debug('Bot.requestCard')
         self.ADB.click(70, 805)
+        number = int(id_card)
+        line = number // 4
+        slide = line // 3
+        line = (number // 4) % 4
+        _number = number % 4
+        if slide == 0:
+            if _number == 0:
+                self.ADB.click(80, 350 + 170 * line)
+            if _number == 1:
+                self.ADB.click(210, 350 + 170 * line)
+            if _number == 2:
+                self.ADB.click(330, 350 + 170 * line)
+            if _number == 3:
+                self.ADB.click(450, 350 + 170 * line)
+            return
+
+        for i in range(slide):
+            self.swipeRequestCard()
+            sleep(2)
+
+        if slide == 4:
+            if _number == 0:
+                self.ADB.click(80, 450 + 170 * line)
+            if _number == 1:
+                self.ADB.click(210, 450 + 170 * line)
+            if _number == 2:
+                self.ADB.click(330, 450 + 170 * line)
+            if _number == 3:
+                self.ADB.click(450, 450 + 170 * line)
+
+        else:
+            if _number == 0:
+                self.ADB.click(80, 350 + 170 * line)
+            if _number == 1:
+                self.ADB.click(210, 350 + 170 * line)
+            if _number == 2:
+                self.ADB.click(330, 350 + 170 * line)
+            if _number == 3:
+                self.ADB.click(450, 350 + 170 * line)
+
 
     def swipeRequestCard(self):
         logger.debug('Bot.swipeRequestCard')

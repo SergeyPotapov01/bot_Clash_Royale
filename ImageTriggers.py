@@ -189,6 +189,7 @@ class ImageTriggers:
             (210, self.image.getpixel((435, 876)), self.image.getpixel((435, 876))[0:3] == (48, 185, 71)),
             (211, self.image.getpixel((435, 876)), self.image.getpixel((435, 876))[0:3] == (236, 8, 56)),
             (212, self.image.getpixel((501, 812)), self.image.getpixel((501, 812))[0:3] == (76, 172, 255)),
+            (225, self.image.getpixel((47, 539)), self.image.getpixel((47, 539))[0:3] == (7, 49, 74)),
             (200, self.image.getpixel((272, 893)), self.image.getpixel((272, 893))[0:3] == (216, 234, 246)),
             (300, self.image.getpixel((442, 906)), self.image.getpixel((442, 906))[0:3] == (154, 205, 255)),
             (301, self.image.getpixel((14, 945)), self.image.getpixel((14, 945))[0:3] == (24, 113, 216)),

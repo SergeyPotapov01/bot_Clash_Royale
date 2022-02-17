@@ -8,7 +8,7 @@ from loguru import logger
 
 
 class Strategics:
-    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, connection_to_parent):
+    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, connection_to_parent):
         self.bot = Bot(port=port)
         self.triggers = ImageTriggers(open_chest, requested_card)
         self.index = 0
@@ -18,6 +18,8 @@ class Strategics:
         self.changed_account = changed_account
         self.total_accounts = total_accounts
         self.connection_to_parent = connection_to_parent
+        self.request_card = requested_card
+        self.id_card = id_card
 
     def main(self):
         if self.bot.ADB.cheakInstallCR() == False:
@@ -25,6 +27,8 @@ class Strategics:
 
         if self.bot.ADB.cheakRunCR() == False:
             self.bot.openCR()
+
+        slowdown_in_menu = True
 
         index_batlle = 0
         t = time.time()
@@ -34,12 +38,12 @@ class Strategics:
             trigger = triggers[0]
             logger.debug(str(triggers) + ' ' + str(time.time() - t))
             self.connection_to_parent._textBrowser_3 = f'{triggers}\n' + self.connection_to_parent._textBrowser_3
-            if self.index == 30:
+            if self.index == 50:
                 self.bot.returnHome()
                 self.bot.reboot()
                 self.index = 0
 
-            if self.index == 10:
+            if self.index % 5 == 0:
                 self.bot.returnHome()
 
             if trigger == 0:
@@ -403,11 +407,18 @@ class Strategics:
 
             elif trigger == 124:
                 self.bot.ADB.click(400, 420)
+                time.sleep(1)
 
             elif trigger == 200:
+                if slowdown_in_menu:
+                    slowdown_in_menu = False
+                    time.sleep(3)
+                    continue
+                slowdown_in_menu = True
+
                 if self.batlle_mode == 'global':
                     self.bot.runBattleGlobal()
-                if self.batlle_mode == 'disabled':
+                elif self.batlle_mode == 'disabled':
                     self.increasing_account_number()
                     self.bot.changeAccount(self.number_account, self.total_accounts)
                     self.connection_to_parent.number_account = self.number_account
@@ -417,23 +428,26 @@ class Strategics:
 
             elif trigger == 210:
                 self.bot.goToClanChat()
+                time.sleep(2)
                 image = self.bot.getScreen()
                 triggers = self.triggers.getTrigger(image)
+                time.sleep(2)
                 trigger = triggers[0]
                 if trigger != 212:
                     self.bot.goToClanChat()
-                self.bot.requestCard('id_card')
-
+                    time.sleep(2)
+                self.bot.requestCard(self.id_card)
 
             elif trigger == 211:
                 self.bot.goToClanChat()
+                time.sleep(2)
                 image = self.bot.getScreen()
                 triggers = self.triggers.getTrigger(image)
                 trigger = triggers[0]
+                time.sleep(2)
                 if trigger != 212:
                     self.bot.goToClanChat()
-                if not 'ДОНАТ КАРТ':
-                    pass # Тут будет ебанутый алгоритм для доната карт потом придумаю
+                    time.sleep(2)
                 self.bot.returnHome()
 
             elif trigger > 220 and trigger < 225:
@@ -449,7 +463,12 @@ class Strategics:
             elif trigger == 250:
                 if self.changed_account:
                     self.increasing_account_number()
-                    self.bot.returnHome()
+
+                    if self.batlle_mode == 'global':
+                        self.bot.skipLimit()
+                    else:
+                        self.bot.returnHome()
+
                     self.bot.changeAccount(self.number_account, self.total_accounts)
                     self.connection_to_parent.number_account = self.number_account
                 else:
