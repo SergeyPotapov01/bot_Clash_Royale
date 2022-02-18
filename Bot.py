@@ -182,6 +182,9 @@ class Bot:
         sleep(3)
         self.ADB.click(250, 575)
         sleep(3)
+        for i in range((total_accounts // 3) + 1):
+            self.ADB.swipe(250,398 , 250, 860)
+            sleep(3)
         number = int(number)
         total_accounts = int(total_accounts)
         slide = number // 3
@@ -209,3 +212,6 @@ class Bot:
             self.ADB.click(250, 690)
         if _number == 2:
             self.ADB.click(250, 834)
+
+    def open_pass_royale(self):
+        self.ADB.click(264, 193)

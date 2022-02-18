@@ -14,6 +14,7 @@ class ImageTriggers:
         self.image = None
         self.open_chest = open_chest
         self.requested_card = requested_card
+        self.x = []
 
     def _cheakTimeInBatlle(self):
         i = self.image.crop((450, 0, 538, 53))
@@ -143,19 +144,24 @@ class ImageTriggers:
         self.index2X2 = False
 
         if self.image.getpixel((530, 944))[0:3] == (64, 76, 95):  # пиксель на кропку эвента если она не активка
-            if self.image.getpixel((272, 893))[0:3] == (216, 234, 246) or self.image.getpixel((272, 893))[0:3] == (216, 234, 245):  # пиксель на кропку эвента если она не активка
-                if self.image.getpixel((435, 876))[0:3] == (48, 185, 71) and self.requested_card:
-                    pass
-                    #return 210, None  # тригер на отправку запроса карт
-                if self.image.getpixel((435, 876))[0:3] == (236, 8, 56) and self.requested_card:
-                    pass
-                    #return 211, None
+
+            if self.image.getpixel((501, 812))[0:3] == (76, 172, 255):
+                return 212, None
+
+            if self.image.getpixel((272, 893))[0:3] == (216, 234, 246) or self.image.getpixel((272, 893))[0:3] == (216, 234, 245):  # пиксель на кропку батл если она открыта
+                if self.image.getpixel((433, 887))[0:3] == (48, 184, 69) and self.requested_card:
+                    return 210, None  # тригер на отправку запроса карт
+                if self.image.getpixel((433, 887))[0:3] == (236, 8, 56) and self.requested_card:
+                    return 211, None
 
                 if self._getTriggerOpenChest() and self.open_chest:
                     return 220 + self._getTriggerOpenChest(), None
 
                 if self._getTriggerOpenedChest() and self.open_chest:
                     return 230 + self._getTriggerOpenedChest(), None
+
+                if self.image.getpixel((264, 193))[0:3] == (152, 75, 7) and self.open_chest:
+                    return 235, None
 
                 return 200, None  # тригер на меню
 
@@ -164,6 +170,29 @@ class ImageTriggers:
 
         if self.image.getpixel((267, 431))[0:3] == (255, 200, 88):  # пиксель всплывающего окна лимита
             return 250, None  # тригер на лимит наград
+
+        if self.image.getpixel((30, 924))[0:3] == (73, 86, 108):
+            if self.image.getpixel((271, 930))[0:3] == (78, 175, 255):
+                if self.image.getpixel((271, 930))[0:3] == (78, 175, 255):
+                    arrayPixel = self.image.crop((404, 340, 405, 800))
+                    for index in range(450):
+                        pixel = arrayPixel.getpixel((0, index))[0:3]
+                        if pixel == (248, 253, 248) or pixel == (152, 184, 155) or pixel == (248, 253, 249):
+                            return 280, 404, index + 350
+
+                    arrayPixel = self.image.crop((137, 340, 138, 800))
+                    for index in range(450):
+                        pixel = arrayPixel.getpixel((0, index))[0:3]
+                        if pixel == (248, 253, 248) or pixel == (152, 184, 155) or pixel == (248, 253, 249):
+                            return 280, 137, index + 350
+
+        if self.image.getpixel((107, 152))[0:3] == (242, 247, 249):
+            for i in range(4):
+                arrayPixel = self.image.crop((90 + 120 * i, 300, 91 + 120 * i, 850))
+                for index in range(530):
+                    pixel = arrayPixel.getpixel((0, index))[0:3]
+                    if pixel == (255, 203, 85):
+                        return 281, 90 + 120 * i, index + 300
 
         if self.image.getpixel((442, 906))[0:3] == (154, 205, 255):
             return 300, None  # тригер на пиксель экрана поиска боя

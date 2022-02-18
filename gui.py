@@ -38,7 +38,7 @@ class MyThread(QtCore.QThread):
 
     def run(self):
         while True:
-            self.sleep(2)
+            self.sleep(3)
             self.mysignal.emit(str(self.number_account))
             self.mysignal2.emit(str(self._textBrowser_3))
             self.mysignal3.emit(str(self._textBrowser_2))
@@ -53,8 +53,8 @@ class MyThread(QtCore.QThread):
             self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, self)
             threading.Thread(target=self.bot.startFarm).start()
 
-    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, request_card, id_card):
-        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, request_card, id_card, self)
+    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card):
+        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, self)
 
 
 class Ui_MainWindow(object):
@@ -602,7 +602,7 @@ class Ui_MainWindow(object):
         self.pushButton_23.setText(_translate("MainWindow", "run Battle \n Mode 2"))
         self.pushButton_24.setText(_translate("MainWindow", "change \n account"))
         self.pushButton_25.setText(_translate("MainWindow", "Request\nCard"))
-        self.pushButton_26.setText(_translate("MainWindow", "26"))
+        self.pushButton_26.setText(_translate("MainWindow", "Open\nPassRoyale"))
         self.pushButton_27.setText(_translate("MainWindow", "27"))
         self.pushButton_28.setText(_translate("MainWindow", "28"))
         self.pushButton_29.setText(_translate("MainWindow", "29"))
@@ -675,6 +675,7 @@ class Ui_MainWindow(object):
         self.pushButton_23.clicked.connect(lambda: self.bot.bot.runBattleMode(2))
         self.pushButton_24.clicked.connect(lambda: self.bot.bot.changeAccount(self.thread.number_account, self._total_accounts))
         self.pushButton_25.clicked.connect(lambda: self.bot.bot.requestCard(self.id_card))
+        self.pushButton_26.clicked.connect(lambda: self.bot.bot.open_pass_royale())
 
     def startStopFarm(self):
         _translate = QtCore.QCoreApplication.translate

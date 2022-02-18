@@ -12,6 +12,8 @@ class Strategics:
         self.bot = Bot(port=port)
         self.triggers = ImageTriggers(open_chest, requested_card)
         self.index = 0
+        self.index124 = 0
+        self.index280 = 0
         self.cycleStart = True
         self.batlle_mode = batlle_mode
         self.number_account = number_account
@@ -38,13 +40,25 @@ class Strategics:
             trigger = triggers[0]
             logger.debug(str(triggers) + ' ' + str(time.time() - t))
             self.connection_to_parent._textBrowser_3 = f'{triggers}\n' + self.connection_to_parent._textBrowser_3
+
             if self.index == 50:
                 self.bot.returnHome()
                 self.bot.reboot()
                 self.index = 0
+                continue
 
-            if self.index % 5 == 0:
+            if self.index % 5 == 4:
                 self.bot.returnHome()
+
+            if self.index124 == 10:
+                self.bot.returnHome()
+                self.index124 = 0
+                continue
+
+            if trigger == 124:
+                self.index124 += 1
+                continue
+            self.index124 = 0
 
             if trigger == 0:
                 self.index += 1
@@ -437,6 +451,10 @@ class Strategics:
                     self.bot.goToClanChat()
                     time.sleep(2)
                 self.bot.requestCard(self.id_card)
+                image = self.bot.getScreen()
+                triggers = self.triggers.getTrigger(image)
+                if triggers[0] == 281:
+                    self.bot.ADB.click(triggers[1], triggers[2])
 
             elif trigger == 211:
                 self.bot.goToClanChat()
@@ -450,6 +468,9 @@ class Strategics:
                     time.sleep(2)
                 self.bot.returnHome()
 
+            elif trigger == 212:
+                self.bot.returnHome()
+
             elif trigger > 220 and trigger < 225:
                 self.bot.getRewardChest(trigger - 220)
 
@@ -459,6 +480,9 @@ class Strategics:
 
             elif trigger > 230 and trigger < 235:
                 self.bot.openChest(trigger - 230)
+
+            elif trigger == 235:
+                self.bot.open_pass_royale()
 
             elif trigger == 250:
                 if self.changed_account:
@@ -483,6 +507,16 @@ class Strategics:
                     time.sleep(2)
                     continue
 
+            elif trigger == 280:
+                self.index280 += 1
+                if self.index280 >= 10:
+                    self.bot.reboot()
+                    self.index280 = 0
+                self.bot.ADB.click(triggers[1], triggers[2])
+
+            elif trigger == 281:
+                pass
+
             elif trigger == 400:
                 time.sleep(120)
                 self.bot.exitBatle1X1()
@@ -492,7 +526,7 @@ class Strategics:
 
     def increasing_account_number(self):
         self.number_account += 1
-        if self.number_account == self.total_accounts:
+        if self.number_account >= self.total_accounts:
             self.number_account = 0
 
     def startFarm(self):
