@@ -82,8 +82,8 @@ class Ui_MainWindow(object):
         self.bot = self.thread.bot
         self.list_mode = ['global', 'mode_1', 'mode_2', '2X2', 'disabled']
         self.list_change_language = [
-                                     'English', 'Русский', 'Deutsch', 'Spænska',
-                                     'français', '日本', 'Italiano', 'čeština',
+                                     'English', 'Русский', 'Deutsch', 'Español',
+                                     'Français', '日本', 'Italiano', 'čeština',
                                      'Português', '中国人'
                                      ]
         self.list_card_request = [
