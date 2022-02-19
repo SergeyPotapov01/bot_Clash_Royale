@@ -751,11 +751,11 @@ class Ui_MainWindow(object):
             self.language = 'English'
         elif language == 'Deutsch':
             self.language = 'German'
-        elif language == 'Spænska':
+        elif language == 'Español':
             self.language = 'Spanish'
         elif language == '中国人':
             self.language = 'Chinese'
-        elif language == 'français':
+        elif language == 'Français':
             self.language = 'French'
         elif language == '日本':
             self.language = 'Japanese'
