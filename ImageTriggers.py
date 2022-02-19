@@ -192,7 +192,7 @@ class ImageTriggers:
                 for index in range(530):
                     pixel = arrayPixel.getpixel((0, index))[0:3]
                     if pixel == (255, 203, 85):
-                        return 281, 90 + 120 * i, index + 300
+                        return 281, 90 + 120 * i, index + 320
 
         if self.image.getpixel((442, 906))[0:3] == (154, 205, 255):
             return 300, None  # тригер на пиксель экрана поиска боя

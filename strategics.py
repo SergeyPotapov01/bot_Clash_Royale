@@ -35,6 +35,7 @@ class Strategics:
         index_batlle = 0
         t = time.time()
         while self.cycleStart:
+
             image = self.bot.getScreen()
             triggers = self.triggers.getTrigger(image)
             trigger = triggers[0]
@@ -50,8 +51,8 @@ class Strategics:
             if self.index % 5 == 4:
                 self.bot.returnHome()
 
-            if self.index124 == 10:
-                self.bot.returnHome()
+            if self.index124 >= 25:
+                self.bot.reboot()
                 self.index124 = 0
                 continue
 
@@ -59,6 +60,9 @@ class Strategics:
                 self.index124 += 1
                 continue
             self.index124 = 0
+
+            if not (trigger == 0):
+                self.index = 0
 
             if trigger == 0:
                 self.index += 1
@@ -433,9 +437,14 @@ class Strategics:
                 if self.batlle_mode == 'global':
                     self.bot.runBattleGlobal()
                 elif self.batlle_mode == 'disabled':
-                    self.increasing_account_number()
-                    self.bot.changeAccount(self.number_account, self.total_accounts)
-                    self.connection_to_parent.number_account = self.number_account
+                    if self.changed_account:
+                        self.increasing_account_number()
+                        self.bot.changeAccount(self.number_account, self.total_accounts)
+                        self.connection_to_parent.number_account = self.number_account
+                    else:
+                        self.bot.closeCR()
+                        time.sleep(60*60)
+                        self.bot.openCR()
                 else:
                     self.bot.runBattleMode(self.batlle_mode)
                 time.sleep(1)
@@ -451,10 +460,7 @@ class Strategics:
                     self.bot.goToClanChat()
                     time.sleep(2)
                 self.bot.requestCard(self.id_card)
-                image = self.bot.getScreen()
-                triggers = self.triggers.getTrigger(image)
-                if triggers[0] == 281:
-                    self.bot.ADB.click(triggers[1], triggers[2])
+                time.sleep(4)
 
             elif trigger == 211:
                 self.bot.goToClanChat()
@@ -515,7 +521,7 @@ class Strategics:
                 self.bot.ADB.click(triggers[1], triggers[2])
 
             elif trigger == 281:
-                pass
+                self.bot.ADB.click(triggers[1], triggers[2])
 
             elif trigger == 400:
                 time.sleep(120)

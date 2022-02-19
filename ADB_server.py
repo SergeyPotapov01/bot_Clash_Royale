@@ -1,17 +1,20 @@
-import os
+import os, time
 
 from ppadb.client import Client as AdbClient
 from loguru import logger
 
+
 class ADB_server:
     def __init__(self, port):
-        logger.debug('ADB_server().__init__()')
+        logger.debug(f'ADB_server().__init__({port})')
         os.system(r'"adb\adb kill-server"')
         os.system(r'"adb\adb start-server"')
-        self.client = AdbClient(host="127.0.0.1", port=5037)
+        time.sleep(2)
         os.system(fr'"adb\adb connect 127.0.0.1:{port}"')
-        self.devices = self.client.devices()
-        self.device = self.devices[-1]
+        time.sleep(2)
+        client = AdbClient(host="127.0.0.1", port=5037)
+        devices = client.devices()
+        self.device = devices[0]
 
     def cheakInstallCR(self):
         logger.debug('cheakInstallCR')
@@ -55,7 +58,6 @@ class ADB_server:
         os.system(fr'"adb\adb connect 127.0.0.1:{port}"')
         self.devices = self.client.devices()
         device = self.devices[-1]
-        print(device, port)
         return device
 
 

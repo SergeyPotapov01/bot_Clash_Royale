@@ -7,10 +7,10 @@ from loguru import logger
 
 class Bot:
     def __init__(self, port):
-        logger.debug('Bot().__init__()')
+        logger.debug(f'Bot().__init__({port})')
         self.ADB = ADB_server(port=port)
 
-    def runBattleMode(self, mode=2):
+    def runBattleMode(self, mode):
         logger.debug(f'Bot.runBattleMode {mode}')
         self.ADB.click(400, 630)
         sleep(0.5)
@@ -87,7 +87,7 @@ class Bot:
         for i in range(slide):
             self.swipeRequestCard()
             sleep(2)
-
+        sleep(3)
         if slide == 4:
             if _number == 0:
                 self.ADB.click(80, 450 + 170 * line)
@@ -177,6 +177,7 @@ class Bot:
         return self.ADB.getScreen()
 
     def changeAccount(self, number, total_accounts):
+        logger.debug(f'Bot.changeAccount {number}, {total_accounts}')
         sleep(3)
         self.ADB.click(500, 90)
         sleep(3)
