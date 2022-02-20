@@ -84,7 +84,7 @@ class Ui_MainWindow(object):
         self.thread.start()
         self.bot = self.thread.bot
         self.list_mode = ['global', 'mode_1', 'mode_2', '2X2', 'disabled']
-        self.list_change_language = ['',
+        self.list_change_language = [ '',
                                      'English', 'Русский', 'Deutsch', 'Español',
                                      'Français', '日本', 'Italiano', 'čeština',
                                      'Português', '中国人'
@@ -692,6 +692,7 @@ class Ui_MainWindow(object):
 
     def getTrigger(self):
         self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card)
+        self.bot = self.thread.bot
         trigger = ImageTriggers(True, True).getTriggerDEBUG(self.bot.bot.getScreen())
         string_debug = ''
         for i in trigger:
@@ -745,13 +746,13 @@ class Ui_MainWindow(object):
 
     def adbPort(self, value):
         self.port = value
-        self.config['adb_port'] = self.port
+        self.config['port_adb'] = self.port
         self.dump_setting()
         logger.debug(f'Был изменен параметр порт подключения на: {value}')
 
     def set_change_account(self, value):
         self.thread.number_account = value
-        self.config['Selected_account'] = self._change_account
+        self.config['Selected_account'] = self.thread.number_account
         self.dump_setting()
         logger.debug(f'Был изменен параметр выбранный аккаунт на: {value}')
 
@@ -782,6 +783,8 @@ class Ui_MainWindow(object):
             self.language = 'Czech'
         elif language == 'Português':
             self.language = 'Portuguese'
+        elif language == '':
+            self.language = 'English'
         self.config['Language'] = language
         self.dump_setting()
         self.language_set_words = []
@@ -813,9 +816,9 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("MainWindow", self.language_set_words[18]))
         self.label.setText(_translate("MainWindow", f"<body><p>{self.language_set_words[19]} Clash Royale</p><p>BugReport: t.me/leninka20</p></body>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", self.language_set_words[20]))
-        self.label_changed_account.setText(_translate("MainWindow", 'Changed Account'))
-        self.label_change_account.setText(_translate("MainWindow", 'Selected  Account'))
-        self.label_total_accounts.setText(_translate("MainWindow", 'Total Accounts'))
+        self.label_changed_account.setText(_translate("MainWindow", self.language_set_words[21]))
+        self.label_change_account.setText(_translate("MainWindow", self.language_set_words[22]))
+        self.label_total_accounts.setText(_translate("MainWindow", self.language_set_words[23]))
 
     def on_change(self, v):
         self.spinBox_change_account.setValue(int(self.thread.number_account))

@@ -52,6 +52,8 @@ class Strategics:
                 self.bot.returnHome()
 
             if self.index124 >= 25:
+                self.bot.goToShop()
+                self.bot.returnHome()
                 self.bot.reboot()
                 self.index124 = 0
                 continue
@@ -63,6 +65,13 @@ class Strategics:
 
             if not (trigger == 0):
                 self.index = 0
+
+            if trigger == 500:
+                self.bot.openCR()
+
+            if trigger == 501:
+                self.connection_to_parent._textBrowser_3 = 'INCORRECT SCREEN RESOLUTION IS SET!'
+                self.stopFarm()
 
             if trigger == 0:
                 self.index += 1
@@ -447,7 +456,7 @@ class Strategics:
                         self.bot.openCR()
                 else:
                     self.bot.runBattleMode(self.batlle_mode)
-                time.sleep(1)
+                time.sleep(1)   
 
             elif trigger == 210:
                 self.bot.goToClanChat()

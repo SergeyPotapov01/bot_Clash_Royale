@@ -115,6 +115,13 @@ class ImageTriggers:
     def getTrigger(self, img):
         self.image = Image.open(io.BytesIO(img))
 
+
+        print(self.image.size)
+        if self.image.size == (960, 540):
+            return 500, None
+        elif self.image.size != (540, 960):
+            return 501, None
+
         if self.image.getpixel((40, 790))[0:3] == (255, 255, 255):  # тригер на облачко
 
             if self.image.getpixel((529, 950))[0:3] == (7, 71, 144):  # тригер нижнию часть экрана
@@ -208,6 +215,11 @@ class ImageTriggers:
 
     def getTriggerDEBUG(self, img):
         self.image = Image.open(io.BytesIO(img))
+        print(self.image.size)
+        if self.image.size == (960, 540):
+            return ((500, None),)
+        elif self.image.size != (540, 960):
+            return ((501, None),)
         return(
             (124, self.image.getpixel((40, 790)), self.image.getpixel((40, 790))[0:3] == (255, 255, 255)),
             (100, self.image.getpixel((529, 950)), self.image.getpixel((529, 950))[0:3] == (7, 71, 144)),
