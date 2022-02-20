@@ -2,6 +2,9 @@
 
 Clash Royale crowns farming BOT
 
+Вiscord server
+https://discord.gg/JYZ7aRnSZz
+
 Bot installation
 https://www.youtube.com/watch?v=14plyoBVodg
 
@@ -75,20 +78,20 @@ Current features:
 8) Able to select game mode (global, mode_1, mode_2, 2X2)
 9) Multiaccount (only supercell id)
 10) Multilanguage
+11) Сard request
+12) Pass royale rewards receive
+13) Saving settings
 
 
 Further features:
 
 1) Read the deck and elixir of the opponent
 2) Read the units on the field
-3) Pass royale rewards receive
-4) Clan wars playing
-5) Сard request
-6) Cards donation
-7) Events playing
-8) Self-learning neural network that increases gaming level
-9) Multithreaded emulator
-10) Saving settings
+3) Clan wars playing
+4) Cards donation
+5) Events playing
+6) Self-learning neural network that increases gaming level
+7) Multithreaded emulator
 
 
 # Install for developers
