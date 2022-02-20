@@ -1,21 +1,21 @@
 Start
 Stop
-Get_trigger
-Reload_game
-Statistics batlle
-Battle results:
-Event log:
-log
-Opening chests
-Card request
-Combat mode
-Language selection
-Selecting a Query Card
-Bot settings
-Specify the port for the adb server
-Number of fights before the break
-Break time ( in minutes )
-ADB settings
+Get_Trigger
+Reload_Game
+Statistics
+Battle Results
+Event Log
+Log
+Open Chests
+Request Cards
+Battle Mode
+Language Selection
+Regular Card to Request
+Bot Settings
+ADB Server Port Number
+Number of Finishes
+Break Time (minutes)
+ADB Settings
 Debug
 Bot for farming crowns in
 About the program
