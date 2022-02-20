@@ -1,7 +1,7 @@
 Anfang
 Halt
-Bekommen
-App Neu Laden
+Auslöser_bekommen
+App_Neu Laden
 Statistiken
 Kampfergebnisse
 Ereignisprotokoll
@@ -11,11 +11,14 @@ Karten Gesuchten
 Kampfmodus
 Sprachauswahl
 Auswählen einer Abfragezuordnung
-Bot Einstellungen
+Botч Einstellungen
 Portnummer ADB-Server
 Anzahl der Fertigen
 Pausenzeit (Minuten)
-ADB-Einstellungen
+ADB
 Debuggen
 Bot zum Farmen von Kronen
 Über das Programm
+Account wechseln
+Ausgewähltes Konto
+Gesamtkonten

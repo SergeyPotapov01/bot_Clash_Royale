@@ -1,7 +1,7 @@
 Démarrer
 Arrêter
-Obtenir des déclencheurs
-Recharger le jeu
+Obtenir des_déclencheurs
+Recharger_le jeu
 Statistiques
 Résultats de la bataille
 Journal des événements
@@ -11,11 +11,14 @@ Demander des cartes
 Mode de combat
 Sélection de la langue
 Carte régulière à demander
-Paramètres du robot
+Paramètres robot
 Numéro de port du serveur ADB
 Nombre de finitions
 Temps de pause (minutes)
-Paramètres ADB
+ADB
 Déboguer
 Bot pour les couronnes agricoles
-À propos du programme
+À propos du robot
+Changer de compte
+Compte sélectionné
+Nombre total de comptes

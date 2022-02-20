@@ -1,7 +1,7 @@
 Iniciar
 Apagar
-Obtener Desencadenadors
-Reiniciar App
+Obtener_Protocolo
+Reiniciar_App
 Estadísticas
 Resultados de la Batalla
 Registro de Eventos
@@ -15,7 +15,10 @@ Configuración del Bot
 Numero Puerto Servidor ADB
 Número de Batallas Antes del Descanso
 Tiempo de Descanso (minutos)
-Configuración ADB
+ADB
 Depurar
 Bot para Cultivar Coronas
 Sobre el Programa
+Cambiar cuenta
+cuenta seleccionada
+Número total de cuentas

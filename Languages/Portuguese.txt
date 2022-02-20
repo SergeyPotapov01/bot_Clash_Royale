@@ -1,7 +1,7 @@
 Começar
 Pare
-Obter gatilhos
-Recarregar jogo
+Obter_gatilhos
+Recarregar_jogo
 Estatisticas
 Resultados da Batalha
 Registro de eventos
@@ -15,7 +15,10 @@ Configurações de bot
 Número da porta do servidor ADB
 Número de acabamentos
 Tempo de pausa (minutos)
-Configurações ADB
+ADB
 Depurar
 Bot para coroas agrícolas
 Sobre o Programa
+Mudar de conta
+Conta selecionada
+Número total de contas

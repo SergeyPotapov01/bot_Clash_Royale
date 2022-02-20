@@ -1,7 +1,7 @@
 Inizio
 Fermare
-Ottieni trigger
-Ricarica gioco
+Ottieni_trigger
+Ricarica_gioco
 Statistiche
 Risultati della battaglia
 Registro eventi
@@ -15,7 +15,10 @@ Impostazioni del bot
 Numero di porta del server ADB
 Numero di finiture
 Pausa (minuti)
-Impostazioni ADB
+ADB
 Debug
 Bot per corone agricole
-Informazioni sul programma
+Sul programma
+Cambia account
+Account selezionato
+Conti totali

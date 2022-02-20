@@ -1,7 +1,7 @@
 Start
 Stop
-Získejte spouštěče
-Znovu načíst hru
+Získejte_spouštěče
+Znovu_načíst hru
 Statistika
 Výsledky bitvy
 Záznam událostí
@@ -19,3 +19,6 @@ Nastavení ADB
 Ladit
 Bot pro Farming Crowns
 O programu
+Změna účtu
+Vybraný účet
+Celkový počet účtů
