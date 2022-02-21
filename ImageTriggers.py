@@ -115,8 +115,6 @@ class ImageTriggers:
     def getTrigger(self, img):
         self.image = Image.open(io.BytesIO(img))
 
-
-        print(self.image.size)
         if self.image.size == (960, 540):
             return 500, None
         elif self.image.size != (540, 960):
@@ -192,6 +190,19 @@ class ImageTriggers:
                         pixel = arrayPixel.getpixel((0, index))[0:3]
                         if pixel == (248, 253, 248) or pixel == (152, 184, 155) or pixel == (248, 253, 249):
                             return 280, 137, index + 350
+
+                    arrayPixel = self.image.crop((200, 340, 201, 800))
+                    for index in range(450):
+                        pixel = arrayPixel.getpixel((0, index))[0:3]
+                        if pixel[0] >= 107 and pixel[0] <= 148 and pixel[1] >= 233 and pixel[1] <= 255 and pixel[2] >= 117 and pixel[2] <= 156:
+                            return 280, 200, index + 350
+
+                    arrayPixel = self.image.crop((400, 340, 401, 800))
+                    for index in range(450):
+                        pixel = arrayPixel.getpixel((0, index))[0:3]
+                        if pixel[0] >= 107 and pixel[0] <= 148 and pixel[1] >= 233 and pixel[1] <= 255 and pixel[2] >= 117 and pixel[2] <= 156:
+                            return 280, 400, index + 350
+
 
         if self.image.getpixel((107, 152))[0:3] == (242, 247, 249):
             for i in range(4):

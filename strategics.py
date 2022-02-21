@@ -35,7 +35,6 @@ class Strategics:
         index_batlle = 0
         t = time.time()
         while self.cycleStart:
-
             image = self.bot.getScreen()
             triggers = self.triggers.getTrigger(image)
             trigger = triggers[0]
@@ -508,8 +507,17 @@ class Strategics:
                     else:
                         self.bot.returnHome()
 
-                    self.bot.changeAccount(self.number_account, self.total_accounts)
-                    self.connection_to_parent.number_account = self.number_account
+                    triggers = self.triggers.getTrigger(image)
+                    trigger = triggers[0]
+
+                    if trigger == 200:
+                        self.bot.changeAccount(self.number_account, self.total_accounts)
+                        self.connection_to_parent.number_account = self.number_account
+                    else:
+                        self.bot.returnHome()
+                        self.bot.changeAccount(self.number_account, self.total_accounts)
+                        self.connection_to_parent.number_account = self.number_account
+                    continue
                 else:
                     self.bot.rewardLimit()
 
