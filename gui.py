@@ -43,7 +43,7 @@ class MyThread(QtCore.QThread):
             self.mysignal.emit(str(self.number_account))
             self.mysignal2.emit(str(self._textBrowser_3))
             self.mysignal3.emit(str(self._textBrowser_2))
-            self.mysignal4.emit(str(f'Got Crowns {self.got_crowns}\nTime in Game(Does not work) {self.time_in_game}\nTotall batlles {self.totall_batlles}\nCup changes(Does not work) {self.cup_changes}'))
+            self.mysignal4.emit(str(f'Got Crowns {self.got_crowns}\nTime in Game(Doesnt work) {self.time_in_game}\nTotal battles {self.totall_batlles}\nTrophy changes(Doesnt work) {self.cup_changes}'))
 
     def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card):
         if self.farm:
