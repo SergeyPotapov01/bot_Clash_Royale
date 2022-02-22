@@ -216,3 +216,6 @@ class Bot:
 
     def open_pass_royale(self):
         self.ADB.click(264, 193)
+
+    def choose_reward(self, choose):
+        self.ADB.click(157 + (choose * 223), 269)

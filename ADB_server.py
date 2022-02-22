@@ -63,7 +63,6 @@ class ADB_server:
 
 class ADB_client:
     def __init__(self, port: int):
-        print(port)
         self.device = self.add_client(port)
 
     def cheakInstallCR(self):
@@ -105,4 +104,4 @@ class ADB_client:
         return self.device.screencap()
 
     def add_client(self, port):
-        return server.add_client(port)
+        pass

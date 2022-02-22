@@ -14,7 +14,6 @@ class ImageTriggers:
         self.image = None
         self.open_chest = open_chest
         self.requested_card = requested_card
-        self.x = []
 
     def _cheakTimeInBatlle(self):
         i = self.image.crop((450, 0, 538, 53))
@@ -112,6 +111,12 @@ class ImageTriggers:
                 self.image.crop((386, 590, 430, 606)),
                 ]
 
+    def x(self):
+        slot = [self.image.getpixel((92, 815))[0:3] == (28, 109, 161), self.image.getpixel((185, 815))[0:3] == (36, 125, 172),
+                self.image.getpixel((345, 815))[0:3] == (36, 125, 172), self.image.getpixel((434, 815))[0:3] ==(30, 110, 162)]
+
+        return slot
+
     def getTrigger(self, img):
         self.image = Image.open(io.BytesIO(img))
 
@@ -157,7 +162,7 @@ class ImageTriggers:
                 if self.image.getpixel((433, 887))[0:3] == (48, 184, 69) and self.requested_card:
                     return 210, None  # тригер на отправку запроса карт
                 if self.image.getpixel((433, 887))[0:3] == (236, 8, 56) and self.requested_card:
-                    return 211, None
+                    return 211, None # триггер на сообщение в чате
 
                 if self._getTriggerOpenChest() and self.open_chest:
                     return 220 + self._getTriggerOpenChest(), None
@@ -168,10 +173,13 @@ class ImageTriggers:
                 if self.image.getpixel((264, 193))[0:3] == (152, 75, 7) and self.open_chest:
                     return 235, None
 
-                return 200, None  # тригер на меню
+                return 200, self.x()  # тригер на меню
 
         if self.image.getpixel((47, 539))[0:3] == (7, 49, 74):
             return 225, None
+
+        if self.image.getpixel((273, 122))[0:3] == (51, 203, 254):
+            return 226, None
 
         if self.image.getpixel((267, 431))[0:3] == (255, 200, 88):  # пиксель всплывающего окна лимита
             return 250, None  # тригер на лимит наград
@@ -226,12 +234,13 @@ class ImageTriggers:
 
     def getTriggerDEBUG(self, img):
         self.image = Image.open(io.BytesIO(img))
-        print(self.image.size)
+        print(self.image.getpixel((273, 122)))
+
         if self.image.size == (960, 540):
             return ((500, None),)
         elif self.image.size != (540, 960):
             return ((501, None),)
-        return(
+        return('\n',
             (124, self.image.getpixel((40, 790)), self.image.getpixel((40, 790))[0:3] == (255, 255, 255)),
             (100, self.image.getpixel((529, 950)), self.image.getpixel((529, 950))[0:3] == (7, 71, 144)),
             (121, self.image.getpixel((300, 840)), self.image.getpixel((300, 840))[0:3] == (104, 187, 255)),
@@ -242,9 +251,12 @@ class ImageTriggers:
             (211, self.image.getpixel((435, 876)), self.image.getpixel((435, 876))[0:3] == (236, 8, 56)),
             (212, self.image.getpixel((501, 812)), self.image.getpixel((501, 812))[0:3] == (76, 172, 255)),
             (225, self.image.getpixel((47, 539)), self.image.getpixel((47, 539))[0:3] == (7, 49, 74)),
+            (226, self.image.getpixel((273, 122)), self.image.getpixel((273, 122))[0:3] == (51, 203, 254)),
+            (235, self.image.getpixel((264, 193)), self.image.getpixel((264, 193))[0:3] == (152, 75, 7)),
             (200, self.image.getpixel((272, 893)), self.image.getpixel((272, 893))[0:3] == (216, 234, 246)),
             (300, self.image.getpixel((442, 906)), self.image.getpixel((442, 906))[0:3] == (154, 205, 255)),
             (301, self.image.getpixel((14, 945)), self.image.getpixel((14, 945))[0:3] == (24, 113, 216)),
             (400, self.image.getpixel((280, 500)), self.image.getpixel((280, 500))[0:3] == (66, 66, 66)),
+            self.image.size,
             self.getTrigger(img),
         )

@@ -107,6 +107,7 @@ class Ui_MainWindow(object):
                                   ]
         self.language = 'English'
         self.language_set_words = []
+        self.list_mode_bbbb = ['Until Chest Slots Full', 'Until Daily Bonus Met']
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -167,16 +168,24 @@ class Ui_MainWindow(object):
         self.tab_3 = QtWidgets.QWidget()
         self.tab_3.setObjectName("tab_3")
 
+        self.comboBox_ = QtWidgets.QComboBox(self.tab_3)
+        self.comboBox_.setGeometry(QtCore.QRect(10, 65, 151, 21))
+        self.comboBox_.setObjectName("checkBox_2")
+        self.comboBox_.addItems(self.list_mode_bbbb)
+        self.comboBox_.currentTextChanged.connect(self.debug)
+
+        self.label_ = QtWidgets.QLabel(self.tab_3)
+        self.label_.setGeometry(QtCore.QRect(200, 65, 211, 20))
+        self.label_.setObjectName("label_8")
+
         self.checkBox = QtWidgets.QCheckBox(self.tab_3)
-        self.checkBox.setGeometry(QtCore.QRect(10, 55, 181, 41))
+        self.checkBox.setGeometry(QtCore.QRect(200, 100, 181, 41))
         self.checkBox.setObjectName("checkBox")
-        self.checkBox.setText('2')
         self.checkBox.stateChanged.connect(self.openChest)
 
         self.checkBox_2 = QtWidgets.QCheckBox(self.tab_3)
         self.checkBox_2.setGeometry(QtCore.QRect(10, 100, 181, 41))
         self.checkBox_2.setObjectName("checkBox_2")
-        self.checkBox_2.setText('2')
         self.checkBox_2.stateChanged.connect(self.requestCard)
 
         self.comboBox = QtWidgets.QComboBox(self.tab_3)
@@ -186,15 +195,15 @@ class Ui_MainWindow(object):
         self.comboBox.currentTextChanged.connect(self.currentTextComboBox_1)
 
         self.label_5 = QtWidgets.QLabel(self.tab_3)
-        self.label_5.setGeometry(QtCore.QRect(200, 30, 201, 20))
+        self.label_5.setGeometry(QtCore.QRect(200, 35, 201, 20))
         self.label_5.setObjectName("label_5")
 
         self.label_6 = QtWidgets.QLabel(self.tab_3)
-        self.label_6.setGeometry(QtCore.QRect(200, 100, 201, 20))
+        self.label_6.setGeometry(QtCore.QRect(200, 105, 201, 20))
         self.label_6.setObjectName("label_6")
 
         self.label_7 = QtWidgets.QLabel(self.tab_3)
-        self.label_7.setGeometry(QtCore.QRect(200, 160, 201, 20))
+        self.label_7.setGeometry(QtCore.QRect(200, 165, 201, 20))
         self.label_7.setObjectName("label_7")
 
         self.comboBox_2 = QtWidgets.QComboBox(self.tab_3)
@@ -210,12 +219,26 @@ class Ui_MainWindow(object):
         self.comboBox_change_language.currentTextChanged.connect(self.currentTextComboBox_change_language)
 
         self.label_change_language = QtWidgets.QLabel(self.tab_3)
-        self.label_change_language.setGeometry(QtCore.QRect(200, 200, 201, 20))
+        self.label_change_language.setGeometry(QtCore.QRect(200, 205, 201, 20))
         self.label_change_language.setObjectName("label_change_language")
 
         self.label_8 = QtWidgets.QLabel(self.tab_3)
-        self.label_8.setGeometry(QtCore.QRect(200, 145, 211, 20))
+        self.label_8.setGeometry(QtCore.QRect(200, 150, 211, 20))
         self.label_8.setObjectName("label_8")
+
+        self.checkBox_clan_var = QtWidgets.QCheckBox(self.tab_3)
+        self.checkBox_clan_var.setGeometry(QtCore.QRect(10, 240, 181, 41))
+        self.checkBox_clan_var.setObjectName("checkBox_clan_var")
+        self.checkBox_clan_var.stateChanged.connect(self.debug)
+
+        self.label_clan_var = QtWidgets.QLabel(self.tab_3)
+        self.label_clan_var.setGeometry(QtCore.QRect(30, 250, 211, 20))
+        self.label_clan_var.setObjectName("label_clan_var")
+
+        self.checkBox_shop_reward = QtWidgets.QCheckBox(self.tab_3)
+        self.checkBox_shop_reward.setGeometry(QtCore.QRect(200, 240, 181, 41))
+        self.checkBox_shop_reward.setObjectName("checkBox_shop_reward")
+        self.checkBox_shop_reward.stateChanged.connect(self.debug)
 
         self.tabWidget.addTab(self.tab_3, "")
 
@@ -251,7 +274,7 @@ class Ui_MainWindow(object):
 
         self.checkBox_changed_account = QtWidgets.QCheckBox(self.tab_4)
         self.checkBox_changed_account.setGeometry(QtCore.QRect(20, 170, 181, 41))
-        self.checkBox_changed_account.setObjectName("checkBox_2")
+        self.checkBox_changed_account.setObjectName("checkBox_changed_account")
         self.checkBox_changed_account.stateChanged.connect(self.changed_account)
 
         self.label_changed_account = QtWidgets.QLabel(self.tab_4)
@@ -260,7 +283,7 @@ class Ui_MainWindow(object):
 
         self.spinBox_change_account = QtWidgets.QSpinBox(self.tab_4)
         self.spinBox_change_account.setGeometry(QtCore.QRect(20, 220, 111, 25))
-        self.spinBox_change_account.setObjectName("spinBox_2")
+        self.spinBox_change_account.setObjectName("spinBox_change_account")
         self.spinBox_change_account.valueChanged.connect(self.set_change_account)
 
         self.label_change_account = QtWidgets.QLabel(self.tab_4)
@@ -269,7 +292,7 @@ class Ui_MainWindow(object):
 
         self.spinBox_total_accounts = QtWidgets.QSpinBox(self.tab_4)
         self.spinBox_total_accounts.setGeometry(QtCore.QRect(20, 270, 111, 25))
-        self.spinBox_total_accounts.setObjectName("spinBox_2")
+        self.spinBox_total_accounts.setObjectName("spinBox_total_accounts")
         self.spinBox_total_accounts.valueChanged.connect(self.set_total_accounts)
 
         self.label_total_accounts = QtWidgets.QLabel(self.tab_4)
@@ -819,6 +842,9 @@ class Ui_MainWindow(object):
         self.label_changed_account.setText(_translate("MainWindow", self.language_set_words[21]))
         self.label_change_account.setText(_translate("MainWindow", self.language_set_words[22]))
         self.label_total_accounts.setText(_translate("MainWindow", self.language_set_words[23]))
+        self.label_clan_var.setText(_translate("MainWindow", 'Play clan war'))
+        self.label_.setText(_translate("MainWindow", 'Battle:'))
+        self.checkBox_shop_reward.setText(_translate("MainWindow", 'Get Reward in Shop'))
 
     def on_change(self, v):
         self.spinBox_change_account.setValue(int(self.thread.number_account))

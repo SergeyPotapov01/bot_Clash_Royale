@@ -436,26 +436,29 @@ class Strategics:
                 time.sleep(1)
 
             elif trigger == 200:
+
+
                 if slowdown_in_menu:
                     slowdown_in_menu = False
                     time.sleep(3)
                     continue
                 slowdown_in_menu = True
 
-                if self.batlle_mode == 'global':
-                    self.bot.runBattleGlobal()
-                elif self.batlle_mode == 'disabled':
-                    if self.changed_account:
-                        self.increasing_account_number()
-                        self.bot.changeAccount(self.number_account, self.total_accounts)
-                        self.connection_to_parent.number_account = self.number_account
+                if 'Until Chest Slots Full':
+                    if self.batlle_mode == 'global':
+                        self.bot.runBattleGlobal()
+                    elif self.batlle_mode == 'disabled':
+                        if self.changed_account:
+                            self.increasing_account_number()
+                            self.bot.changeAccount(self.number_account, self.total_accounts)
+                            self.connection_to_parent.number_account = self.number_account
+                        else:
+                            self.bot.closeCR()
+                            time.sleep(60*60)
+                            self.bot.openCR()
                     else:
-                        self.bot.closeCR()
-                        time.sleep(60*60)
-                        self.bot.openCR()
-                else:
-                    self.bot.runBattleMode(self.batlle_mode)
-                time.sleep(1)   
+                        self.bot.runBattleMode(self.batlle_mode)
+                    time.sleep(1)
 
             elif trigger == 210:
                 self.bot.goToClanChat()
@@ -491,6 +494,11 @@ class Strategics:
             elif trigger == 225:
                 self.bot.returnHome()
                 time.sleep(0.5)
+
+            elif trigger == 226:
+                self.bot.choose_reward(randint(0, 1))
+                time.sleep(0.5)
+
 
             elif trigger > 230 and trigger < 235:
                 self.bot.openChest(trigger - 230)
