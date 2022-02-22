@@ -17,6 +17,9 @@ https://t.me/bot_Clash_Royale
 Bug Report:
 https://t.me/leninka20
 
+Сompilation instruction:
+https://www.youtube.com/watch?v=M28z3jA4IBI
+
 
 # Install for users
 
