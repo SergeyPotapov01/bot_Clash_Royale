@@ -463,7 +463,8 @@ class Strategics:
                         time.sleep(1)
                         self.bot.returnHome()
                         continue
-                    else:
+
+                    if trigger == 211 and not (True in triggers[1]):
                         self.CW = False
 
                 if slowdown_in_menu:
