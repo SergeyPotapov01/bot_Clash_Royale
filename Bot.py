@@ -66,13 +66,13 @@ class Bot:
         self.ADB.click(490, 61)
 
     def requestCard(self, id_card):
-        logger.debug('Bot.requestCard')
         self.ADB.click(70, 805)
         number = int(id_card)
         line = number // 4
         slide = line // 3
-        line = (number // 4) % 4
+        line = (number // 3) % 4
         _number = number % 4
+        logger.debug(f'Bot.requestCard {id_card}, {line}, {slide}, {_number}')
         if slide == 0:
             if _number == 0:
                 self.ADB.click(80, 350 + 170 * line)
@@ -107,6 +107,7 @@ class Bot:
                 self.ADB.click(330, 350 + 170 * line)
             if _number == 3:
                 self.ADB.click(450, 350 + 170 * line)
+            sleep(2)
 
 
     def swipeRequestCard(self):
@@ -215,7 +216,35 @@ class Bot:
             self.ADB.click(250, 834)
 
     def open_pass_royale(self):
+        logger.debug('Bot.open_pass_royale')
         self.ADB.click(264, 193)
 
     def choose_reward(self, choose):
+        logger.debug(f'Bot.choose_reward {choose}')
         self.ADB.click(157 + (choose * 223), 269)
+
+    def swipe_shop(self):
+        logger.debug('Bot.swipe_shop')
+        self.ADB.swipe(250, 860, 250, 100)
+        sleep(3)
+
+    def get_shop_reward(self):
+        logger.debug('Bot.get_shop_reward')
+        for i in range(3):
+            self.ADB.swipe(250, 80, 250, 850)
+            sleep(3)
+        self.ADB.click(88, 350)
+        sleep(2)
+        self.ADB.click(270, 600)
+
+
+    def swipe_clan_war(self):
+        logger.debug('Bot.swipe_clan_war')
+        self.ADB.swipe(250, 300, 250, 450)
+        sleep(3)
+
+    def go_batlle_clan_war(self):
+        logger.debug('Bot.go_batlle_clan_war')
+        self.ADB.click(472, 720)
+        sleep(2)
+        self.ADB.click(350, 630)

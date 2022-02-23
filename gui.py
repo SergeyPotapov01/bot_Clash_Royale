@@ -15,6 +15,8 @@ from ImageTriggers import ImageTriggers
 
 from loguru import logger
 from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5.QtWidgets import QLabel
+from PyQt5.QtGui import QPixmap
 from keras.models import load_model
 
 
@@ -25,7 +27,7 @@ class MyThread(QtCore.QThread):
     mysignal4 = QtCore.pyqtSignal(str)
 
 
-    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, parent=None):
+    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, parent=None):
         QtCore.QThread.__init__(self, parent)
         self.farm = False
         self.number_account = '0'
@@ -45,17 +47,17 @@ class MyThread(QtCore.QThread):
             self.mysignal3.emit(str(self._textBrowser_2))
             self.mysignal4.emit(str(f'Got Crowns {self.got_crowns}\nTime in Game(Doesnt work) {self.time_in_game}\nTotal battles {self.totall_batlles}\nTrophy changes(Doesnt work) {self.cup_changes}'))
 
-    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card):
+    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war):
         if self.farm:
             self.farm = False
             self.bot.stopFarm()
         else:
             self.farm = True
-            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, self)
+            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self)
             threading.Thread(target=self.bot.startFarm).start()
 
-    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card):
-        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, self)
+    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war):
+        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self)
 
 
 class Ui_MainWindow(object):
@@ -76,7 +78,8 @@ class Ui_MainWindow(object):
         self.id_card = 0
         self.number_of_finish = 0
         self.time_break = 0
-        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card)
+        self.play_clan_war = False
+        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war)
         self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)
         self.thread.mysignal2.connect(self.logEvent, QtCore.Qt.QueuedConnection)
         self.thread.mysignal3.connect(self.logCrown, QtCore.Qt.QueuedConnection)
@@ -89,6 +92,7 @@ class Ui_MainWindow(object):
                                      'Français', '日本', 'Italiano', 'čeština',
                                      'Português', '中国人'
                                      ]
+
         self.list_card_request = [
                                     'Skeletons', 'Ice_Spirit', 'Fire_Spirit', 'Electro_Spirit',
                                     'Goblins', 'Bomber', 'Spear_Goblins', 'Bats',
@@ -98,7 +102,7 @@ class Ui_MainWindow(object):
                                     'Mortar', 'Tesla', 'Barbarians', 'Minion_Horde',
                                     'Rascals', 'Royal_Giant', 'Elite_Barbarians', 'Royal_Delivery',
                                     'Heal_Spirit', 'Ice_Golem', 'Mega_Minion', 'Dart_Goblin',
-                                    'Elixir_Golem', 'Tombstone', 'Graveyard', 'Valkyrie',
+                                    'Elixir_Golem', 'Tombstone', 'Earthquake', 'Valkyrie',
                                     'Musketeer', 'Mini_PEKKA', 'Hog_Rider', 'Battle_Ram',
                                     'Zappies', 'Flying_Machine', 'Battle_Healer', 'Bomb_Tower',
                                     'Furnace', 'Goblin_Cage', 'Fireball', 'Giant',
@@ -169,13 +173,13 @@ class Ui_MainWindow(object):
         self.tab_3.setObjectName("tab_3")
 
         self.comboBox_ = QtWidgets.QComboBox(self.tab_3)
-        self.comboBox_.setGeometry(QtCore.QRect(10, 65, 151, 21))
+        self.comboBox_.setGeometry(QtCore.QRect(200, 65, 151, 21))
         self.comboBox_.setObjectName("checkBox_2")
         self.comboBox_.addItems(self.list_mode_bbbb)
         self.comboBox_.currentTextChanged.connect(self.debug)
 
         self.label_ = QtWidgets.QLabel(self.tab_3)
-        self.label_.setGeometry(QtCore.QRect(200, 65, 211, 20))
+        self.label_.setGeometry(QtCore.QRect(10, 65, 211, 20))
         self.label_.setObjectName("label_8")
 
         self.checkBox = QtWidgets.QCheckBox(self.tab_3)
@@ -183,19 +187,27 @@ class Ui_MainWindow(object):
         self.checkBox.setObjectName("checkBox")
         self.checkBox.stateChanged.connect(self.openChest)
 
+        self.label_openChest = QtWidgets.QLabel(self.tab_3)
+        self.label_openChest.setGeometry(QtCore.QRect(220, 115, 211, 20))
+        self.label_openChest.setObjectName("label_openChest")
+
         self.checkBox_2 = QtWidgets.QCheckBox(self.tab_3)
         self.checkBox_2.setGeometry(QtCore.QRect(10, 100, 181, 41))
         self.checkBox_2.setObjectName("checkBox_2")
         self.checkBox_2.stateChanged.connect(self.requestCard)
 
+        self.label_requestCard = QtWidgets.QLabel(self.tab_3)
+        self.label_requestCard.setGeometry(QtCore.QRect(30, 115, 211, 20))
+        self.label_requestCard.setObjectName("label_requestCard")
+
         self.comboBox = QtWidgets.QComboBox(self.tab_3)
-        self.comboBox.setGeometry(QtCore.QRect(10, 30, 151, 21))
+        self.comboBox.setGeometry(QtCore.QRect(200, 30, 151, 21))
         self.comboBox.setObjectName("comboBox")
         self.comboBox.addItems(self.list_mode)
         self.comboBox.currentTextChanged.connect(self.currentTextComboBox_1)
 
         self.label_5 = QtWidgets.QLabel(self.tab_3)
-        self.label_5.setGeometry(QtCore.QRect(200, 35, 201, 20))
+        self.label_5.setGeometry(QtCore.QRect(10, 35, 201, 20))
         self.label_5.setObjectName("label_5")
 
         self.label_6 = QtWidgets.QLabel(self.tab_3)
@@ -207,29 +219,33 @@ class Ui_MainWindow(object):
         self.label_7.setObjectName("label_7")
 
         self.comboBox_2 = QtWidgets.QComboBox(self.tab_3)
-        self.comboBox_2.setGeometry(QtCore.QRect(10, 145, 151, 21))
+        self.comboBox_2.setGeometry(QtCore.QRect(200, 145, 151, 21))
         self.comboBox_2.setObjectName("comboBox_2")
         self.comboBox_2.addItems(self.list_card_request)
         self.comboBox_2.currentTextChanged.connect(self.currentTextComboBox_2)
 
+        self.label_img = QLabel(self.tab_3)
+        self.label_img.move(360, 130)
+        self.label_img.resize(50, 50)
+
         self.comboBox_change_language = QtWidgets.QComboBox(self.tab_3)
-        self.comboBox_change_language.setGeometry(QtCore.QRect(10, 200, 151, 21))
+        self.comboBox_change_language.setGeometry(QtCore.QRect(200, 200, 151, 21))
         self.comboBox_change_language.setObjectName("comboBox_change_language")
         self.comboBox_change_language.addItems(self.list_change_language)
         self.comboBox_change_language.currentTextChanged.connect(self.currentTextComboBox_change_language)
 
         self.label_change_language = QtWidgets.QLabel(self.tab_3)
-        self.label_change_language.setGeometry(QtCore.QRect(200, 205, 201, 20))
+        self.label_change_language.setGeometry(QtCore.QRect(10, 205, 201, 20))
         self.label_change_language.setObjectName("label_change_language")
 
         self.label_8 = QtWidgets.QLabel(self.tab_3)
-        self.label_8.setGeometry(QtCore.QRect(200, 150, 211, 20))
+        self.label_8.setGeometry(QtCore.QRect(10, 150, 211, 20))
         self.label_8.setObjectName("label_8")
 
         self.checkBox_clan_var = QtWidgets.QCheckBox(self.tab_3)
         self.checkBox_clan_var.setGeometry(QtCore.QRect(10, 240, 181, 41))
         self.checkBox_clan_var.setObjectName("checkBox_clan_var")
-        self.checkBox_clan_var.stateChanged.connect(self.debug)
+        self.checkBox_clan_var.stateChanged.connect(self.clan_war)
 
         self.label_clan_var = QtWidgets.QLabel(self.tab_3)
         self.label_clan_var.setGeometry(QtCore.QRect(30, 250, 211, 20))
@@ -627,8 +643,8 @@ class Ui_MainWindow(object):
         self.pushButton_23.setText(_translate("MainWindow", "run Battle \n Mode 2"))
         self.pushButton_24.setText(_translate("MainWindow", "change \n account"))
         self.pushButton_25.setText(_translate("MainWindow", "Request\nCard"))
-        self.pushButton_26.setText(_translate("MainWindow", "Open\nPassRoyale1/2"))
-        self.pushButton_27.setText(_translate("MainWindow", "Open\nPassRoyale2/2"))
+        self.pushButton_26.setText(_translate("MainWindow", "Open\nPassRoyale"))
+        self.pushButton_27.setText(_translate("MainWindow", "Swipe\nShop"))
         self.pushButton_28.setText(_translate("MainWindow", "28"))
         self.pushButton_29.setText(_translate("MainWindow", "29"))
         self.pushButton_30.setText(_translate("MainWindow", "30"))
@@ -701,6 +717,7 @@ class Ui_MainWindow(object):
         self.pushButton_24.clicked.connect(lambda: self.bot.bot.changeAccount(self.thread.number_account, self._total_accounts))
         self.pushButton_25.clicked.connect(lambda: self.bot.bot.requestCard(self.id_card))
         self.pushButton_26.clicked.connect(lambda: self.bot.bot.open_pass_royale())
+        self.pushButton_27.clicked.connect(lambda: self.bot.bot.get_shop_reward())
 
     def startStopFarm(self):
         _translate = QtCore.QCoreApplication.translate
@@ -710,11 +727,11 @@ class Ui_MainWindow(object):
         else:
             self.farm = True
             self.pushButton.setText(_translate("MainWindow", self.language_set_words[1]))
-        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card)
+        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war)
         self.bot = self.thread.bot
 
     def getTrigger(self):
-        self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card)
+        self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war)
         self.bot = self.thread.bot
         trigger = ImageTriggers(True, True).getTriggerDEBUG(self.bot.bot.getScreen())
         string_debug = ''
@@ -753,7 +770,7 @@ class Ui_MainWindow(object):
         logger.debug(f'Была установлен карта запроса: {text}, {self.id_card}')
         self.config['id_card'] = self.id_card
         self.dump_setting()
-
+        self.label_img.setPixmap(QPixmap(f'Cards/{text}.png'))
 
     def openChest(self, event):
         logger.debug(f'Был изменен параметр открытия сундуков на: {event}')
@@ -826,8 +843,8 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", self.language_set_words[5]))
         self.label_4.setText(_translate("MainWindow", self.language_set_words[6]))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Log), _translate("MainWindow", self.language_set_words[7]))
-        self.checkBox.setText(_translate("MainWindow", self.language_set_words[8]))
-        self.checkBox_2.setText(_translate("MainWindow", self.language_set_words[9]))
+        self.label_openChest.setText(_translate("MainWindow", self.language_set_words[8]))
+        self.label_requestCard.setText(_translate("MainWindow", self.language_set_words[9]))
         self.label_5.setText(_translate("MainWindow", self.language_set_words[10]))
         self.label_change_language.setText(_translate("MainWindow", self.language_set_words[11]))
         self.label_8.setText(_translate("MainWindow", self.language_set_words[12]))
@@ -886,7 +903,15 @@ class Ui_MainWindow(object):
             self.checkBox.click()
         if config['Request_cards']:
             self.checkBox_2.click()
+        if config['play_clan_war']:
+            self.checkBox_clan_var.click()
 
     def dump_setting(self):
         with open('config/custom.json', 'w') as outfile:
             json.dump(self.config, outfile)
+
+    def clan_war(self, event):
+        logger.debug(f'Был изменен параметр клановых войн: {event}')
+        self.play_clan_war = bool(event)
+        self.config['play_clan_war'] = self.play_clan_war
+        self.dump_setting()

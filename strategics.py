@@ -8,7 +8,7 @@ from loguru import logger
 
 
 class Strategics:
-    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, connection_to_parent):
+    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent):
         self.bot = Bot(port=port)
         self.triggers = ImageTriggers(open_chest, requested_card)
         self.index = 0
@@ -22,6 +22,8 @@ class Strategics:
         self.connection_to_parent = connection_to_parent
         self.request_card = requested_card
         self.id_card = id_card
+        self.play_clan_war = play_clan_war
+        self.CW = play_clan_war
 
     def main(self):
         if self.bot.ADB.cheakInstallCR() == False:
@@ -42,13 +44,13 @@ class Strategics:
             self.connection_to_parent._textBrowser_3 = f'{triggers}\n' + self.connection_to_parent._textBrowser_3
 
             if self.index == 50:
-                self.bot.returnHome()
                 self.bot.reboot()
                 self.index = 0
                 continue
 
             if self.index % 5 == 4:
                 self.bot.returnHome()
+                self.bot.choose_reward(randint(0, 1))
 
             if self.index124 >= 25:
                 self.bot.goToShop()
@@ -77,8 +79,10 @@ class Strategics:
                 logger.debug('Не найден триггер')
                 time.sleep(1)
                 continue
+            else:
+                self.index = 0
 
-            elif trigger == 100:
+            if trigger == 100:
 
                 if 'Goblin_Barrel' in triggers[2]:
                     if triggers[1] >= 3:
@@ -411,7 +415,7 @@ class Strategics:
                 self.bot.exitBatle1X1()
                 self.connection_to_parent.totall_batlles += 1
                 self.connection_to_parent.got_crowns += triggers[1]
-                self.connection_to_parent._textBrowser_2 = f'{triggers[1]}' + self.connection_to_parent._textBrowser_2
+                self.connection_to_parent._textBrowser_2 = f'{triggers[1]}\n' + self.connection_to_parent._textBrowser_2
                 self.connection_to_parent._textBrowser_3 = f'{triggers}\n'
 
                 if index_batlle == 10:
@@ -437,6 +441,30 @@ class Strategics:
 
             elif trigger == 200:
 
+                if self.CW:
+                    self.bot.goToClanChat()
+                    time.sleep(2)
+                    image = self.bot.getScreen()
+                    triggers = self.triggers.getTrigger(image)
+                    trigger = triggers[0]
+                    if trigger == 211 and True in triggers[1]:
+                        while True:
+                            self.bot.swipe_clan_war()
+                            time.sleep(2)
+                            image = self.bot.getScreen()
+                            triggers = self.triggers.getTrigger(image)
+                            trigger = triggers[0]
+                            if trigger == 260:
+                                self.bot.go_batlle_clan_war()
+                                break
+                        continue
+                    elif trigger == 212:
+                        self.bot.goToClanChat()
+                        time.sleep(1)
+                        self.bot.returnHome()
+                        continue
+                    else:
+                        self.CW = False
 
                 if slowdown_in_menu:
                     slowdown_in_menu = False
@@ -452,6 +480,7 @@ class Strategics:
                             self.increasing_account_number()
                             self.bot.changeAccount(self.number_account, self.total_accounts)
                             self.connection_to_parent.number_account = self.number_account
+                            self.CW = self.play_clan_war
                         else:
                             self.bot.closeCR()
                             time.sleep(60*60)
@@ -488,6 +517,10 @@ class Strategics:
             elif trigger == 212:
                 self.bot.returnHome()
 
+            elif trigger == 219:
+                self.id_card += 1
+                self.bot.reboot()
+
             elif trigger > 220 and trigger < 225:
                 self.bot.getRewardChest(trigger - 220)
 
@@ -499,12 +532,26 @@ class Strategics:
                 self.bot.choose_reward(randint(0, 1))
                 time.sleep(0.5)
 
-
             elif trigger > 230 and trigger < 235:
                 self.bot.openChest(trigger - 230)
 
             elif trigger == 235:
                 self.bot.open_pass_royale()
+
+            elif trigger == 236:
+                self.bot.goToShop()
+                x = 0
+                while True:
+                    x += 1
+                    self.bot.swipe_shop()
+                    image = self.bot.getScreen()
+                    triggers = self.triggers.getTrigger(image)
+                    trigger = triggers[0]
+                    if trigger == 237 and x >=4:
+                        break
+                self.bot.get_shop_reward()
+                self.bot.returnHome()
+                continue
 
             elif trigger == 250:
                 if self.changed_account:
@@ -529,6 +576,12 @@ class Strategics:
                 else:
                     self.bot.rewardLimit()
 
+            elif trigger == 260:
+                pass
+
+            elif trigger == 261:
+                pass
+
             elif trigger == 270:
                 self.index += 1
                 if self.index >= 5:
@@ -552,7 +605,6 @@ class Strategics:
                 time.sleep(120)
                 self.bot.exitBatle1X1()
 
-            self.index = 0
             t = time.time()
 
     def increasing_account_number(self):
