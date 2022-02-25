@@ -196,7 +196,7 @@ class ImageTriggers:
                 if self._getTriggerOpenedChest() and self.open_chest:
                     return 230 + self._getTriggerOpenedChest(), None
 
-                if self.image.getpixel((264, 193))[0:3] == (152, 75, 7) and self.open_chest:
+                if (self.image.getpixel((264, 193))[0:3] == (152, 75, 7) or self.image.getpixel((264, 193))[0:3] == (152, 74, 7)) and self.open_chest:  # триггер на пасс рояль
                     return 235, None
 
                 return 200, self.x()  # тригер на меню

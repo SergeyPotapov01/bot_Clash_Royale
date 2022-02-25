@@ -41,7 +41,7 @@ class MyThread(QtCore.QThread):
 
     def run(self):
         while True:
-            self.sleep(3)
+            self.sleep(1)
             self.mysignal.emit(str(self.number_account))
             self.mysignal2.emit(str(self._textBrowser_3))
             self.mysignal3.emit(str(self._textBrowser_2))
@@ -733,14 +733,17 @@ class Ui_MainWindow(object):
     def getTrigger(self):
         self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war)
         self.bot = self.thread.bot
-        trigger = ImageTriggers(True, True).getTriggerDEBUG(self.bot.bot.getScreen())
+        trigger = ImageTriggers(True, True)
+        x = trigger.getTriggerDEBUG(self.bot.bot.getScreen())
+
         string_debug = ''
-        for i in trigger:
+        for i in x:
             for j in i:
                 string_debug += str(j)
             string_debug += '\n'
         self.thread._textBrowser_3 = 'Получен тригер: ' + string_debug + '\n'
         self.textBrowser_3.setText(self._textBrowser_3)
+
 
     def reboot(self):
         if self.bot == None:
@@ -749,12 +752,18 @@ class Ui_MainWindow(object):
         self.bot.bot.reboot()
 
     def logCrown(self, crown):
+        if self.textBrowser_2.toPlainText() == crown:
+            return
         self.textBrowser_2.setText(crown)
 
     def logEvent(self, event):
+        if self.textBrowser_3.toPlainText() == event:
+            return
         self.textBrowser_3.setText(event)
 
     def logStatistic(self, stata):
+        if self.textBrowser.toPlainText() == stata:
+            return
         self.textBrowser.setText(stata)
 
     def currentTextComboBox_1(self, text):

@@ -77,7 +77,7 @@ class Strategics:
             if trigger == 0:
                 self.index += 1
                 logger.debug('Не найден триггер')
-                time.sleep(1)
+                time.sleep(3)
                 continue
             else:
                 self.index = 0
@@ -443,7 +443,7 @@ class Strategics:
 
                 if self.CW:
                     self.bot.goToClanChat()
-                    time.sleep(2)
+                    time.sleep(5)
                     image = self.bot.getScreen()
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
