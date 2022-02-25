@@ -731,8 +731,9 @@ class Ui_MainWindow(object):
         self.bot = self.thread.bot
 
     def getTrigger(self):
-        self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war)
-        self.bot = self.thread.bot
+        if self.bot == None:
+            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war)
+            self.bot = self.thread.bot
         trigger = ImageTriggers(True, True)
         x = trigger.getTriggerDEBUG(self.bot.bot.getScreen())
 

@@ -176,19 +176,19 @@ class ImageTriggers:
                 return 260, None
 
             if self.image.getpixel((62, 70))[0:3] == (228, 220, 229):
-                return 211, self.x2()
+                return 215, self.x2()  # Триггер на окно кв
 
             if self.image.getpixel((501, 812))[0:3] == (76, 172, 255):
-                return 212, None
+                return 212, None  # триггер на чат клана
 
             if self.image.getpixel((63, 877))[0:3] == (236, 8, 56):
-                return 236, None
+                return 236, None  # триггер на ежедневную награду
 
             if self.image.getpixel((272, 893))[0:3] == (216, 234, 246) or self.image.getpixel((272, 893))[0:3] == (216, 234, 245):  # пиксель на кропку батл если она открыта
                 if self.image.getpixel((433, 887))[0:3] == (48, 184, 69) and self.requested_card:
                     return 210, None  # тригер на отправку запроса карт
                 if self.image.getpixel((433, 887))[0:3] == (236, 8, 56) and self.requested_card:
-                    return 211, None # триггер на сообщение в чате
+                    return 211, None  # триггер на сообщение в чате
 
                 if self._getTriggerOpenChest() and self.open_chest:
                     return 220 + self._getTriggerOpenChest(), None
@@ -279,6 +279,7 @@ class ImageTriggers:
             (210, self.image.getpixel((435, 876)), self.image.getpixel((435, 876))[0:3] == (48, 185, 71)),
             (211, self.image.getpixel((435, 876)), self.image.getpixel((435, 876))[0:3] == (236, 8, 56)),
             (212, self.image.getpixel((501, 812)), self.image.getpixel((501, 812))[0:3] == (76, 172, 255)),
+            (215, self.image.getpixel((62, 70)), self.image.getpixel((62, 70))[0:3] == (228, 220, 229)),
             (219, self.image.getpixel((500, 150)), self.image.getpixel((500, 150))[0:3] == (97, 104, 124)),
             (225, self.image.getpixel((47, 539)), self.image.getpixel((47, 539))[0:3] == (8, 55, 83)),
             (225, self.image.getpixel((47, 539)), self.image.getpixel((47, 539))[0:3] == (7, 49, 74)),

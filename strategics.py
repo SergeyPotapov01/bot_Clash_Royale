@@ -447,7 +447,7 @@ class Strategics:
                     image = self.bot.getScreen()
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
-                    if trigger == 211 and True in triggers[1]:
+                    if trigger == 215 and True in triggers[1]:
                         while True:
                             self.bot.swipe_clan_war()
                             time.sleep(2)
