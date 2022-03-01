@@ -21,49 +21,58 @@ class Bot:
         elif mode == '2X2':
             self.ADB.swipe(250, 800, 250, 297)
             self.ADB.click(405, 408)
+        sleep(1)
 
     def runBattleGlobal(self):
         logger.debug('Bot.runBattleGlobal')
         self.ADB.click(180, 630)
+        sleep(1)
 
     def runBattleEvent(self):
         logger.debug('Bot.runBattleEvent')
         self.ADB.click(280, 720)
+        sleep(1)
 
     def rewardLimit(self):
         logger.debug('Bot.rewardLimit')
         self.ADB.click(276, 600)
+        sleep(1)
 
     def skipLimit(self):
         logger.debug('Bot.skipLimit')
         self.ADB.click(482, 316)
         sleep(1)
         self.ADB.click(280, 900)
+        sleep(1)
 
     def getRewardChest(self, number):
         logger.debug(f'Bot.getRewardChest {number}')
         self.ADB.click(-25 + number * 120, 780)
+        sleep(1)
 
     def openChest(self, number):
         logger.debug(f'Bot.openChest {number}')
         self.ADB.click(-25 + number * 120, 780)
-        sleep(0.5)
+        sleep(1)
         self.ADB.click(276, 625)
+        sleep(1)
 
     def returnHome(self):
         logger.debug('Bot.returnHome')
         self.ADB.click(500, 920)
-        sleep(0.5)
+        sleep(1)
         self.ADB.click(220, 920)
-        sleep(0.5)
+        sleep(1)
 
     def goToClanChat(self):
         logger.debug('Bot.goToClanChat')
         self.ADB.click(371, 911)
+        sleep(1)
 
     def openCloseClanChat(self):
         logger.debug('Bot.openCloseClanChat')
         self.ADB.click(490, 61)
+        sleep(1)
 
     def requestCard(self, id_card):
         self.ADB.click(70, 805)
@@ -113,19 +122,22 @@ class Bot:
     def swipeRequestCard(self):
         logger.debug('Bot.swipeRequestCard')
         self.ADB.swipe(250, 800, 250, 297)
-        sleep(0.5)
+        sleep(1)
 
     def goToEvents(self):
         logger.debug('Bot.goToEvents')
         self.ADB.click(520, 930)
+        sleep(1)
 
     def goToDeck(self):
         logger.debug('Bot.goToDeck')
         self.ADB.click(168, 930)
+        sleep(1)
 
     def goToShop(self):
         logger.debug('Bot.goToShop')
         self.ADB.click(80, 930)
+        sleep(1)
 
     def placingCard1X1(self, x, y):
         logger.debug(f'Bot.placingCard1X1 x = {x}, y = {y}')
@@ -138,10 +150,12 @@ class Bot:
     def exitBatle2X2(self):
         logger.debug('Bot.exitBatle2X2')
         self.ADB.click(74, 910)
+        sleep(1)
 
     def exitBatle1X1(self):
         logger.debug('Bot.exitBatle1X1')
         self.ADB.click(270, 840)
+        sleep(1)
 
     def selectCard(self, number):
         logger.debug('Bot.selectCard')
@@ -150,28 +164,32 @@ class Bot:
     def setEnglishLanguage(self):
         logger.debug('Bot.setEnglishLanguage')
         self.ADB.click(500, 100)
-        sleep(0.5)
+        sleep(1)
         self.ADB.click(325, 470)
-        sleep(0.5)
+        sleep(1)
         self.ADB.click(160, 570)
-        sleep(0.5)
+        sleep(1)
         self.ADB.click(275, 235)
-        sleep(0.5)
+        sleep(1)
         self.ADB.click(370, 590)
+        sleep(1)
 
     def reboot(self):
         logger.debug('Bot.reboot')
         self.ADB.closeCR()
         sleep(2)
         self.ADB.openCR()
+        sleep(1)
 
     def openCR(self):
         logger.debug('Bot.openCR')
         self.ADB.openCR()
+        sleep(1)
 
     def closeCR(self):
         logger.debug('Bot.closeCR')
         self.ADB.closeCR()
+        sleep(1)
 
     def getScreen(self):
         logger.debug('Bot.getScreen')
@@ -214,14 +232,17 @@ class Bot:
             self.ADB.click(250, 690)
         if _number == 2:
             self.ADB.click(250, 834)
+        sleep(1)
 
     def open_pass_royale(self):
         logger.debug('Bot.open_pass_royale')
         self.ADB.click(264, 193)
+        sleep(1)
 
     def choose_reward(self, choose):
         logger.debug(f'Bot.choose_reward {choose}')
         self.ADB.click(157 + (choose * 223), 269)
+        sleep(1)
 
     def swipe_shop(self):
         logger.debug('Bot.swipe_shop')
@@ -236,9 +257,9 @@ class Bot:
         self.ADB.click(88, 350)
         sleep(2)
         self.ADB.click(270, 600)
+        sleep(1)
         self.ADB.click(270, 650)
-
-
+        sleep(1)
 
     def swipe_clan_war(self):
         logger.debug('Bot.swipe_clan_war')
@@ -253,13 +274,21 @@ class Bot:
             self.ADB.click(472, 690)
         sleep(2)
         self.ADB.click(350, 630)
+        sleep(1)
 
     def get_reward_clan_war(self):
         logger.debug('Bot.get_reward_clan_war')
-        self.ADB.click(280, 570)
-        self.ADB.click(268, 800)
+        self.ADB.click(280, 630)
+        sleep(1)
 
     def close_statistics_clan_war(self):
         logger.debug('Bot.close_statistics_clan_war')
         self.ADB.click(280, 570)
+        sleep(1)
         self.ADB.click(268, 800)
+        sleep(1)    
+
+    def swipe_clan_war_2(self):
+        logger.debug('Bot.swipe_clan_war_2')
+        self.ADB.swipe(250, 500, 250, 850)
+        sleep(3)

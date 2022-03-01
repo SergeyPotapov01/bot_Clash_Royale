@@ -126,13 +126,11 @@ class ImageTriggers:
             self.image.getpixel((113, 784))[0:3] == (202, 144, 18), self.image.getpixel((252, 784))[0:3] == (204, 148, 20),
             self.image.getpixel((382, 784))[0:3] == (204, 146, 20), self.image.getpixel((516, 784))[0:3] == (204, 148, 20),
         ]
-
-
         return slot
 
     def getTrigger(self, img):
         self.image = Image.open(io.BytesIO(img))
-
+        print(self.image.getpixel((263, 627))[0:3])
         if self.image.size == (960, 540):
             return 500, None
         elif self.image.size != (540, 960):
@@ -172,7 +170,7 @@ class ImageTriggers:
 
         if self.image.getpixel((530, 944))[0:3] == (64, 76, 95):  # пиксель на кропку эвента если она не активка
 
-            if self.image.getpixel((200, 578))[0:3] == (255, 255, 255):
+            if self.image.getpixel((263, 627))[0:3] == (224, 209, 175):
                 return 239, None
 
             if self.image.getpixel((473, 716))[0:3] == (191, 194, 201):

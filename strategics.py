@@ -440,7 +440,7 @@ class Strategics:
                 time.sleep(1)
 
             elif trigger == 200:
-
+                print(self.CW)
                 if self.CW:
                     self.bot.goToClanChat()
                     time.sleep(5)
@@ -450,9 +450,21 @@ class Strategics:
                     if trigger == 239:
                         self.bot.get_reward_clan_war()
                         continue
+
                     if trigger == 218:
                         self.bot.close_statistics_clan_war()
                         continue
+
+                    if trigger == 260:
+                        self.bot.swipe_clan_war_2()
+                        self.bot.returnHome()
+                        continue
+
+                    if trigger == 261:
+                        self.bot.swipe_clan_war_2()
+                        self.bot.returnHome()
+                        continue
+
                     if trigger == 215 and True in triggers[1]:
                         while True:
                             self.bot.swipe_clan_war()
@@ -614,10 +626,10 @@ class Strategics:
                     self.bot.rewardLimit()
 
             elif trigger == 260:
-                pass
+                self.bot.returnHome()
 
             elif trigger == 261:
-                pass
+                self.bot.returnHome()
 
             elif trigger == 270:
                 self.index += 1
