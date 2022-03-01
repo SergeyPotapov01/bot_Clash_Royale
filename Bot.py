@@ -236,6 +236,8 @@ class Bot:
         self.ADB.click(88, 350)
         sleep(2)
         self.ADB.click(270, 600)
+        self.ADB.click(270, 650)
+
 
 
     def swipe_clan_war(self):
@@ -243,8 +245,21 @@ class Bot:
         self.ADB.swipe(250, 300, 250, 450)
         sleep(3)
 
-    def go_batlle_clan_war(self):
+    def go_batlle_clan_war(self, combat):
         logger.debug('Bot.go_batlle_clan_war')
-        self.ADB.click(472, 720)
+        if combat == 0:
+            self.ADB.click(472, 720)
+        elif combat == 1:
+            self.ADB.click(472, 690)
         sleep(2)
         self.ADB.click(350, 630)
+
+    def get_reward_clan_war(self):
+        logger.debug('Bot.get_reward_clan_war')
+        self.ADB.click(280, 570)
+        self.ADB.click(268, 800)
+
+    def close_statistics_clan_war(self):
+        logger.debug('Bot.close_statistics_clan_war')
+        self.ADB.click(280, 570)
+        self.ADB.click(268, 800)

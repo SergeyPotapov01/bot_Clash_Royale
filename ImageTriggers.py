@@ -172,10 +172,16 @@ class ImageTriggers:
 
         if self.image.getpixel((530, 944))[0:3] == (64, 76, 95):  # пиксель на кропку эвента если она не активка
 
+            if self.image.getpixel((200, 578))[0:3] == (255, 255, 255):
+                return 239, None
+
             if self.image.getpixel((473, 716))[0:3] == (191, 194, 201):
                 return 260, None
 
-            if self.image.getpixel((62, 70))[0:3] == (228, 220, 229):
+            if self.image.getpixel((474, 652))[0:3] == (84, 136, 223):
+                return 261, None
+
+            if self.image.getpixel((62, 70))[0:3] == (228, 220, 229) or self.image.getpixel((62, 70))[0:3] == (228, 220, 230):
                 return 215, self.x2()  # Триггер на окно кв
 
             if self.image.getpixel((501, 812))[0:3] == (76, 172, 255):
@@ -183,6 +189,9 @@ class ImageTriggers:
 
             if self.image.getpixel((63, 877))[0:3] == (236, 8, 56):
                 return 236, None  # триггер на ежедневную награду
+
+            if self.image.getpixel((10, 955))[0:3] == (234, 189, 80):
+                return 238, None
 
             if self.image.getpixel((272, 893))[0:3] == (216, 234, 246) or self.image.getpixel((272, 893))[0:3] == (216, 234, 245):  # пиксель на кропку батл если она открыта
                 if self.image.getpixel((433, 887))[0:3] == (48, 184, 69) and self.requested_card:
@@ -198,6 +207,9 @@ class ImageTriggers:
 
                 if (self.image.getpixel((264, 193))[0:3] == (152, 75, 7) or self.image.getpixel((264, 193))[0:3] == (152, 74, 7)) and self.open_chest:  # триггер на пасс рояль
                     return 235, None
+
+                if self.image.getpixel((268, 800)) == (255, 255, 255):
+                    return 218
 
                 return 200, self.x()  # тригер на меню
 

@@ -174,30 +174,30 @@ class Ui_MainWindow(object):
 
         self.comboBox_ = QtWidgets.QComboBox(self.tab_3)
         self.comboBox_.setGeometry(QtCore.QRect(200, 65, 151, 21))
-        self.comboBox_.setObjectName("checkBox_2")
+        self.comboBox_.setObjectName("comboBox_clan_var")
         self.comboBox_.addItems(self.list_mode_bbbb)
         self.comboBox_.currentTextChanged.connect(self.debug)
 
         self.label_ = QtWidgets.QLabel(self.tab_3)
         self.label_.setGeometry(QtCore.QRect(10, 65, 211, 20))
-        self.label_.setObjectName("label_8")
+        self.label_.setObjectName("label_")
 
-        self.checkBox = QtWidgets.QCheckBox(self.tab_3)
-        self.checkBox.setGeometry(QtCore.QRect(200, 100, 181, 41))
-        self.checkBox.setObjectName("checkBox")
-        self.checkBox.stateChanged.connect(self.openChest)
+        self.checkBox_openChest = QtWidgets.QCheckBox(self.tab_3)
+        self.checkBox_openChest.setGeometry(QtCore.QRect(200, 100, 181, 41))
+        self.checkBox_openChest.setObjectName("checkBox_openChest")
+        self.checkBox_openChest.stateChanged.connect(self.openChest)
 
         self.label_openChest = QtWidgets.QLabel(self.tab_3)
         self.label_openChest.setGeometry(QtCore.QRect(220, 115, 211, 20))
         self.label_openChest.setObjectName("label_openChest")
 
-        self.checkBox_2 = QtWidgets.QCheckBox(self.tab_3)
-        self.checkBox_2.setGeometry(QtCore.QRect(10, 100, 181, 41))
-        self.checkBox_2.setObjectName("checkBox_2")
-        self.checkBox_2.stateChanged.connect(self.requestCard)
+        self.checkBox_requestCard = QtWidgets.QCheckBox(self.tab_3)
+        self.checkBox_requestCard.setGeometry(QtCore.QRect(10, 100, 181, 41))
+        self.checkBox_requestCard.setObjectName("checkBox_requestCard")
+        self.checkBox_requestCard.stateChanged.connect(self.requestCard)
 
         self.label_requestCard = QtWidgets.QLabel(self.tab_3)
-        self.label_requestCard.setGeometry(QtCore.QRect(30, 115, 211, 20))
+        self.label_requestCard.setGeometry(QtCore.QRect(30, 115, 151, 20))
         self.label_requestCard.setObjectName("label_requestCard")
 
         self.comboBox = QtWidgets.QComboBox(self.tab_3)
@@ -209,14 +209,6 @@ class Ui_MainWindow(object):
         self.label_5 = QtWidgets.QLabel(self.tab_3)
         self.label_5.setGeometry(QtCore.QRect(10, 35, 201, 20))
         self.label_5.setObjectName("label_5")
-
-        self.label_6 = QtWidgets.QLabel(self.tab_3)
-        self.label_6.setGeometry(QtCore.QRect(200, 105, 201, 20))
-        self.label_6.setObjectName("label_6")
-
-        self.label_7 = QtWidgets.QLabel(self.tab_3)
-        self.label_7.setGeometry(QtCore.QRect(200, 165, 201, 20))
-        self.label_7.setObjectName("label_7")
 
         self.comboBox_2 = QtWidgets.QComboBox(self.tab_3)
         self.comboBox_2.setGeometry(QtCore.QRect(200, 145, 151, 21))
@@ -910,9 +902,9 @@ class Ui_MainWindow(object):
         if config['Change_accounts']:
             self.checkBox_changed_account.click()
         if config['Open_chests']:
-            self.checkBox.click()
+            self.checkBox_openChest.click()
         if config['Request_cards']:
-            self.checkBox_2.click()
+            self.checkBox_requestCard.click()
         if config['play_clan_war']:
             self.checkBox_clan_var.click()
 

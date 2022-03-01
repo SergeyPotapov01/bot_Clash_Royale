@@ -49,8 +49,8 @@ class Strategics:
                 continue
 
             if self.index % 5 == 4:
-                self.bot.returnHome()
                 self.bot.choose_reward(randint(0, 1))
+                self.bot.returnHome()
 
             if self.index124 >= 25:
                 self.bot.goToShop()
@@ -447,6 +447,12 @@ class Strategics:
                     image = self.bot.getScreen()
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
+                    if trigger == 239:
+                        self.bot.get_reward_clan_war()
+                        continue
+                    if trigger == 218:
+                        self.bot.close_statistics_clan_war()
+                        continue
                     if trigger == 215 and True in triggers[1]:
                         while True:
                             self.bot.swipe_clan_war()
@@ -455,7 +461,10 @@ class Strategics:
                             triggers = self.triggers.getTrigger(image)
                             trigger = triggers[0]
                             if trigger == 260:
-                                self.bot.go_batlle_clan_war()
+                                self.bot.go_batlle_clan_war(0)
+                                break
+                            if trigger == 261:
+                                self.bot.go_batlle_clan_war(1)
                                 break
                         continue
                     elif trigger == 212:
@@ -498,8 +507,14 @@ class Strategics:
                 time.sleep(2)
                 trigger = triggers[0]
                 if trigger != 212:
+                    self.bot.choose_reward(randint(0, 1))
                     self.bot.goToClanChat()
                     time.sleep(2)
+                elif trigger == 239:
+                    self.bot.get_reward_clan_war()
+                elif trigger == 218:
+                    self.bot.close_statistics_clan_war()
+                    continue
                 self.bot.requestCard(self.id_card)
                 time.sleep(4)
 
@@ -510,13 +525,27 @@ class Strategics:
                 triggers = self.triggers.getTrigger(image)
                 trigger = triggers[0]
                 time.sleep(2)
+                if trigger == 239:
+                    self.bot.get_reward_clan_war()
+                    continue
+                elif trigger == 218:
+                    self.bot.close_statistics_clan_war()
+                    continue
                 if trigger != 212:
+                    self.bot.choose_reward(randint(0, 1))
                     self.bot.goToClanChat()
                     time.sleep(2)
                 self.bot.returnHome()
 
             elif trigger == 212:
                 self.bot.returnHome()
+
+            elif trigger == 215:
+                self.bot.returnHome()
+
+            elif trigger == 218:
+                self.bot.close_statistics_clan_war()
+                continue
 
             elif trigger == 219:
                 self.id_card += 1
@@ -553,6 +582,13 @@ class Strategics:
                 self.bot.get_shop_reward()
                 self.bot.returnHome()
                 continue
+
+            elif trigger == 238:
+                self.bot.goToShop()
+                self.bot.returnHome()
+
+            elif trigger == 239:
+                self.bot.get_reward_clan_war()
 
             elif trigger == 250:
                 if self.changed_account:
