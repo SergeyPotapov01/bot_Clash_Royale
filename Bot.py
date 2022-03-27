@@ -75,7 +75,9 @@ class Bot:
         sleep(1)
 
     def requestCard(self, id_card):
+        sleep(3)
         self.ADB.click(70, 805)
+        sleep(3)
         number = int(id_card)
         line = number // 4
         slide = line // 3
@@ -163,6 +165,7 @@ class Bot:
 
     def setEnglishLanguage(self):
         logger.debug('Bot.setEnglishLanguage')
+        sleep(3)
         self.ADB.click(500, 100)
         sleep(1)
         self.ADB.click(325, 470)
@@ -286,7 +289,7 @@ class Bot:
         self.ADB.click(280, 570)
         sleep(1)
         self.ADB.click(268, 800)
-        sleep(1)    
+        sleep(1)
 
     def swipe_clan_war_2(self):
         logger.debug('Bot.swipe_clan_war_2')

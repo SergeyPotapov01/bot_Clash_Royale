@@ -82,6 +82,7 @@ class Strategics:
             else:
                 self.index = 0
 
+
             if trigger == 100:
 
                 if 'Goblin_Barrel' in triggers[2]:
@@ -440,13 +441,17 @@ class Strategics:
                 time.sleep(1)
 
             elif trigger == 200:
-                print(self.CW)
                 if self.CW:
                     self.bot.goToClanChat()
                     time.sleep(5)
                     image = self.bot.getScreen()
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
+
+                    if trigger == 216:
+                        self.CW = False
+                        self.bot.returnHome()
+
                     if trigger == 239:
                         self.bot.get_reward_clan_war()
                         continue
@@ -466,7 +471,9 @@ class Strategics:
                         continue
 
                     if trigger == 215 and True in triggers[1]:
+                        index = 0
                         while True:
+                            index += 1
                             self.bot.swipe_clan_war()
                             time.sleep(2)
                             image = self.bot.getScreen()
@@ -475,18 +482,22 @@ class Strategics:
                             if trigger == 260:
                                 self.bot.go_batlle_clan_war(0)
                                 break
-                            if trigger == 261:
+                            if trigger == 261 or index >= 7:
                                 self.bot.go_batlle_clan_war(1)
                                 break
+
                         continue
+
                     elif trigger == 212:
                         self.bot.goToClanChat()
                         time.sleep(1)
                         self.bot.returnHome()
                         continue
 
-                    if trigger == 211 and not (True in triggers[1]):
+                    if trigger == 215 and not (True in triggers[1]):
                         self.CW = False
+                        self.bot.returnHome()
+                        continue
 
                 if slowdown_in_menu:
                     slowdown_in_menu = False
@@ -495,11 +506,14 @@ class Strategics:
                 slowdown_in_menu = True
 
                 if 'Until Chest Slots Full':
+                    self.bot.returnHome()
                     if self.batlle_mode == 'global':
                         self.bot.runBattleGlobal()
                     elif self.batlle_mode == 'disabled':
                         if self.changed_account:
+                            self.bot.returnHome()
                             self.increasing_account_number()
+                            time.sleep(5)
                             self.bot.changeAccount(self.number_account, self.total_accounts)
                             self.connection_to_parent.number_account = self.number_account
                             self.CW = self.play_clan_war

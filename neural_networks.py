@@ -48,7 +48,7 @@ class ElixirInBatlle:
         try:
             self.elixir = int(self.class_names[prediction])
         except ValueError:
-            pass
+            self.elixir = 0
 
         return self.elixir
 
