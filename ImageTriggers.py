@@ -170,6 +170,9 @@ class ImageTriggers:
 
         if self.image.getpixel((530, 944))[0:3] == (64, 76, 95):  # пиксель на кропку эвента если она не активка
 
+            if self.image.getpixel((478, 216))[0:3] == (76, 173, 255):
+                return 202, None
+
             if self.image.getpixel((270, 70))[0:3] == (226, 226, 226):
                 return 216, None
 
@@ -262,6 +265,9 @@ class ImageTriggers:
             if self.image.getpixel((500, 236))[0:3] == (179, 211, 234):
                 return 219, None
 
+        if self.image.getpixel((436, 297))[0:3] == (50, 27, 99, 255):
+            return 289
+
         if self.image.getpixel((442, 906))[0:3] == (154, 205, 255):
             return 300, None  # тригер на пиксель экрана поиска боя
 
@@ -276,6 +282,7 @@ class ImageTriggers:
 
     def getTriggerDEBUG(self, img):
         self.image = Image.open(io.BytesIO(img))
+        print(self.image.getpixel((478, 216)))
 
         if self.image.size == (960, 540):
             return ((500, None),)
@@ -287,6 +294,7 @@ class ImageTriggers:
             (121, self.image.getpixel((300, 840)), self.image.getpixel((300, 840))[0:3] == (104, 187, 255)),
             (124, self.image.getpixel((40, 790)), self.image.getpixel((40, 790))[0:3] == (255, 255, 255)),
             (200, self.image.getpixel((530, 944)), self.image.getpixel((530, 944))[0:3] == (64, 76, 95)),
+            (202, self.image.getpixel((478, 216)), self.image.getpixel((478, 216))[0:3] == (76, 173, 255)),
             (200, self.image.getpixel((272, 893)), self.image.getpixel((272, 893))[0:3] == (216, 234, 245)),
             (200, self.image.getpixel((272, 893)), self.image.getpixel((272, 893))[0:3] == (216, 234, 246)),
             (210, self.image.getpixel((435, 876)), self.image.getpixel((435, 876))[0:3] == (48, 185, 71)),
@@ -303,6 +311,7 @@ class ImageTriggers:
             (237, self.image.getpixel((17, 922)), self.image.getpixel((17, 922))[0:3] == (78, 115, 149)),
             (250, self.image.getpixel((267, 431)), self.image.getpixel((267, 431))[0:3] == (255, 200, 88)),
             (260, self.image.getpixel((473, 716)), self.image.getpixel((473, 716))[0:3] == (191, 194, 201)),
+            (289, self.image.getpixel((436, 297)), self.image.getpixel((436, 297))[0:3] == (50, 27, 99, 255)),
             (300, self.image.getpixel((442, 906)), self.image.getpixel((442, 906))[0:3] == (154, 205, 255)),
             (301, self.image.getpixel((14, 945)), self.image.getpixel((14, 945))[0:3] == (24, 113, 216)),
             (400, self.image.getpixel((280, 500)), self.image.getpixel((280, 500))[0:3] == (66, 66, 66)),

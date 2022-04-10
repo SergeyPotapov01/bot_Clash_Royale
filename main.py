@@ -16,7 +16,7 @@ if DEBUG:
     logger.add('log/DEBUG.log', format='{time:HH:mm:ss} {level} {message}',
                 level='DEBUG', rotation='1 week', compression='zip')
 
-__version__ = '0.3.8'
+__version__ = '0.3.9'
 
 
 try:

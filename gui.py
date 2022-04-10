@@ -25,12 +25,14 @@ class MyThread(QtCore.QThread):
     mysignal2 = QtCore.pyqtSignal(str)
     mysignal3 = QtCore.pyqtSignal(str)
     mysignal4 = QtCore.pyqtSignal(str)
+    mysignal5 = QtCore.pyqtSignal(int)
 
 
-    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, parent=None):
+    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, change_deck, number_fights_deck_change, parent=None):
         QtCore.QThread.__init__(self, parent)
         self.farm = False
         self.number_account = '0'
+        self.number_deck = 5
         self._textBrowser_3 = ''
         self._textBrowser_2 = ''
         self.got_crowns = 0
@@ -46,18 +48,20 @@ class MyThread(QtCore.QThread):
             self.mysignal2.emit(str(self._textBrowser_3))
             self.mysignal3.emit(str(self._textBrowser_2))
             self.mysignal4.emit(str(f'Got Crowns {self.got_crowns}\nTime in Game(Doesnt work) {self.time_in_game}\nTotal battles {self.totall_batlles}\nTrophy changes(Doesnt work) {self.cup_changes}'))
+            self.mysignal5.emit(self.number_deck)
 
-    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war):
+
+    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change):
         if self.farm:
             self.farm = False
             self.bot.stopFarm()
         else:
             self.farm = True
-            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self)
+            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change)
             threading.Thread(target=self.bot.startFarm).start()
 
-    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war):
-        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self)
+    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change):
+        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change)
 
 
 class Ui_MainWindow(object):
@@ -79,11 +83,15 @@ class Ui_MainWindow(object):
         self.number_of_finish = 0
         self.time_break = 0
         self.play_clan_war = False
-        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war)
+        self.number_fights_deck_change = 0
+        self.change_deck = False
+        self.deck_number = 0
+        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change)
         self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)
         self.thread.mysignal2.connect(self.logEvent, QtCore.Qt.QueuedConnection)
         self.thread.mysignal3.connect(self.logCrown, QtCore.Qt.QueuedConnection)
         self.thread.mysignal4.connect(self.logStatistic, QtCore.Qt.QueuedConnection)
+        self.thread.mysignal5.connect(self.on_change_2, QtCore.Qt.QueuedConnection)
         self.thread.start()
         self.bot = self.thread.bot
         self.list_mode = ['global', 'mode_1', 'mode_2', '2X2', 'disabled']
@@ -281,12 +289,12 @@ class Ui_MainWindow(object):
         self.spinBox_2.valueChanged.connect(self.timeBreak)
 
         self.checkBox_changed_account = QtWidgets.QCheckBox(self.tab_4)
-        self.checkBox_changed_account.setGeometry(QtCore.QRect(20, 170, 181, 41))
+        self.checkBox_changed_account.setGeometry(QtCore.QRect(20, 160, 181, 41))
         self.checkBox_changed_account.setObjectName("checkBox_changed_account")
         self.checkBox_changed_account.stateChanged.connect(self.changed_account)
 
         self.label_changed_account = QtWidgets.QLabel(self.tab_4)
-        self.label_changed_account.setGeometry(QtCore.QRect(170, 170, 211, 20))
+        self.label_changed_account.setGeometry(QtCore.QRect(170, 180, 211, 20))
         self.label_changed_account.setObjectName("label_change_account")
 
         self.spinBox_change_account = QtWidgets.QSpinBox(self.tab_4)
@@ -302,6 +310,38 @@ class Ui_MainWindow(object):
         self.spinBox_total_accounts.setGeometry(QtCore.QRect(20, 270, 111, 25))
         self.spinBox_total_accounts.setObjectName("spinBox_total_accounts")
         self.spinBox_total_accounts.valueChanged.connect(self.set_total_accounts)
+
+        ###########
+
+        self.checkBox_change_deck = QtWidgets.QCheckBox(self.tab_4)
+        self.checkBox_change_deck.setGeometry(QtCore.QRect(20, 310, 181, 41))
+        self.checkBox_change_deck.setObjectName("checkBox_change_deck")
+        self.checkBox_change_deck.stateChanged.connect(self._checkBox_change_deck)
+
+        self.label_change_deck = QtWidgets.QLabel(self.tab_4)
+        self.label_change_deck.setGeometry(QtCore.QRect(170, 320, 211, 20))
+        self.label_change_deck.setObjectName("label_change_deck")
+
+        self.spinBox_deck_number = QtWidgets.QSpinBox(self.tab_4)
+        self.spinBox_deck_number.setGeometry(QtCore.QRect(20, 360, 111, 25))
+        self.spinBox_deck_number.setObjectName("spinBox_deck_number")
+        self.spinBox_deck_number.valueChanged.connect(self._spinBox_deck_number)
+
+        self.label_deck_number = QtWidgets.QLabel(self.tab_4)
+        self.label_deck_number.setGeometry(QtCore.QRect(170, 360, 211, 20))
+        self.label_deck_number.setObjectName("label_deck_number")
+
+        self.spinBox_number_fights_deck_change = QtWidgets.QSpinBox(self.tab_4)
+        self.spinBox_number_fights_deck_change.setGeometry(QtCore.QRect(20, 400, 111, 25))
+        self.spinBox_number_fights_deck_change.setObjectName("spinBox_number_fights_deck_change")
+        self.spinBox_number_fights_deck_change.valueChanged.connect(self._spinBox_number_fights_deck_change)
+
+        self.label_number_fights_deck_change = QtWidgets.QLabel(self.tab_4)
+        self.label_number_fights_deck_change.setGeometry(QtCore.QRect(170, 400, 211, 20))
+        self.label_number_fights_deck_change.setObjectName("label_number_fights_deck_change")
+
+
+        ##########
 
         self.label_total_accounts = QtWidgets.QLabel(self.tab_4)
         self.label_total_accounts.setGeometry(QtCore.QRect(170, 270, 211, 20))
@@ -719,12 +759,12 @@ class Ui_MainWindow(object):
         else:
             self.farm = True
             self.pushButton.setText(_translate("MainWindow", self.language_set_words[1]))
-        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war)
+        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change)
         self.bot = self.thread.bot
 
     def getTrigger(self):
         if self.bot == None:
-            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war)
+            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change)
             self.bot = self.thread.bot
         trigger = ImageTriggers(True, True)
         x = trigger.getTriggerDEBUG(self.bot.bot.getScreen())
@@ -864,11 +904,19 @@ class Ui_MainWindow(object):
         self.label_clan_var.setText(_translate("MainWindow", 'Play clan war'))
         self.label_.setText(_translate("MainWindow", 'Battle:'))
         self.checkBox_shop_reward.setText(_translate("MainWindow", 'Get Reward in Shop'))
+        self.label_change_deck.setText(_translate("MainWindow", 'Change deck'))
+        self.label_deck_number.setText(_translate("MainWindow", 'Deck number'))
+        self.label_number_fights_deck_change.setText(_translate("MainWindow", 'Number of fights before deck change'))
+
 
     def on_change(self, v):
+        if self.thread.number_account == self.spinBox_change_account.value():
+            return
+        logger.debug(f'Был изменен параметр номера аккаунта: {v}')
         self.spinBox_change_account.setValue(int(self.thread.number_account))
 
     def changed_account(self, v):
+        logger.debug(f'Был изменен параметр смены аккаунта: {v}')
         self._changed_account = v
         self.config['Change_accounts'] = bool(self._changed_account)
         self.dump_setting()
@@ -908,6 +956,15 @@ class Ui_MainWindow(object):
         if config['play_clan_war']:
             self.checkBox_clan_var.click()
 
+        self.spinBox_deck_number.setValue(config['deck_number'])
+        if config['change_deck']:
+            self.checkBox_change_deck.click()
+        self.spinBox_deck_number.setValue(config['deck_number'])
+        self.spinBox_number_fights_deck_change.setValue(config['number_fights_deck_change'])
+
+
+
+
     def dump_setting(self):
         with open('config/custom.json', 'w') as outfile:
             json.dump(self.config, outfile)
@@ -917,3 +974,32 @@ class Ui_MainWindow(object):
         self.play_clan_war = bool(event)
         self.config['play_clan_war'] = self.play_clan_war
         self.dump_setting()
+
+
+    def on_change_2(self, v):
+        if self.spinBox_deck_number.value() == int(v):
+            return
+        logger.debug(f'Был изменен параметр номер колоды на: {v}')
+        self.spinBox_deck_number.setValue(v)
+
+    def _spinBox_deck_number(self, value):
+        self.thread.number_deck = self.spinBox_deck_number.value()
+        self.deck_number = self.spinBox_deck_number.value()
+        self.config['deck_number'] = self.deck_number
+        self.dump_setting()
+        logger.debug(f'Был изменен параметр номер колоды на: {value}')
+
+    def _checkBox_change_deck(self, v):
+        logger.debug(f'Был изменен параметр смены колоды на: {v}')
+        self.change_deck = v
+        self.config['change_deck'] = bool(self.change_deck)
+        self.dump_setting()
+
+    def _spinBox_number_fights_deck_change(self, value):
+        self.number_fights_deck_change = value
+        self.config['number_fights_deck_change'] = self.number_fights_deck_change
+        self.dump_setting()
+        logger.debug(f'Был изменен параметр номер колоды на: {value}')
+
+
+

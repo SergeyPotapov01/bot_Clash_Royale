@@ -9,5 +9,10 @@
     "time_break": 0,
     "Change_accounts" :false,
     "total_accounts": 0,
-    "Selected_account": 0
+    "Selected_account": 0,
+    "play_clan_war": false,
+    "change_deck": false,
+    "deck_number": 0,
+    "number_fights_deck_change": 0
+
 }

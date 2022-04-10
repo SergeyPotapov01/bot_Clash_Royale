@@ -8,7 +8,7 @@ from loguru import logger
 
 
 class Strategics:
-    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent):
+    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change):
         self.bot = Bot(port=port)
         self.triggers = ImageTriggers(open_chest, requested_card)
         self.index = 0
@@ -24,6 +24,9 @@ class Strategics:
         self.id_card = id_card
         self.play_clan_war = play_clan_war
         self.CW = play_clan_war
+        self.change_deck = change_deck
+        self.number_fights_deck_change = number_fights_deck_change
+        self.index_change_deck = 0
 
     def main(self):
         if self.bot.ADB.cheakInstallCR() == False:
@@ -95,7 +98,7 @@ class Strategics:
                 if 'Goblin_Drill' in triggers[2]:
                     if triggers[1] >= 3:
                         self.bot.selectCard(triggers[2].index('Goblin_Drill'))
-                        self.bot.placingCard1X1(choice((410, 105)), 256)
+                        self.bot.placingCard1X1(choice((440, 103)), 220)
                     else:
                         continue
 
@@ -105,6 +108,34 @@ class Strategics:
                         self.bot.placingCard1X1(choice((410, 105)), 202)
                     else:
                         continue
+
+                if 'Graveyard' in triggers[2]:
+                    if triggers[1] >= 6:
+                        self.bot.selectCard(triggers[2].index('Graveyard'))
+                        self.bot.placingCard1X1(choice((440, 103)), 220)
+                    else:
+                        continue
+
+                if 'Miner' in triggers[2]:
+                    if triggers[1] >= 6:
+                        self.bot.selectCard(triggers[2].index('Miner'))
+                        self.bot.placingCard1X1(choice((440, 103)), 220)
+                    else:
+                        continue
+
+                if 'Mortar' in triggers[2]:
+                    if triggers[1] >= 6:
+                        self.bot.selectCard(triggers[2].index('Mortar'))
+                        self.bot.placingCard1X1(choice((125, 416)), 470)
+                    else:
+                        continue
+                if 'X-Bow' in triggers[2]:
+                    if triggers[1] >= 6:
+                        self.bot.selectCard(triggers[2].index('X-Bow'))
+                        self.bot.placingCard1X1(choice((125, 416)), 470)
+                    else:
+                        continue
+
 
                 if 'Skeleton_Barrel' in triggers[2]:
                     if triggers[1] >= 4:
@@ -131,6 +162,13 @@ class Strategics:
                     if triggers[1] >= 6:
                         self.bot.selectCard(triggers[2].index('Ram_Rider'))
                         self.bot.placingCard1X1(choice((410, 105)), 202)
+                    else:
+                        continue
+
+                if 'Elixir_Collector' in triggers[2]:
+                    if triggers[1] >= 6:
+                        self.bot.selectCard(triggers[2].index('Elixir_Collector'))
+                        self.bot.placingCard1X1(choice((71, 176, 211, 280, 359, 481)), 673)
                     else:
                         continue
 
@@ -315,8 +353,17 @@ class Strategics:
                     if 'Witch' in triggers[2]:
                         self.bot.selectCard(triggers[2].index('Witch'))
                         self.bot.placingCard1X1(275, 700)
+                    elif 'Battle_Healer' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Battle_Healer'))
+                        self.bot.placingCard1X1(275, 700)
+                    elif 'Elite_Barbarians' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Elite_Barbarians'))
+                        self.bot.placingCard1X1(330, 700)
                     elif 'Night_Witch' in triggers[2]:
                         self.bot.selectCard(triggers[2].index('Night_Witch'))
+                        self.bot.placingCard1X1(275, 700)
+                    elif 'Electro_Dragon' in triggers[2]:
+                        self.bot.selectCard(triggers[2].index('Electro_Dragon'))
                         self.bot.placingCard1X1(275, 700)
                     else:
                         self.bot.selectCard(triggers[2].index('Elixir_Golem'))
@@ -415,6 +462,7 @@ class Strategics:
                 index_batlle += 1
                 self.bot.exitBatle1X1()
                 self.connection_to_parent.totall_batlles += 1
+                self.index_change_deck += 1
                 self.connection_to_parent.got_crowns += triggers[1]
                 self.connection_to_parent._textBrowser_2 = f'{triggers[1]}\n' + self.connection_to_parent._textBrowser_2
                 self.connection_to_parent._textBrowser_3 = f'{triggers}\n'
@@ -429,6 +477,7 @@ class Strategics:
                 index_batlle += 1
                 self.connection_to_parent.totall_batlles += 1
                 self.connection_to_parent.got_crowns += triggers[1]
+                self.index_change_deck += 1
                 self.connection_to_parent._textBrowser_2 = f'{triggers[1]}' + self.connection_to_parent._textBrowser_2
                 self.connection_to_parent._textBrowser_3 = f'{triggers}\n'
                 if index_batlle == 10:
@@ -505,6 +554,24 @@ class Strategics:
                     continue
                 slowdown_in_menu = True
 
+                if self.number_fights_deck_change <= self.index_change_deck:
+                    self.bot.goToDeck()
+                    time.sleep(5)
+                    image = self.bot.getScreen()
+                    triggers = self.triggers.getTrigger(image)
+                    trigger = triggers[0]
+
+                    if trigger == 202:
+                        self.connection_to_parent.number_deck += 1
+                        if self.connection_to_parent.number_deck >= 5:
+                            self.connection_to_parent.number_deck = 0
+                        self.bot.change_deck(self.connection_to_parent.number_deck)
+
+                    time.sleep(5)
+
+                    self.bot.returnHome()
+                    time.sleep(2)
+
                 if 'Until Chest Slots Full':
                     self.bot.returnHome()
                     if self.batlle_mode == 'global':
@@ -524,6 +591,9 @@ class Strategics:
                     else:
                         self.bot.runBattleMode(self.batlle_mode)
                     time.sleep(1)
+
+            elif trigger == 202:
+                self.bot.returnHome()
 
             elif trigger == 210:
                 self.bot.goToClanChat()
@@ -603,7 +673,7 @@ class Strategics:
                     image = self.bot.getScreen()
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
-                    if trigger == 237 and x >=4:
+                    if (trigger == 237 and x >=4) or x >= 10:
                         break
                 self.bot.get_shop_reward()
                 self.bot.returnHome()
@@ -663,6 +733,9 @@ class Strategics:
 
             elif trigger == 281:
                 self.bot.ADB.click(triggers[1], triggers[2])
+
+            elif trigger == 289:
+                self.bot.sale_reward()
 
             elif trigger == 400:
                 time.sleep(120)

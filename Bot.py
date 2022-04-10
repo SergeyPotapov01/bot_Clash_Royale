@@ -295,3 +295,13 @@ class Bot:
         logger.debug('Bot.swipe_clan_war_2')
         self.ADB.swipe(250, 500, 250, 850)
         sleep(3)
+
+    def sale_reward(self):
+        logger.debug('Bot.sale_reward')
+        self.ADB.click(337, 644)
+        sleep(3)
+
+    def change_deck(self, number: int):
+        logger.debug('Bot.change_deck')
+        self.ADB.click(157 + number * 57, 224)
+        sleep(3)
