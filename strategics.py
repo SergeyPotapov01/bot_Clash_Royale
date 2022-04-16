@@ -8,7 +8,7 @@ from loguru import logger
 
 
 class Strategics:
-    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change):
+    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion):
         self.bot = Bot(port=port)
         self.triggers = ImageTriggers(open_chest, requested_card)
         self.index = 0
@@ -27,6 +27,8 @@ class Strategics:
         self.change_deck = change_deck
         self.number_fights_deck_change = number_fights_deck_change
         self.index_change_deck = 0
+        self._number_fights_deck_change = self.number_fights_deck_change
+        self.send_emotion = False # Потом прокину коннект в интерфейс
 
     def main(self):
         if self.bot.ADB.cheakInstallCR() == False:
@@ -87,6 +89,11 @@ class Strategics:
 
 
             if trigger == 100:
+
+                if triggers[1] <= 4:
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
+                    continue
 
                 if 'Goblin_Barrel' in triggers[2]:
                     if triggers[1] >= 3:
@@ -199,7 +206,11 @@ class Strategics:
                         self.bot.placingCard1X1(275, 700)
                     else:
                         continue
-                    time.sleep(7)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
+                    time.sleep(6)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     if 'Witch' in triggers[2]:
                         self.bot.selectCard(triggers[2].index('Witch'))
                         self.bot.placingCard1X1(275, 700)
@@ -209,13 +220,21 @@ class Strategics:
                     else:
                         self.bot.selectCard(triggers[2].index('Golem'))
                         self.bot.placingCard1X1(275, 700)
-                    time.sleep(5)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
+                    time.sleep(4)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
                     self.bot.placingCard1X1(475, 550)
-                    time.sleep(6)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
+                    time.sleep(4)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
@@ -229,7 +248,11 @@ class Strategics:
                         self.bot.placingCard1X1(275, 700)
                     else:
                         continue
-                    time.sleep(7)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
+                    time.sleep(6)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     if 'Witch' in triggers[2]:
                         self.bot.selectCard(triggers[2].index('Witch'))
                         self.bot.placingCard1X1(275, 700)
@@ -239,13 +262,17 @@ class Strategics:
                     else:
                         self.bot.selectCard(triggers[2].index('Giant'))
                         self.bot.placingCard1X1(275, 700)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     time.sleep(5)
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
                     self.bot.placingCard1X1(475, 550)
-                    time.sleep(6)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
+                    time.sleep(5)
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
@@ -259,7 +286,11 @@ class Strategics:
                         self.bot.placingCard1X1(275, 700)
                     else:
                         continue
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     time.sleep(7)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     if 'Witch' in triggers[2]:
                         self.bot.selectCard(triggers[2].index('Witch'))
                         self.bot.placingCard1X1(275, 700)
@@ -269,13 +300,21 @@ class Strategics:
                     else:
                         self.bot.selectCard(triggers[2].index('Goblin_Giant'))
                         self.bot.placingCard1X1(275, 700)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     time.sleep(5)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
                     self.bot.placingCard1X1(475, 550)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     time.sleep(6)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
@@ -289,7 +328,11 @@ class Strategics:
                         self.bot.placingCard1X1(275, 700)
                     else:
                         continue
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     time.sleep(7)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     if 'Witch' in triggers[2]:
                         self.bot.selectCard(triggers[2].index('Witch'))
                         self.bot.placingCard1X1(275, 700)
@@ -299,13 +342,21 @@ class Strategics:
                     else:
                         self.bot.selectCard(triggers[2].index('Lava_Hound'))
                         self.bot.placingCard1X1(275, 700)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     time.sleep(5)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
                     self.bot.placingCard1X1(475, 550)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     time.sleep(6)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
@@ -319,7 +370,11 @@ class Strategics:
                         self.bot.placingCard1X1(275, 700)
                     else:
                         continue
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     time.sleep(7)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     if 'Witch' in triggers[2]:
                         self.bot.selectCard(triggers[2].index('Witch'))
                         self.bot.placingCard1X1(275, 700)
@@ -329,13 +384,21 @@ class Strategics:
                     else:
                         self.bot.selectCard(triggers[2].index('Electro_Giant'))
                         self.bot.placingCard1X1(275, 700)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     time.sleep(5)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
                     self.bot.placingCard1X1(475, 550)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     time.sleep(6)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
@@ -349,7 +412,11 @@ class Strategics:
                         self.bot.placingCard1X1(275, 700)
                     else:
                         continue
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     time.sleep(4)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     if 'Witch' in triggers[2]:
                         self.bot.selectCard(triggers[2].index('Witch'))
                         self.bot.placingCard1X1(275, 700)
@@ -368,13 +435,21 @@ class Strategics:
                     else:
                         self.bot.selectCard(triggers[2].index('Elixir_Golem'))
                         self.bot.placingCard1X1(275, 700)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     time.sleep(5)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
                     self.bot.placingCard1X1(475, 550)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     time.sleep(6)
+                    if self.send_emotion:
+                        self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
@@ -451,9 +526,6 @@ class Strategics:
                         self.bot.placingCard1X1(250, 515)
                     else:
                         continue
-
-                if triggers[1] <= 4:
-                    continue
 
                 self.bot.selectCard(randint(0, 3))
                 self.bot.placingCard1X1(randint(275, 475), randint(426, 700))
@@ -554,7 +626,7 @@ class Strategics:
                     continue
                 slowdown_in_menu = True
 
-                if self.number_fights_deck_change <= self.index_change_deck:
+                if self._number_fights_deck_change <= self.index_change_deck:
                     self.bot.goToDeck()
                     time.sleep(5)
                     image = self.bot.getScreen()
@@ -569,11 +641,13 @@ class Strategics:
 
                     time.sleep(5)
 
+                    self.index_change_deck = 0
+                    self._number_fights_deck_change = self.number_fights_deck_change + randint(0, 6)
+
                     self.bot.returnHome()
                     time.sleep(2)
 
                 if 'Until Chest Slots Full':
-                    self.bot.returnHome()
                     if self.batlle_mode == 'global':
                         self.bot.runBattleGlobal()
                     elif self.batlle_mode == 'disabled':

@@ -305,3 +305,8 @@ class Bot:
         logger.debug('Bot.change_deck')
         self.ADB.click(157 + number * 57, 224)
         sleep(3)
+
+    def send_emotion(self, number: int):
+        logger.debug('Bot.sale_reward')
+        self.ADB.click(51, 800)
+        self.ADB.click(140 + 95 * number, 640)

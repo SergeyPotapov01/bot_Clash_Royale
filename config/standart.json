@@ -13,6 +13,6 @@
     "play_clan_war": false,
     "change_deck": false,
     "deck_number": 0,
-    "number_fights_deck_change": 0
-
+    "number_fights_deck_change": 0,
+    "send_emotion": false
 }

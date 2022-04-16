@@ -28,7 +28,7 @@ class MyThread(QtCore.QThread):
     mysignal5 = QtCore.pyqtSignal(int)
 
 
-    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, change_deck, number_fights_deck_change, parent=None):
+    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, change_deck, number_fights_deck_change, send_emotion, parent=None):
         QtCore.QThread.__init__(self, parent)
         self.farm = False
         self.number_account = '0'
@@ -51,17 +51,17 @@ class MyThread(QtCore.QThread):
             self.mysignal5.emit(self.number_deck)
 
 
-    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change):
+    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion):
         if self.farm:
             self.farm = False
             self.bot.stopFarm()
         else:
             self.farm = True
-            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change)
+            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion)
             threading.Thread(target=self.bot.startFarm).start()
 
-    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change):
-        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change)
+    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion):
+        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion)
 
 
 class Ui_MainWindow(object):
@@ -76,6 +76,7 @@ class Ui_MainWindow(object):
         self.request_card = False
         self.open_chest = False
         self._changed_account = False
+        self.send_emotion = False
         self.port = config['port_adb']
         self._total_accounts = 0
         self._change_account = 0
@@ -86,7 +87,7 @@ class Ui_MainWindow(object):
         self.number_fights_deck_change = 0
         self.change_deck = False
         self.deck_number = 0
-        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change)
+        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion)
         self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)
         self.thread.mysignal2.connect(self.logEvent, QtCore.Qt.QueuedConnection)
         self.thread.mysignal3.connect(self.logCrown, QtCore.Qt.QueuedConnection)
@@ -340,6 +341,15 @@ class Ui_MainWindow(object):
         self.label_number_fights_deck_change.setGeometry(QtCore.QRect(170, 400, 211, 20))
         self.label_number_fights_deck_change.setObjectName("label_number_fights_deck_change")
 
+
+        self.checkBox_send_emotion = QtWidgets.QCheckBox(self.tab_4)
+        self.checkBox_send_emotion.setGeometry(QtCore.QRect(20, 440, 181, 41))
+        self.checkBox_send_emotion.setObjectName("checkBox_send_emotion")
+        self.checkBox_send_emotion.stateChanged.connect(self._checkBox_send_emotion)
+
+        self.label_send_emotion = QtWidgets.QLabel(self.tab_4)
+        self.label_send_emotion.setGeometry(QtCore.QRect(170, 450, 211, 20))
+        self.label_send_emotion.setObjectName("label_send_emotion")
 
         ##########
 
@@ -759,12 +769,12 @@ class Ui_MainWindow(object):
         else:
             self.farm = True
             self.pushButton.setText(_translate("MainWindow", self.language_set_words[1]))
-        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change)
+        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion)
         self.bot = self.thread.bot
 
     def getTrigger(self):
         if self.bot == None:
-            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change)
+            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion)
             self.bot = self.thread.bot
         trigger = ImageTriggers(True, True)
         x = trigger.getTriggerDEBUG(self.bot.bot.getScreen())
@@ -907,6 +917,7 @@ class Ui_MainWindow(object):
         self.label_change_deck.setText(_translate("MainWindow", 'Change deck'))
         self.label_deck_number.setText(_translate("MainWindow", 'Deck number'))
         self.label_number_fights_deck_change.setText(_translate("MainWindow", 'Number of fights before deck change'))
+        self.label_send_emotion.setText(_translate("MainWindow", 'Send emoji during combat'))
 
 
     def on_change(self, v):
@@ -1001,5 +1012,8 @@ class Ui_MainWindow(object):
         self.dump_setting()
         logger.debug(f'Был изменен параметр номер колоды на: {value}')
 
-
-
+    def _checkBox_send_emotion(self, v):
+        logger.debug(f'Был изменен параметр смены колоды на: {v}')
+        self.change_deck = v
+        self.config['send_emotion'] = bool(self.send_emotion)
+        self.dump_setting()

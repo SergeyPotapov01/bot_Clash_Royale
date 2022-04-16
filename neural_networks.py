@@ -45,10 +45,11 @@ class ElixirInBatlle:
         image = image.reshape(1, 840)
         prediction = self.model.predict(image)
         prediction = np.argmax(prediction)
+
         try:
             self.elixir = int(self.class_names[prediction])
         except ValueError:
-            self.elixir = 0
+            self.elixir -= 3
 
         return self.elixir
 
