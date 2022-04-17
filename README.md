@@ -15,7 +15,7 @@ telegram channel:
 https://t.me/bot_Clash_Royale
 
 Bug Report:
-https://t.me/leninka20
+https://t.me/Sergey_p7
 
 Сompilation instruction:
 https://www.youtube.com/watch?v=M28z3jA4IBI
@@ -76,7 +76,7 @@ Current features:
 3) Receive rewards from chests
 4) Read the elixir
 5) Read the deck during combat
-6) 25 cards have logic to play, the rest will be random
+6) 30 cards have logic to play, the rest will be random
 7) Get a number of received crowns
 8) Able to select game mode (global, mode_1, mode_2, 2X2)
 9) Multiaccount (only supercell id)
@@ -84,17 +84,24 @@ Current features:
 11) Сard request
 12) Pass royale rewards receive
 13) Saving settings
+14) Clan wars playing
+15) Swipe deck(1-5 or 6-10)
+16) Send emoji during combat (https://www.youtube.com/watch?v=NUqRh0eeAG8)
 
 
 Further features:
 
 1) Read the deck and elixir of the opponent
 2) Read the units on the field
-3) Clan wars playing
-4) Cards donation
-5) Events playing
-6) Self-learning neural network that increases gaming level
-7) Multithreaded emulator
+3) Cards donation
+4) Events playing
+5) Self-learning neural network that increases gaming level
+6) Multithreaded emulator
+7) Manage and receive information through the telegram bot
+8) Сard improvement
+9) Donate cards and collect one-time rewards for purchasing a clan member's royale pass
+10) Sunday Epic Card Request
+11) Ability to share battle with clanmates
 
 
 # Install for developers
