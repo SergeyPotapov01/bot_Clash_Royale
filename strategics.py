@@ -1,4 +1,6 @@
 import time
+import datetime
+
 from random import randint, choice
 
 from Bot import Bot
@@ -37,6 +39,8 @@ class Strategics:
         if self.bot.ADB.cheakRunCR() == False:
             self.bot.openCR()
 
+        sl = 2 if self.send_emotion else 0
+
         slowdown_in_menu = True
 
         index_batlle = 0
@@ -46,7 +50,7 @@ class Strategics:
             triggers = self.triggers.getTrigger(image)
             trigger = triggers[0]
             logger.debug(str(triggers) + ' ' + str(time.time() - t))
-            self.connection_to_parent._textBrowser_3 = f'{triggers}\n' + self.connection_to_parent._textBrowser_3
+            #self.connection_to_parent._textBrowser_3 = f'{triggers}\n' + self.connection_to_parent._textBrowser_3
 
             if self.index == 50:
                 self.bot.reboot()
@@ -82,6 +86,7 @@ class Strategics:
             if trigger == 0:
                 self.index += 1
                 logger.debug('Не найден триггер')
+                self.connection_to_parent._textBrowser_3 = 'Trigger not found\n' + self.connection_to_parent._textBrowser_3
                 time.sleep(3)
                 continue
             else:
@@ -89,6 +94,7 @@ class Strategics:
 
 
             if trigger == 100:
+                self.connection_to_parent._textBrowser_3 = f'In battle\n Card: {triggers[2]} Elixir: {triggers[1]} ' + self.connection_to_parent._textBrowser_3
 
                 if triggers[1] <= 4:
                     if self.send_emotion:
@@ -99,6 +105,7 @@ class Strategics:
                     if triggers[1] >= 3:
                         self.bot.selectCard(triggers[2].index('Goblin_Barrel'))
                         self.bot.placingCard1X1(choice((410, 105)), 202)
+                        continue
                     else:
                         continue
 
@@ -106,6 +113,7 @@ class Strategics:
                     if triggers[1] >= 3:
                         self.bot.selectCard(triggers[2].index('Goblin_Drill'))
                         self.bot.placingCard1X1(choice((440, 103)), 220)
+                        continue
                     else:
                         continue
 
@@ -113,6 +121,7 @@ class Strategics:
                     if triggers[1] >= 6:
                         self.bot.selectCard(triggers[2].index('Balloon'))
                         self.bot.placingCard1X1(choice((410, 105)), 202)
+                        continue
                     else:
                         continue
 
@@ -120,6 +129,7 @@ class Strategics:
                     if triggers[1] >= 6:
                         self.bot.selectCard(triggers[2].index('Graveyard'))
                         self.bot.placingCard1X1(choice((440, 103)), 220)
+                        continue
                     else:
                         continue
 
@@ -127,6 +137,7 @@ class Strategics:
                     if triggers[1] >= 6:
                         self.bot.selectCard(triggers[2].index('Miner'))
                         self.bot.placingCard1X1(choice((440, 103)), 220)
+                        continue
                     else:
                         continue
 
@@ -134,12 +145,14 @@ class Strategics:
                     if triggers[1] >= 6:
                         self.bot.selectCard(triggers[2].index('Mortar'))
                         self.bot.placingCard1X1(choice((125, 416)), 470)
+                        continue
                     else:
                         continue
                 if 'X-Bow' in triggers[2]:
                     if triggers[1] >= 6:
                         self.bot.selectCard(triggers[2].index('X-Bow'))
                         self.bot.placingCard1X1(choice((125, 416)), 470)
+                        continue
                     else:
                         continue
 
@@ -148,6 +161,7 @@ class Strategics:
                     if triggers[1] >= 4:
                         self.bot.selectCard(triggers[2].index('Skeleton_Barrel'))
                         self.bot.placingCard1X1(choice((410, 105)), 202)
+                        continue
                     else:
                         continue
 
@@ -155,6 +169,7 @@ class Strategics:
                     if triggers[1] >= 9:
                         self.bot.selectCard(triggers[2].index('Three_Musketeers'))
                         self.bot.placingCard1X1(723, 723)
+                        continue
                     else:
                         continue
 
@@ -162,6 +177,7 @@ class Strategics:
                     if triggers[1] >= 4:
                         self.bot.selectCard(triggers[2].index('Zappies'))
                         self.bot.placingCard1X1(723, 723)
+                        continue
                     else:
                         continue
 
@@ -169,6 +185,7 @@ class Strategics:
                     if triggers[1] >= 6:
                         self.bot.selectCard(triggers[2].index('Ram_Rider'))
                         self.bot.placingCard1X1(choice((410, 105)), 202)
+                        continue
                     else:
                         continue
 
@@ -176,6 +193,7 @@ class Strategics:
                     if triggers[1] >= 6:
                         self.bot.selectCard(triggers[2].index('Elixir_Collector'))
                         self.bot.placingCard1X1(choice((71, 176, 211, 280, 359, 481)), 673)
+                        continue
                     else:
                         continue
 
@@ -183,6 +201,7 @@ class Strategics:
                     if triggers[1] >= 6:
                         self.bot.selectCard(triggers[2].index('Prince'))
                         self.bot.placingCard1X1(choice((410, 105)), 202)
+                        continue
                     else:
                         continue
 
@@ -190,6 +209,7 @@ class Strategics:
                     if triggers[1] >= 5:
                         self.bot.selectCard(triggers[2].index('Dark_Prince'))
                         self.bot.placingCard1X1(choice((410, 105)), 202)
+                        continue
                     else:
                         continue
 
@@ -197,6 +217,7 @@ class Strategics:
                     if triggers[1] >= 6:
                         self.bot.selectCard(triggers[2].index('Royal_Hogs'))
                         self.bot.placingCard1X1(choice((410, 268, 105)), 202)
+                        continue
                     else:
                         continue
 
@@ -204,6 +225,7 @@ class Strategics:
                     if triggers[1] >= 8:
                         self.bot.selectCard(triggers[2].index('Golem'))
                         self.bot.placingCard1X1(275, 700)
+                        continue
                     else:
                         continue
                     if self.send_emotion:
@@ -250,7 +272,7 @@ class Strategics:
                         continue
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(6)
+                    time.sleep(4+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     if 'Witch' in triggers[2]:
@@ -264,7 +286,7 @@ class Strategics:
                         self.bot.placingCard1X1(275, 700)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(5)
+                    time.sleep(3+sl)
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
@@ -272,7 +294,7 @@ class Strategics:
                     self.bot.placingCard1X1(475, 550)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(5)
+                    time.sleep(3+sl)
                     image = self.bot.getScreen()
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
@@ -288,7 +310,7 @@ class Strategics:
                         continue
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(7)
+                    time.sleep(5+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     if 'Witch' in triggers[2]:
@@ -302,7 +324,7 @@ class Strategics:
                         self.bot.placingCard1X1(275, 700)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(5)
+                    time.sleep(3 + sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
@@ -312,7 +334,7 @@ class Strategics:
                     self.bot.placingCard1X1(475, 550)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(6)
+                    time.sleep(3+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
@@ -330,7 +352,7 @@ class Strategics:
                         continue
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(7)
+                    time.sleep(5+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     if 'Witch' in triggers[2]:
@@ -344,7 +366,7 @@ class Strategics:
                         self.bot.placingCard1X1(275, 700)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(5)
+                    time.sleep(3+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
@@ -354,7 +376,7 @@ class Strategics:
                     self.bot.placingCard1X1(475, 550)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(6)
+                    time.sleep(4+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
@@ -372,7 +394,7 @@ class Strategics:
                         continue
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(7)
+                    time.sleep(5+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     if 'Witch' in triggers[2]:
@@ -386,7 +408,7 @@ class Strategics:
                         self.bot.placingCard1X1(275, 700)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(5)
+                    time.sleep(3+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
@@ -396,7 +418,7 @@ class Strategics:
                     self.bot.placingCard1X1(475, 550)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(6)
+                    time.sleep(4+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
@@ -414,7 +436,7 @@ class Strategics:
                         continue
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(4)
+                    time.sleep(2+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     if 'Witch' in triggers[2]:
@@ -437,7 +459,7 @@ class Strategics:
                         self.bot.placingCard1X1(275, 700)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(5)
+                    time.sleep(3+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
@@ -447,7 +469,7 @@ class Strategics:
                     self.bot.placingCard1X1(475, 550)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    time.sleep(6)
+                    time.sleep(4+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     image = self.bot.getScreen()
@@ -458,9 +480,10 @@ class Strategics:
                     continue
 
                 if 'Goblin_Gang' in triggers[2]:
-                    self.bot.selectCard(triggers[2].index('Goblin_Gang'))
                     if triggers[1] >= 3:
+                        self.bot.selectCard(triggers[2].index('Goblin_Gang'))
                         self.bot.placingCard1X1(260, 700)
+                        continue
                     else:
                         continue
 
@@ -468,6 +491,7 @@ class Strategics:
                     if triggers[1] >= 3:
                         self.bot.selectCard(triggers[2].index('Princess'))
                         self.bot.placingCard1X1(260, 700)
+                        continue
                     else:
                         continue
 
@@ -475,6 +499,7 @@ class Strategics:
                     if triggers[1] >= 4:
                         self.bot.selectCard(triggers[2].index('Hog_Rider'))
                         self.bot.placingCard1X1(choice((410, 105)), 202)
+                        continue
                     else:
                         continue
 
@@ -482,6 +507,7 @@ class Strategics:
                     if triggers[1] >= 4:
                         self.bot.selectCard(triggers[2].index('Cannon'))
                         self.bot.placingCard1X1(250, 515)
+                        continue
                     else:
                         continue
 
@@ -489,6 +515,7 @@ class Strategics:
                     if triggers[1] >= 4:
                         self.bot.selectCard(triggers[2].index('Goblin_Hut'))
                         self.bot.placingCard1X1(250, 515)
+                        continue
                     else:
                         continue
 
@@ -496,6 +523,7 @@ class Strategics:
                     if triggers[1] >= 4:
                         self.bot.selectCard(triggers[2].index('Goblin_Cage'))
                         self.bot.placingCard1X1(250, 515)
+                        continue
                     else:
                         continue
 
@@ -503,6 +531,7 @@ class Strategics:
                     if triggers[1] >= 4:
                         self.bot.selectCard(triggers[2].index('Barbarian_Hut'))
                         self.bot.placingCard1X1(250, 515)
+                        continue
                     else:
                         continue
 
@@ -510,6 +539,7 @@ class Strategics:
                     if triggers[1] >= 4:
                         self.bot.selectCard(triggers[2].index('Furnace'))
                         self.bot.placingCard1X1(250, 515)
+                        continue
                     else:
                         continue
 
@@ -517,6 +547,7 @@ class Strategics:
                     if triggers[1] >= 5:
                         self.bot.selectCard(triggers[2].index('Bomb_Tower'))
                         self.bot.placingCard1X1(250, 515)
+                        continue
                     else:
                         continue
 
@@ -524,11 +555,128 @@ class Strategics:
                     if triggers[1] >= 5:
                         self.bot.selectCard(triggers[2].index('Tesla'))
                         self.bot.placingCard1X1(250, 515)
+                        continue
+                    else:
+                        continue
+                    #######################
+
+                if 'Tornado' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Tornado'))
+                        self.bot.placingCard1X1(randint(110, 420), 315)
+                        continue
+                    else:
+                        continue
+
+                if 'Royal_Delivery' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Royal_Delivery'))
+                        self.bot.placingCard1X1(choice((100, 130, 160, 380, 410, 440)), randint(430, 500))
+                        continue
+                    else:
+                        continue
+
+                if 'Barbarian_Barrel' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Barbarian_Barrel'))
+                        self.bot.placingCard1X1(choice((100, 130, 160, 380, 410, 440)), 430)
+                        continue
+                    else:
+                        continue
+
+                if 'The_Log' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('The_Log'))
+                        self.bot.placingCard1X1(choice((100, 130, 160, 380, 410, 440)), 430)
+                        continue
+                    else:
+                        continue
+
+                if 'Earthquake' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Earthquake'))
+                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 330, 360, 390, 400)), 290)
+                        continue
+                    else:
+                        continue
+
+                if 'Lightnimg' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Lightnimg'))
+                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 330, 360, 390, 400)), 290)
+                        continue
+                    else:
+                        continue
+
+                if 'Poison' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Poison'))
+                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 330, 360, 390, 400)), 290)
+                        continue
+                    else:
+                        continue
+
+                if 'Arrows' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Arrows'))
+                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 330, 360, 390, 400)), 290)
+                        continue
+                    else:
+                        continue
+
+                if 'Fireball' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Fireball'))
+                        self.bot.placingCard1X1(choice((75, 100, 128, 150, 175, 350, 385, 410, 440)), 270)
+                        continue
+                    else:
+                        continue
+
+                if 'Giant_Snowball' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Giant_Snowball'))
+                        self.bot.placingCard1X1(choice((75, 100, 128, 150, 175, 350, 385, 410, 440)), 270)
+                        continue
+                    else:
+                        continue
+
+                if 'Freeze' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Freeze'))
+                        self.bot.placingCard1X1(choice((75, 100, 128, 150, 175, 350, 385, 410, 440)), 270)
+                        continue
+                    else:
+                        continue
+
+                if 'Rocket' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Rocket'))
+                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 330, 360, 390, 400)), 250)
+                        continue
+                    else:
+                        continue
+
+                if 'Zap' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Zap'))
+                        self.bot.placingCard1X1(choice((75, 100, 128, 150, 175, 350, 385, 410, 440)), 270)
+                        continue
+                    else:
+                        continue
+
+                if 'Rage' in triggers[2]:
+                    if triggers[1] >= 5:
+                        self.bot.selectCard(triggers[2].index('Rage'))
+                        self.bot.placingCard1X1(choice((105, 130, 160, 180, 330, 360, 390)), 520)
+                        continue
                     else:
                         continue
 
                 self.bot.selectCard(randint(0, 3))
                 self.bot.placingCard1X1(randint(275, 475), randint(426, 700))
+                t = time.time()
+                continue
+
 
             elif trigger == 121:
                 index_batlle += 1
@@ -536,8 +684,9 @@ class Strategics:
                 self.connection_to_parent.totall_batlles += 1
                 self.index_change_deck += 1
                 self.connection_to_parent.got_crowns += triggers[1]
-                self.connection_to_parent._textBrowser_2 = f'{triggers[1]}\n' + self.connection_to_parent._textBrowser_2
-                self.connection_to_parent._textBrowser_3 = f'{triggers}\n'
+                self.connection_to_parent._textBrowser_2 = f'The result of the battle: {datetime.datetime.now():%Y-%m-%d %H:%M:%S} crows:{triggers[1]}\n' + self.connection_to_parent._textBrowser_2
+                self.connection_to_parent._textBrowser_3 = 'End of the fight\n'
+
 
                 if index_batlle == 10:
                     self.bot.reboot()
@@ -545,12 +694,13 @@ class Strategics:
                 time.sleep(3)
 
             elif trigger == 122:
+                self.connection_to_parent._textBrowser_3 = 'End of the fight\n'
                 self.bot.exitBatle2X2()
                 index_batlle += 1
                 self.connection_to_parent.totall_batlles += 1
                 self.connection_to_parent.got_crowns += triggers[1]
                 self.index_change_deck += 1
-                self.connection_to_parent._textBrowser_2 = f'{triggers[1]}' + self.connection_to_parent._textBrowser_2
+                self.connection_to_parent._textBrowser_2 = f'The result of the battle: {datetime.datetime.now():%Y-%m-%d %H:%M:%S} crows:{triggers[1]}\n' + self.connection_to_parent._textBrowser_2
                 self.connection_to_parent._textBrowser_3 = f'{triggers}\n'
                 if index_batlle == 10:
                     self.bot.reboot()
@@ -558,11 +708,14 @@ class Strategics:
                 time.sleep(3)
 
             elif trigger == 124:
+                self.connection_to_parent._textBrowser_3 = 'Loading a fight\n' + self.connection_to_parent._textBrowser_3
                 self.bot.ADB.click(400, 420)
                 time.sleep(1)
 
             elif trigger == 200:
+                self.connection_to_parent._textBrowser_3 = 'The bot is in the menu\n' + self.connection_to_parent._textBrowser_3
                 if self.CW:
+                    self.connection_to_parent._textBrowser_3 = 'Checking for sending to battle on square\n' + self.connection_to_parent._textBrowser_3
                     self.bot.goToClanChat()
                     time.sleep(5)
                     image = self.bot.getScreen()
@@ -570,23 +723,28 @@ class Strategics:
                     trigger = triggers[0]
 
                     if trigger == 216:
+                        self.connection_to_parent._textBrowser_3 = 'You are not in a clan\n' + self.connection_to_parent._textBrowser_3
                         self.CW = False
                         self.bot.returnHome()
 
                     if trigger == 239:
+                        self.connection_to_parent._textBrowser_3 = 'Get reward clan war\n' + self.connection_to_parent._textBrowser_3
                         self.bot.get_reward_clan_war()
                         continue
 
                     if trigger == 218:
+                        self.connection_to_parent._textBrowser_3 = 'Close statistics clan war\n' + self.connection_to_parent._textBrowser_3
                         self.bot.close_statistics_clan_war()
                         continue
 
                     if trigger == 260:
+                        self.connection_to_parent._textBrowser_3 = 'Scroll to recognize\n' + self.connection_to_parent._textBrowser_3
                         self.bot.swipe_clan_war_2()
                         self.bot.returnHome()
                         continue
 
                     if trigger == 261:
+                        self.connection_to_parent._textBrowser_3 = 'Scroll to recognize\n' + self.connection_to_parent._textBrowser_3
                         self.bot.swipe_clan_war_2()
                         self.bot.returnHome()
                         continue
@@ -594,6 +752,7 @@ class Strategics:
                     if trigger == 215 and True in triggers[1]:
                         index = 0
                         while True:
+                            self.connection_to_parent._textBrowser_3 = 'Scroll to send go batlle\n' + self.connection_to_parent._textBrowser_3
                             index += 1
                             self.bot.swipe_clan_war()
                             time.sleep(2)
@@ -601,21 +760,25 @@ class Strategics:
                             triggers = self.triggers.getTrigger(image)
                             trigger = triggers[0]
                             if trigger == 260:
+                                self.connection_to_parent._textBrowser_3 = 'Go batlle\n' + self.connection_to_parent._textBrowser_3
                                 self.bot.go_batlle_clan_war(0)
                                 break
                             if trigger == 261 or index >= 7:
+                                self.connection_to_parent._textBrowser_3 = 'Go batlle\n' + self.connection_to_parent._textBrowser_3
                                 self.bot.go_batlle_clan_war(1)
                                 break
 
                         continue
 
                     elif trigger == 212:
+                        self.connection_to_parent._textBrowser_3 = 'Go batlle\n' + self.connection_to_parent._textBrowser_3
                         self.bot.goToClanChat()
                         time.sleep(1)
                         self.bot.returnHome()
                         continue
 
                     if trigger == 215 and not (True in triggers[1]):
+                        self.connection_to_parent._textBrowser_3 = 'Switching to the clan wars menu\n' + self.connection_to_parent._textBrowser_3
                         self.CW = False
                         self.bot.returnHome()
                         continue
@@ -627,6 +790,7 @@ class Strategics:
                 slowdown_in_menu = True
 
                 if self._number_fights_deck_change <= self.index_change_deck and self.change_deck:
+                    self.connection_to_parent._textBrowser_3 = 'Change deck 1/2\n' + self.connection_to_parent._textBrowser_3
                     self.bot.goToDeck()
                     time.sleep(5)
                     image = self.bot.getScreen()
@@ -634,6 +798,7 @@ class Strategics:
                     trigger = triggers[0]
 
                     if trigger == 202:
+                        self.connection_to_parent._textBrowser_3 = 'Change deck 2/2\n' + self.connection_to_parent._textBrowser_3
                         self.connection_to_parent.number_deck += 1
                         if self.connection_to_parent.number_deck >= 5:
                             self.connection_to_parent.number_deck = 0
@@ -650,6 +815,7 @@ class Strategics:
                 if 'Until Chest Slots Full':
                     if self.batlle_mode == 'global':
                         self.bot.runBattleGlobal()
+                        self.connection_to_parent._textBrowser_3 = 'Run Battle Global\n' + self.connection_to_parent._textBrowser_3
                     elif self.batlle_mode == 'disabled':
                         if self.changed_account:
                             self.bot.returnHome()
@@ -663,13 +829,16 @@ class Strategics:
                             time.sleep(60*60)
                             self.bot.openCR()
                     else:
+                        self.connection_to_parent._textBrowser_3 = f'Run Battle mode {self.batlle_mode} \n' + self.connection_to_parent._textBrowser_3
                         self.bot.runBattleMode(self.batlle_mode)
                     time.sleep(1)
 
             elif trigger == 202:
+                self.connection_to_parent._textBrowser_3 = 'Return home\n' + self.connection_to_parent._textBrowser_3
                 self.bot.returnHome()
 
             elif trigger == 210:
+                self.connection_to_parent._textBrowser_3 = 'Checking messages in clan chat\n' + self.connection_to_parent._textBrowser_3
                 self.bot.goToClanChat()
                 time.sleep(2)
                 image = self.bot.getScreen()
@@ -677,20 +846,27 @@ class Strategics:
                 time.sleep(2)
                 trigger = triggers[0]
                 if trigger != 212:
+                    self.connection_to_parent._textBrowser_3 = 'Checking messages in clan chat\n' + self.connection_to_parent._textBrowser_3
                     self.bot.choose_reward(randint(0, 1))
                     self.bot.goToClanChat()
                     time.sleep(2)
                 elif trigger == 239:
+                    self.connection_to_parent._textBrowser_3 = 'Get reward clan war\n' + self.connection_to_parent._textBrowser_3
                     self.bot.get_reward_clan_war()
                 elif trigger == 218:
+                    self.connection_to_parent._textBrowser_3 = 'Close statistics clan war\n' + self.connection_to_parent._textBrowser_3
                     self.bot.close_statistics_clan_war()
                     continue
                 if trigger == 28:
+                    self.connection_to_parent._textBrowser_3 = 'Request Card\n' + self.connection_to_parent._textBrowser_3
+                    continue
                     pass
+                self.connection_to_parent._textBrowser_3 = 'Request Card\n' + self.connection_to_parent._textBrowser_3
                 self.bot.requestCard(self.id_card)
                 time.sleep(4)
 
             elif trigger == 211:
+                self.connection_to_parent._textBrowser_3 = 'Checking messages in clan chat\n' + self.connection_to_parent._textBrowser_3
                 self.bot.goToClanChat()
                 time.sleep(2)
                 image = self.bot.getScreen()
@@ -698,52 +874,66 @@ class Strategics:
                 trigger = triggers[0]
                 time.sleep(2)
                 if trigger == 239:
+                    self.connection_to_parent._textBrowser_3 = 'Get reward clan war\n' + self.connection_to_parent._textBrowser_3
                     self.bot.get_reward_clan_war()
                     continue
                 elif trigger == 218:
+                    self.connection_to_parent._textBrowser_3 = 'Close statistics clan war\n' + self.connection_to_parent._textBrowser_3
                     self.bot.close_statistics_clan_war()
                     continue
                 if trigger != 212:
+                    self.connection_to_parent._textBrowser_3 = 'pass\n' + self.connection_to_parent._textBrowser_3
                     self.bot.choose_reward(randint(0, 1))
                     self.bot.goToClanChat()
                     time.sleep(2)
                 self.bot.returnHome()
 
             elif trigger == 212:
+                self.connection_to_parent._textBrowser_3 = 'Return home\n' + self.connection_to_parent._textBrowser_3
                 self.bot.returnHome()
 
             elif trigger == 215:
+                self.connection_to_parent._textBrowser_3 = 'Return home\n' + self.connection_to_parent._textBrowser_3
                 self.bot.returnHome()
 
             elif trigger == 218:
+                self.connection_to_parent._textBrowser_3 = 'Сlose statistics clan war\n' + self.connection_to_parent._textBrowser_3
                 self.bot.close_statistics_clan_war()
                 continue
 
             elif trigger == 219:
+                self.connection_to_parent._textBrowser_3 = 'Unable to request a card\n' + self.connection_to_parent._textBrowser_3
                 self.id_card += 1
                 self.bot.reboot()
 
             elif trigger > 220 and trigger < 225:
+                self.connection_to_parent._textBrowser_3 = 'Get reward chest\n' + self.connection_to_parent._textBrowser_3
                 self.bot.getRewardChest(trigger - 220)
 
             elif trigger == 225:
+                self.connection_to_parent._textBrowser_3 = 'Return home\n' + self.connection_to_parent._textBrowser_3
                 self.bot.returnHome()
                 time.sleep(0.5)
 
             elif trigger == 226:
+                self.connection_to_parent._textBrowser_3 = 'Choose reward\n' + self.connection_to_parent._textBrowser_3
                 self.bot.choose_reward(randint(0, 1))
                 time.sleep(0.5)
 
             elif trigger > 230 and trigger < 235:
+                self.connection_to_parent._textBrowser_3 = f'Open Chest {trigger - 231}\n' + self.connection_to_parent._textBrowser_3
                 self.bot.openChest(trigger - 230)
 
             elif trigger == 235:
+                self.connection_to_parent._textBrowser_3 = 'Open pass royale\n' + self.connection_to_parent._textBrowser_3
                 self.bot.open_pass_royale()
 
             elif trigger == 236:
+                self.connection_to_parent._textBrowser_3 = 'Get shop reward 1/3\n' + self.connection_to_parent._textBrowser_3
                 self.bot.goToShop()
                 x = 0
                 while True:
+                    self.connection_to_parent._textBrowser_3 = 'Get shop reward 2/3\n' + self.connection_to_parent._textBrowser_3
                     x += 1
                     self.bot.swipe_shop()
                     image = self.bot.getScreen()
@@ -751,21 +941,25 @@ class Strategics:
                     trigger = triggers[0]
                     if (trigger == 237 and x >=4) or x >= 10:
                         break
+                self.connection_to_parent._textBrowser_3 = 'Get shop reward 3/3\n' + self.connection_to_parent._textBrowser_3
                 self.bot.get_shop_reward()
                 self.bot.returnHome()
                 continue
 
             elif trigger == 238:
+                self.connection_to_parent._textBrowser_3 = 'Skip shop\n' + self.connection_to_parent._textBrowser_3
                 self.bot.goToShop()
                 self.bot.returnHome()
 
             elif trigger == 239:
+                self.connection_to_parent._textBrowser_3 = 'Get reward clan war\n' + self.connection_to_parent._textBrowser_3
                 self.bot.get_reward_clan_war()
 
             elif trigger == 250:
+                self.connection_to_parent._textBrowser_3 = 'Reward limit\n' + self.connection_to_parent._textBrowser_3
                 if self.changed_account:
                     self.increasing_account_number()
-
+                    self.connection_to_parent._textBrowser_3 = 'Changed account 1/2\n' + self.connection_to_parent._textBrowser_3
                     if self.batlle_mode == 'global':
                         self.bot.skipLimit()
                     else:
@@ -773,7 +967,7 @@ class Strategics:
 
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
-
+                    self.connection_to_parent._textBrowser_3 = 'Changed account 2/2\n' + self.connection_to_parent._textBrowser_3
                     if trigger == 200:
                         self.bot.changeAccount(self.number_account, self.total_accounts)
                         self.connection_to_parent.number_account = self.number_account
@@ -786,12 +980,15 @@ class Strategics:
                     self.bot.rewardLimit()
 
             elif trigger == 260:
+                self.connection_to_parent._textBrowser_3 = 'Return Home\n' + self.connection_to_parent._textBrowser_3
                 self.bot.returnHome()
 
             elif trigger == 261:
+                self.connection_to_parent._textBrowser_3 = 'Return Home\n' + self.connection_to_parent._textBrowser_3
                 self.bot.returnHome()
 
             elif trigger == 270:
+                self.connection_to_parent._textBrowser_3 = 'Language set incorrectly\n' + self.connection_to_parent._textBrowser_3
                 self.index += 1
                 if self.index >= 5:
                     self.bot.setEnglishLanguage()
@@ -801,6 +998,7 @@ class Strategics:
                     continue
 
             elif trigger == 280:
+                self.connection_to_parent._textBrowser_3 = 'Receiving an award\n' + self.connection_to_parent._textBrowser_3
                 self.index280 += 1
                 if self.index280 >= 10:
                     self.bot.reboot()
@@ -808,12 +1006,15 @@ class Strategics:
                 self.bot.ADB.click(triggers[1], triggers[2])
 
             elif trigger == 281:
+                self.connection_to_parent._textBrowser_3 = 'Receiving an award\n' + self.connection_to_parent._textBrowser_3
                 self.bot.ADB.click(triggers[1], triggers[2])
 
             elif trigger == 289:
+                self.connection_to_parent._textBrowser_3 = 'Selling an award\n' + self.connection_to_parent._textBrowser_3
                 self.bot.sale_reward()
 
             elif trigger == 400:
+                self.connection_to_parent._textBrowser_3 = 'Loss of connection\n' + self.connection_to_parent._textBrowser_3
                 time.sleep(120)
                 self.bot.exitBatle1X1()
 
