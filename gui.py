@@ -118,6 +118,10 @@ class Ui_MainWindow(object):
                                     'Wizard', 'Royal_Hogs', 'Goblin_Hut', 'Inferno_Tower',
                                     'Elixir_Collector', 'Rocket', 'Barbarian_Hut', 'Three_Musketeers',
                                   ]
+
+        self.list_card_request_epic = [
+
+        ]
         self.language = 'English'
         self.language_set_words = []
         self.list_mode_bbbb = ['Until Chest Slots Full', 'Until Daily Bonus Met']
@@ -220,27 +224,45 @@ class Ui_MainWindow(object):
         self.label_5.setObjectName("label_5")
 
         self.comboBox_2 = QtWidgets.QComboBox(self.tab_3)
-        self.comboBox_2.setGeometry(QtCore.QRect(200, 145, 151, 21))
+        self.comboBox_2.setGeometry(QtCore.QRect(200, 135, 151, 21))
         self.comboBox_2.setObjectName("comboBox_2")
         self.comboBox_2.addItems(self.list_card_request)
         self.comboBox_2.currentTextChanged.connect(self.currentTextComboBox_2)
 
         self.label_img = QLabel(self.tab_3)
-        self.label_img.move(360, 130)
+        self.label_img.move(360, 100)
         self.label_img.resize(50, 50)
 
+        ############################
+
+        self.comboBox_2_epic = QtWidgets.QComboBox(self.tab_3)
+        self.comboBox_2_epic.setGeometry(QtCore.QRect(200, 175, 151, 21))
+        self.comboBox_2_epic.setObjectName("comboBox_2")
+        self.comboBox_2_epic.addItems(self.list_card_request_epic)
+        self.comboBox_2_epic.currentTextChanged.connect(self.currentTextComboBox_2)
+
+        self.label_img_epic = QLabel(self.tab_3)
+        self.label_img_epic.move(360, 170)
+        self.label_img_epic.resize(50, 50)
+
+        self.label_epic = QtWidgets.QLabel(self.tab_3)
+        self.label_epic.setGeometry(QtCore.QRect(10, 175, 211, 20))
+        self.label_epic.setObjectName("label_epic")
+
+        ####################################
+
         self.comboBox_change_language = QtWidgets.QComboBox(self.tab_3)
-        self.comboBox_change_language.setGeometry(QtCore.QRect(200, 200, 151, 21))
+        self.comboBox_change_language.setGeometry(QtCore.QRect(200, 210, 151, 21))
         self.comboBox_change_language.setObjectName("comboBox_change_language")
         self.comboBox_change_language.addItems(self.list_change_language)
         self.comboBox_change_language.currentTextChanged.connect(self.currentTextComboBox_change_language)
 
         self.label_change_language = QtWidgets.QLabel(self.tab_3)
-        self.label_change_language.setGeometry(QtCore.QRect(10, 205, 201, 20))
+        self.label_change_language.setGeometry(QtCore.QRect(10, 215, 201, 20))
         self.label_change_language.setObjectName("label_change_language")
 
         self.label_8 = QtWidgets.QLabel(self.tab_3)
-        self.label_8.setGeometry(QtCore.QRect(10, 150, 211, 20))
+        self.label_8.setGeometry(QtCore.QRect(10, 140, 211, 20))
         self.label_8.setObjectName("label_8")
 
         self.checkBox_clan_var = QtWidgets.QCheckBox(self.tab_3)
@@ -918,7 +940,7 @@ class Ui_MainWindow(object):
         self.label_deck_number.setText(_translate("MainWindow", 'Deck number'))
         self.label_number_fights_deck_change.setText(_translate("MainWindow", 'Number of fights before deck change'))
         self.label_send_emotion.setText(_translate("MainWindow", 'Send emoji during combat'))
-
+        self.label_epic.setText(_translate("MainWindow", 'Epic cart Request'))
 
     def on_change(self, v):
         if self.thread.number_account == self.spinBox_change_account.value():
@@ -958,20 +980,28 @@ class Ui_MainWindow(object):
         self.comboBox_2.setCurrentIndex(self.id_card)
         self.spinBox_change_account.setValue(config['Selected_account'])
         self.spinBox_total_accounts.setValue(config['total_accounts'])
+
         if config['Change_accounts']:
             self.checkBox_changed_account.click()
+
         if config['Open_chests']:
             self.checkBox_openChest.click()
+
         if config['Request_cards']:
             self.checkBox_requestCard.click()
         if config['play_clan_war']:
             self.checkBox_clan_var.click()
 
         self.spinBox_deck_number.setValue(config['deck_number'])
+
         if config['change_deck']:
             self.checkBox_change_deck.click()
+
         self.spinBox_deck_number.setValue(config['deck_number'])
         self.spinBox_number_fights_deck_change.setValue(config['number_fights_deck_change'])
+
+        if config['send_emotion']:
+            self.checkBox_send_emotion.click()
 
 
 
@@ -1014,6 +1044,7 @@ class Ui_MainWindow(object):
 
     def _checkBox_send_emotion(self, v):
         logger.debug(f'Был изменен параметр смены колоды на: {v}')
-        self.change_deck = v
+        self.send_emotion = bool(v)
+        print(self.send_emotion)
         self.config['send_emotion'] = bool(self.send_emotion)
         self.dump_setting()

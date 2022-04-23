@@ -28,7 +28,7 @@ class Strategics:
         self.number_fights_deck_change = number_fights_deck_change
         self.index_change_deck = 0
         self._number_fights_deck_change = self.number_fights_deck_change
-        self.send_emotion = False # Потом прокину коннект в интерфейс
+        self.send_emotion = send_emotion
 
     def main(self):
         if self.bot.ADB.cheakInstallCR() == False:
@@ -626,7 +626,7 @@ class Strategics:
                     continue
                 slowdown_in_menu = True
 
-                if self._number_fights_deck_change <= self.index_change_deck:
+                if self._number_fights_deck_change <= self.index_change_deck and self.change_deck:
                     self.bot.goToDeck()
                     time.sleep(5)
                     image = self.bot.getScreen()
@@ -685,6 +685,8 @@ class Strategics:
                 elif trigger == 218:
                     self.bot.close_statistics_clan_war()
                     continue
+                if trigger == 28:
+                    pass
                 self.bot.requestCard(self.id_card)
                 time.sleep(4)
 

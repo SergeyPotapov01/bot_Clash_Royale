@@ -282,7 +282,7 @@ class ImageTriggers:
 
     def getTriggerDEBUG(self, img):
         self.image = Image.open(io.BytesIO(img))
-        print(self.image.getpixel((478, 216)))
+        print(self.image.getpixel((130, 770)))
 
         if self.image.size == (960, 540):
             return ((500, None),)
