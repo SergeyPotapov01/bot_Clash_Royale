@@ -2,14 +2,15 @@
 
 Clash Royale crowns farming BOT
 
-Вiscord server
+Discord server
 https://discord.gg/JYZ7aRnSZz
 
 Bot installation
 https://www.youtube.com/watch?v=14plyoBVodg
 
 Game Bot example
-https://www.youtube.com/watch?v=udde0HUNdYE
+https://www.youtube.com/watch?v=_ByQy354N7I
+https://www.youtube.com/watch?v=3gRX78Mcm9I
 
 telegram channel:
 https://t.me/bot_Clash_Royale
@@ -29,12 +30,6 @@ Download and unzip the archive with the latest version of the bot from the teleg
 
 Install с++
 https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170
-
-
-Starting from version 0.2.7 this program is NOT used
-
-Install Tesseract-osr
-https://github.com/UB-Mannheim/tesseract/wiki
 
 
 Install BlueStacks 5.3.0+
@@ -102,7 +97,8 @@ Further features:
 9) Donate cards and collect one-time rewards for purchasing a clan member's royale pass
 10) Sunday Epic Card Request
 11) Ability to share battle with clanmates
-
+12) mastery collection
+13) battle tactics based on tower health
 
 # Install for developers
 
@@ -123,7 +119,7 @@ BlueStacks > Settings > Preferences > Enable Android Debug Bridge (ADB)
 
 Install Python 3.7+ 64 bit
 
-pip install tensorflow PyQt5 opencv-python loguru pure-python-adb Pillow pytesseract
+pip install tensorflow PyQt5 opencv-python loguru pure-python-adb Pillow 
 
 
 # 
