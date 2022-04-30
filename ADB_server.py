@@ -60,6 +60,9 @@ class ADB_server:
         device = self.devices[-1]
         return device
 
+    def reboot(self):
+        self.device.shell('reboot')
+
 
 class ADB_client:
     def __init__(self, port: int):

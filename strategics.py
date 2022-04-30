@@ -94,7 +94,7 @@ class Strategics:
 
 
             if trigger == 100:
-                self.connection_to_parent._textBrowser_3 = f'In battle\n Card: {triggers[2]} Elixir: {triggers[1]} ' + self.connection_to_parent._textBrowser_3
+                self.connection_to_parent._textBrowser_3 = f'In battle Card: {triggers[2]} Elixir: {triggers[1]}  \n' + self.connection_to_parent._textBrowser_3
 
                 if triggers[1] <= 4:
                     if self.send_emotion:
@@ -225,7 +225,6 @@ class Strategics:
                     if triggers[1] >= 8:
                         self.bot.selectCard(triggers[2].index('Golem'))
                         self.bot.placingCard1X1(275, 700)
-                        continue
                     else:
                         continue
                     if self.send_emotion:
@@ -611,7 +610,7 @@ class Strategics:
                 if 'Poison' in triggers[2]:
                     if triggers[1] >= 5:
                         self.bot.selectCard(triggers[2].index('Poison'))
-                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 330, 360, 390, 400)), 290)
+                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 360, 390, 400)), 290)
                         continue
                     else:
                         continue
@@ -789,7 +788,7 @@ class Strategics:
                     continue
                 slowdown_in_menu = True
 
-                if self._number_fights_deck_change <= self.index_change_deck and self.change_deck:
+                if self._number_fights_deck_change <= self.index_change_deck:
                     self.connection_to_parent._textBrowser_3 = 'Change deck 1/2\n' + self.connection_to_parent._textBrowser_3
                     self.bot.goToDeck()
                     time.sleep(5)
@@ -797,7 +796,35 @@ class Strategics:
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
 
-                    if trigger == 202:
+                    if trigger == 209:
+                        self.bot.get_reward_masteries()
+                        time.sleep(5)
+                        image = self.bot.getScreen()
+                        triggers = self.triggers.getTrigger(image)
+                        trigger = triggers[0]
+
+                        if trigger == 290:
+                            self.bot.close_reward_masteries()
+                        elif trigger == 291:
+                            self.bot.get_reward_masteries_2(trigger)
+                        elif trigger == 292:
+                            self.bot.get_reward_masteries_2(trigger)
+                        elif trigger == 293:
+                            self.bot.get_reward_masteries_2(trigger)
+                        elif trigger == 294:
+                            self.bot.get_reward_masteries_2(trigger)
+
+                        time.sleep(5)
+                        image = self.bot.getScreen()
+                        triggers = self.triggers.getTrigger(image)
+                        trigger = triggers[0]
+
+                        if trigger == 289:
+                            self.connection_to_parent._textBrowser_3 = 'Selling an award\n' + self.connection_to_parent._textBrowser_3
+                            self.bot.sale_reward()
+                        continue
+
+                    if trigger == 202 and self.change_deck:
                         self.connection_to_parent._textBrowser_3 = 'Change deck 2/2\n' + self.connection_to_parent._textBrowser_3
                         self.connection_to_parent.number_deck += 1
                         if self.connection_to_parent.number_deck >= 5:
@@ -833,7 +860,7 @@ class Strategics:
                         self.bot.runBattleMode(self.batlle_mode)
                     time.sleep(1)
 
-            elif trigger == 202:
+            elif trigger == 202 or trigger == 209:
                 self.connection_to_parent._textBrowser_3 = 'Return home\n' + self.connection_to_parent._textBrowser_3
                 self.bot.returnHome()
 
@@ -939,7 +966,7 @@ class Strategics:
                     image = self.bot.getScreen()
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
-                    if (trigger == 237 and x >=4) or x >= 10:
+                    if (trigger == 237 and x >=4) or x >= 7:
                         break
                 self.connection_to_parent._textBrowser_3 = 'Get shop reward 3/3\n' + self.connection_to_parent._textBrowser_3
                 self.bot.get_shop_reward()
@@ -1012,6 +1039,11 @@ class Strategics:
             elif trigger == 289:
                 self.connection_to_parent._textBrowser_3 = 'Selling an award\n' + self.connection_to_parent._textBrowser_3
                 self.bot.sale_reward()
+
+            elif trigger >= 290 and trigger <= 294:
+                self.bot.close_reward_masteries()
+                self.bot.returnHome()
+
 
             elif trigger == 400:
                 self.connection_to_parent._textBrowser_3 = 'Loss of connection\n' + self.connection_to_parent._textBrowser_3

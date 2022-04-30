@@ -1,5 +1,7 @@
 from time import sleep
 
+import threading
+
 from ADB_server import ADB_server
 
 from loguru import logger
@@ -9,6 +11,7 @@ class Bot:
     def __init__(self, port):
         logger.debug(f'Bot().__init__({port})')
         self.ADB = ADB_server(port=port)
+        self. lock = threading.Lock()
 
     def runBattleMode(self, mode):
         logger.debug(f'Bot.runBattleMode {mode}')
@@ -196,7 +199,13 @@ class Bot:
 
     def getScreen(self):
         logger.debug('Bot.getScreen')
-        return self.ADB.getScreen()
+        self.lock.acquire()
+        try:
+            self.x = self.ADB.getScreen()
+        except:
+            pass
+        self.lock.release()
+        return self.x
 
     def changeAccount(self, number, total_accounts):
         logger.debug(f'Bot.changeAccount {number}, {total_accounts}')
@@ -310,3 +319,29 @@ class Bot:
         logger.debug('Bot.sale_reward')
         self.ADB.click(51, 800)
         self.ADB.click(140 + 95 * number, 640)
+
+    def get_reward_masteries(self):
+        logger.debug('Bot.get_reward_masteries')
+        self.ADB.click(492, 707)
+        sleep(4)
+        self.ADB.click(100, 280)
+
+    def get_reward_masteries_2(self, number):
+        logger.debug('Bot.get_reward_masteries_2')
+        if number == 291:
+            self.ADB.click(261, 705)
+        elif number == 292:
+            self.ADB.click(292, 498)
+        elif number == 293:
+            self.ADB.click(265, 625)
+        elif number == 294:
+            #self.ADB.click(492, 707)
+            pass
+        sleep(4)
+
+    def close_reward_masteries(self):
+        logger.debug('Bot.close_reward_masteries')
+        self.ADB.click(486, 133)
+        sleep(4)
+        self.ADB.click(482, 161)
+        sleep(4)
