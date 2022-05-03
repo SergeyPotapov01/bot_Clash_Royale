@@ -36,7 +36,7 @@ class Strategics:
         self._reboot_index = 15
 
     def main(self):
-        if self.bot.ADB.cheakInstallCR() = False:
+        if self.bot.ADB.cheakInstallCR() == False:
             self.cycleStart = False
 
         if self.bot.ADB.cheakRunCR() == False:
