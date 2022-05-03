@@ -87,7 +87,7 @@ class Ui_MainWindow(object):
         self.number_fights_deck_change = 0
         self.change_deck = False
         self.deck_number = 0
-        self.reboot_index = 0
+        self.reboot_index = 20
         self.android = 'C:\Program Files\BlueStacks_nxt\HD-Player.exe'
         self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android)
         self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)

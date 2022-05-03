@@ -33,7 +33,7 @@ class Strategics:
         self._number_fights_deck_change = self.number_fights_deck_change
         self.send_emotion = send_emotion
         self.reboot_index = reboot_index
-        self._reboot_index = 15
+        self._reboot_index = 0
 
     def main(self):
         if self.bot.ADB.cheakInstallCR() == False:
