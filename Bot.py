@@ -1,6 +1,6 @@
 from time import sleep
 
-import threading
+import subprocess
 
 from ADB_server import ADB_server
 
@@ -8,10 +8,10 @@ from loguru import logger
 
 
 class Bot:
-    def __init__(self, port):
+    def __init__(self, port, android):
         logger.debug(f'Bot().__init__({port})')
         self.ADB = ADB_server(port=port)
-        self. lock = threading.Lock()
+        self.android = android
 
     def runBattleMode(self, mode):
         logger.debug(f'Bot.runBattleMode {mode}')
@@ -199,13 +199,7 @@ class Bot:
 
     def getScreen(self):
         logger.debug('Bot.getScreen')
-        self.lock.acquire()
-        try:
-            self.x = self.ADB.getScreen()
-        except:
-            pass
-        self.lock.release()
-        return self.x
+        return self.ADB.getScreen()
 
     def changeAccount(self, number, total_accounts):
         logger.debug(f'Bot.changeAccount {number}, {total_accounts}')
@@ -318,7 +312,8 @@ class Bot:
     def send_emotion(self, number: int):
         logger.debug('Bot.sale_reward')
         self.ADB.click(51, 800)
-        self.ADB.click(140 + 95 * number, 640)
+        sleep(1)
+        self.ADB.click(140 + 95 * number, 730)
 
     def get_reward_masteries(self):
         logger.debug('Bot.get_reward_masteries')
@@ -338,6 +333,7 @@ class Bot:
             #self.ADB.click(492, 707)
             pass
         sleep(4)
+        self.ADB.click(350, 640)
 
     def close_reward_masteries(self):
         logger.debug('Bot.close_reward_masteries')
@@ -345,3 +341,16 @@ class Bot:
         sleep(4)
         self.ADB.click(482, 161)
         sleep(4)
+
+    def reboot_android(self):
+        self.ADB.reboot()
+        subprocess.Popen(self.android)
+        x = True
+        while x:
+            try:
+                self.getScreen()
+                sleep(5)
+                x = False
+                self.openCR()
+            except:
+                pass

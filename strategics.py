@@ -10,8 +10,9 @@ from loguru import logger
 
 
 class Strategics:
-    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion):
-        self.bot = Bot(port=port)
+    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android):
+        self.port = port
+        self.bot = Bot(port=port, android=android)
         self.triggers = ImageTriggers(open_chest, requested_card)
         self.index = 0
         self.index124 = 0
@@ -31,6 +32,8 @@ class Strategics:
         self.index_change_deck = 0
         self._number_fights_deck_change = self.number_fights_deck_change
         self.send_emotion = send_emotion
+        self.reboot_index = reboot_index
+        self._reboot_index = 15
 
     def main(self):
         if self.bot.ADB.cheakInstallCR() == False:
@@ -99,6 +102,7 @@ class Strategics:
                 if triggers[1] <= 4:
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
+                        self.sleep(2)
                     continue
 
                 if 'Goblin_Barrel' in triggers[2]:
@@ -685,12 +689,18 @@ class Strategics:
                 self.connection_to_parent.got_crowns += triggers[1]
                 self.connection_to_parent._textBrowser_2 = f'The result of the battle: {datetime.datetime.now():%Y-%m-%d %H:%M:%S} crows:{triggers[1]}\n' + self.connection_to_parent._textBrowser_2
                 self.connection_to_parent._textBrowser_3 = 'End of the fight\n'
+                self._reboot_index += 1
 
 
                 if index_batlle == 10:
                     self.bot.reboot()
                     index_batlle = 0
                 time.sleep(3)
+
+                if self._reboot_index >= self.reboot_index:
+                    self.bot.reboot_android()
+                    self._reboot_index = 0
+
 
             elif trigger == 122:
                 self.connection_to_parent._textBrowser_3 = 'End of the fight\n'
@@ -701,10 +711,15 @@ class Strategics:
                 self.index_change_deck += 1
                 self.connection_to_parent._textBrowser_2 = f'The result of the battle: {datetime.datetime.now():%Y-%m-%d %H:%M:%S} crows:{triggers[1]}\n' + self.connection_to_parent._textBrowser_2
                 self.connection_to_parent._textBrowser_3 = f'{triggers}\n'
+                self._reboot_index += 1
                 if index_batlle == 10:
                     self.bot.reboot()
                     index_batlle = 0
                 time.sleep(3)
+
+                if self._reboot_index >= self.reboot_index:
+                    self.bot.reboot_android()
+                    self._reboot_index = 0
 
             elif trigger == 124:
                 self.connection_to_parent._textBrowser_3 = 'Loading a fight\n' + self.connection_to_parent._textBrowser_3
@@ -1059,7 +1074,10 @@ class Strategics:
 
     def startFarm(self):
         self.cycleStart = True
-        self.main()
-
+        while self.cycleStart :
+            try:
+                self.main()
+            except:
+                self.bot = Bot(port=self.port)
     def stopFarm(self):
         self.cycleStart = False
