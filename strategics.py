@@ -33,10 +33,10 @@ class Strategics:
         self._number_fights_deck_change = self.number_fights_deck_change
         self.send_emotion = send_emotion
         self.reboot_index = reboot_index
-        self._reboot_index = 0
+        self._reboot_index = 15
 
     def main(self):
-        if self.bot.ADB.cheakInstallCR() == False:
+        if self.bot.ADB.cheakInstallCR() = False:
             self.cycleStart = False
 
         if self.bot.ADB.cheakRunCR() == False:
@@ -1074,10 +1074,9 @@ class Strategics:
 
     def startFarm(self):
         self.cycleStart = True
-        while self.cycleStart :
-            try:
-                self.main()
-            except:
-                self.bot = Bot(port=self.port)
+         
+        self.main()
+           
+                
     def stopFarm(self):
         self.cycleStart = False
