@@ -138,7 +138,7 @@ class ImageTriggers:
 
         if self.image.getpixel((40, 790))[0:3] == (255, 255, 255):  # тригер на облачко
 
-            if self.image.getpixel((529, 950))[0:3] == (7, 71, 144):  # тригер нижнию часть экрана
+            if self.image.getpixel((529, 950))[0:3] == (7, 71, 144) or self.image.getpixel((529, 950))[0:3] == (7, 71, 143) or self.image.getpixel((529, 950))[0:3] == (7, 71, 142) :  # тригер нижнию часть экрана
                 return 100, self._getElixir(), self._getCardsInBatlle()  # тригер на бой
 
             if self.image.getpixel((300, 840))[0:3] == (104, 187, 255):  # тригер на кнопку выйти

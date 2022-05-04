@@ -87,7 +87,7 @@ class Ui_MainWindow(object):
         self.number_fights_deck_change = 0
         self.change_deck = False
         self.deck_number = 0
-        self.reboot_index = 20
+        self.reboot_index = 15
         self.android = 'C:\Program Files\BlueStacks_nxt\HD-Player.exe'
         self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android)
         self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)
@@ -286,13 +286,23 @@ class Ui_MainWindow(object):
         self.tab_4 = QtWidgets.QWidget()
         self.tab_4.setObjectName("tab_4")
 
+
         self.lineEdit = QtWidgets.QLineEdit(self.tab_4)
-        self.lineEdit.setGeometry(QtCore.QRect(20, 20, 111, 25))
+        self.lineEdit.setGeometry(QtCore.QRect(20, 20, 111, 20))
         self.lineEdit.setObjectName("lineEdit")
         self.lineEdit.textChanged.connect(self.adbPort)
 
+        self.lineEdit_android = QtWidgets.QLineEdit(self.tab_4)
+        self.lineEdit_android.setGeometry(QtCore.QRect(20, 50, 250, 20))
+        self.lineEdit_android.setObjectName("lineEdit")
+        self.lineEdit_android.textChanged.connect(self._android)
+
+        self.label_android = QtWidgets.QLabel(self.tab_4)
+        self.label_android.setGeometry(QtCore.QRect(280, 50, 231, 20))
+        self.label_android.setObjectName("label_android")
+
         self.spinBox = QtWidgets.QSpinBox(self.tab_4)
-        self.spinBox.setGeometry(QtCore.QRect(20, 70, 111, 25))
+        self.spinBox.setGeometry(QtCore.QRect(20, 80, 111, 25))
         self.spinBox.setObjectName("spinBox")
         self.spinBox.valueChanged.connect(self.numberOfFinish)
 
@@ -866,6 +876,12 @@ class Ui_MainWindow(object):
         self.dump_setting()
         logger.debug(f'Был изменен параметр порт подключения на: {value}')
 
+    def _android(self, value):
+        self.android = value
+        self.config['android'] = self.android
+        self.dump_setting()
+        logger.debug(f'Был изменен параметр порт подключения на: {value}')
+
     def set_change_account(self, value):
         self.thread.number_account = value
         self.config['Selected_account'] = self.thread.number_account
@@ -943,6 +959,7 @@ class Ui_MainWindow(object):
         self.label_number_fights_deck_change.setText(_translate("MainWindow", 'Number of fights before deck change'))
         self.label_send_emotion.setText(_translate("MainWindow", 'Send emoji during combat'))
         self.label_epic.setText(_translate("MainWindow", 'Epic cart Request'))
+        self.label_android.setText(_translate("MainWindow", 'path to .exe'))
 
     def on_change(self, v):
         if self.thread.number_account == self.spinBox_change_account.value():
@@ -1005,8 +1022,7 @@ class Ui_MainWindow(object):
         if config['send_emotion']:
             self.checkBox_send_emotion.click()
 
-
-
+        self.lineEdit_android.setText(_translate("MainWindow", str(config['android'])))
 
     def dump_setting(self):
         with open('config/custom.json', 'w') as outfile:

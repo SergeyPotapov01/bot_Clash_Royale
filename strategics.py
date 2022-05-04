@@ -33,7 +33,8 @@ class Strategics:
         self._number_fights_deck_change = self.number_fights_deck_change
         self.send_emotion = send_emotion
         self.reboot_index = reboot_index
-        self._reboot_index = 15
+        self.reboot_index_2 = reboot_index
+        self._reboot_index = 0
 
     def main(self):
         if self.bot.ADB.cheakInstallCR() == False:
@@ -102,7 +103,7 @@ class Strategics:
                 if triggers[1] <= 4:
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                        self.sleep(2)
+                        time.sleep(2)
                     continue
 
                 if 'Goblin_Barrel' in triggers[2]:
@@ -566,7 +567,7 @@ class Strategics:
                 if 'Tornado' in triggers[2]:
                     if triggers[1] >= 5:
                         self.bot.selectCard(triggers[2].index('Tornado'))
-                        self.bot.placingCard1X1(randint(110, 420), 315)
+                        self.bot.placingCard1X1(randint(110, 420), 300)
                         continue
                     else:
                         continue
@@ -598,7 +599,7 @@ class Strategics:
                 if 'Earthquake' in triggers[2]:
                     if triggers[1] >= 5:
                         self.bot.selectCard(triggers[2].index('Earthquake'))
-                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 330, 360, 390, 400)), 290)
+                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 330, 360, 390, 400)), 250)
                         continue
                     else:
                         continue
@@ -606,7 +607,7 @@ class Strategics:
                 if 'Lightnimg' in triggers[2]:
                     if triggers[1] >= 5:
                         self.bot.selectCard(triggers[2].index('Lightnimg'))
-                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 330, 360, 390, 400)), 290)
+                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 330, 360, 390, 400)), 250)
                         continue
                     else:
                         continue
@@ -614,7 +615,7 @@ class Strategics:
                 if 'Poison' in triggers[2]:
                     if triggers[1] >= 5:
                         self.bot.selectCard(triggers[2].index('Poison'))
-                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 360, 390, 400)), 290)
+                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 360, 390, 400)), 250)
                         continue
                     else:
                         continue
@@ -622,7 +623,7 @@ class Strategics:
                 if 'Arrows' in triggers[2]:
                     if triggers[1] >= 5:
                         self.bot.selectCard(triggers[2].index('Arrows'))
-                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 330, 360, 390, 400)), 290)
+                        self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 330, 360, 390, 400)), 250)
                         continue
                     else:
                         continue
@@ -636,7 +637,7 @@ class Strategics:
                         continue
 
                 if 'Giant_Snowball' in triggers[2]:
-                    if triggers[1] >= 5:
+                    if triggers[1] >= 3:
                         self.bot.selectCard(triggers[2].index('Giant_Snowball'))
                         self.bot.placingCard1X1(choice((75, 100, 128, 150, 175, 350, 385, 410, 440)), 270)
                         continue
@@ -652,7 +653,7 @@ class Strategics:
                         continue
 
                 if 'Rocket' in triggers[2]:
-                    if triggers[1] >= 5:
+                    if triggers[1] >= 6:
                         self.bot.selectCard(triggers[2].index('Rocket'))
                         self.bot.placingCard1X1(choice((75, 105, 130, 160, 180, 330, 360, 390, 400)), 250)
                         continue
@@ -683,7 +684,6 @@ class Strategics:
 
             elif trigger == 121:
                 index_batlle += 1
-                self.bot.exitBatle1X1()
                 self.connection_to_parent.totall_batlles += 1
                 self.index_change_deck += 1
                 self.connection_to_parent.got_crowns += triggers[1]
@@ -697,14 +697,18 @@ class Strategics:
                     index_batlle = 0
                 time.sleep(3)
 
-                if self._reboot_index >= self.reboot_index:
+                if self._reboot_index >= self.reboot_index_2:
                     self.bot.reboot_android()
                     self._reboot_index = 0
+                    self.reboot_index_2 = self.reboot_index + randint(1, 6)
+                    continue
+
+                self.bot.exitBatle1X1()
+
 
 
             elif trigger == 122:
                 self.connection_to_parent._textBrowser_3 = 'End of the fight\n'
-                self.bot.exitBatle2X2()
                 index_batlle += 1
                 self.connection_to_parent.totall_batlles += 1
                 self.connection_to_parent.got_crowns += triggers[1]
@@ -717,9 +721,14 @@ class Strategics:
                     index_batlle = 0
                 time.sleep(3)
 
-                if self._reboot_index >= self.reboot_index:
+                if self._reboot_index >= self.reboot_index_2:
                     self.bot.reboot_android()
                     self._reboot_index = 0
+                    self.reboot_index_2 = self.reboot_index + randint(1, 6)
+                    continue
+
+                self.bot.exitBatle2X2()
+
 
             elif trigger == 124:
                 self.connection_to_parent._textBrowser_3 = 'Loading a fight\n' + self.connection_to_parent._textBrowser_3
@@ -1074,9 +1083,7 @@ class Strategics:
 
     def startFarm(self):
         self.cycleStart = True
-         
         self.main()
-           
-                
+
     def stopFarm(self):
         self.cycleStart = False

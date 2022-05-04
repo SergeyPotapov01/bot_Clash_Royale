@@ -345,12 +345,13 @@ class Bot:
     def reboot_android(self):
         self.ADB.reboot()
         subprocess.Popen(self.android)
-        x = True
-        while x:
+        while True:
             try:
                 self.getScreen()
                 sleep(5)
-                x = False
+                print(1)
                 self.openCR()
+                break
             except:
-                pass
+                sleep(5)
+        print(2)
