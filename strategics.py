@@ -697,7 +697,7 @@ class Strategics:
                     index_batlle = 0
                 time.sleep(3)
 
-                if self._reboot_index >= self.reboot_index_2:
+                if self._reboot_index >= self.reboot_index_2 and False:
                     self.bot.reboot_android()
                     self._reboot_index = 0
                     self.reboot_index_2 = self.reboot_index + randint(1, 6)
@@ -721,7 +721,7 @@ class Strategics:
                     index_batlle = 0
                 time.sleep(3)
 
-                if self._reboot_index >= self.reboot_index_2:
+                if self._reboot_index >= self.reboot_index_2 and False:
                     self.bot.reboot_android()
                     self._reboot_index = 0
                     self.reboot_index_2 = self.reboot_index + randint(1, 6)
@@ -734,6 +734,10 @@ class Strategics:
                 self.connection_to_parent._textBrowser_3 = 'Loading a fight\n' + self.connection_to_parent._textBrowser_3
                 self.bot.ADB.click(400, 420)
                 time.sleep(1)
+
+            elif trigger == 125:
+                self.connection_to_parent._textBrowser_3 = 'Send emotion\n' + self.connection_to_parent._textBrowser_3
+                self.bot.send_emotion(randint(0, 3))
 
             elif trigger == 200:
                 self.connection_to_parent._textBrowser_3 = 'The bot is in the menu\n' + self.connection_to_parent._textBrowser_3
@@ -1055,10 +1059,14 @@ class Strategics:
                     self.bot.reboot()
                     self.index280 = 0
                 self.bot.ADB.click(triggers[1], triggers[2])
+                time.sleep(3)
+                self.bot.sale_reward()
 
             elif trigger == 281:
                 self.connection_to_parent._textBrowser_3 = 'Receiving an award\n' + self.connection_to_parent._textBrowser_3
                 self.bot.ADB.click(triggers[1], triggers[2])
+                time.sleep(3)
+                self.bot.sale_reward()
 
             elif trigger == 289:
                 self.connection_to_parent._textBrowser_3 = 'Selling an award\n' + self.connection_to_parent._textBrowser_3

@@ -1,5 +1,6 @@
 from time import sleep
 
+import threading
 import subprocess
 
 from ADB_server import ADB_server
@@ -12,6 +13,7 @@ class Bot:
         logger.debug(f'Bot().__init__({port})')
         self.ADB = ADB_server(port=port)
         self.android = android
+        self.port = port
 
     def runBattleMode(self, mode):
         logger.debug(f'Bot.runBattleMode {mode}')
@@ -344,10 +346,12 @@ class Bot:
 
     def reboot_android(self):
         self.ADB.reboot()
+        sleep(5)
         subprocess.Popen(self.android)
         while True:
             try:
-                self.getScreen()
+                self.ADB = ADB_server(port=self.port)
+                self.ADB.cheakInstallCR()
                 sleep(5)
                 print(1)
                 self.openCR()

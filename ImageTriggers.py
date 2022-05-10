@@ -91,9 +91,9 @@ class ImageTriggers:
 
         cards = []
         for card in imageCards:
-            card = card.resize((26, 28))
-            card = recognitionCard.predict(card)
-            cards.append(card)
+            card_ = card.resize((26, 28))
+            card_ = recognitionCard.predict(card_)
+            cards.append(card_)
 
         return cards
 
@@ -116,7 +116,7 @@ class ImageTriggers:
         slot = [self.image.getpixel((92, 815))[0:3] == (28, 109, 161),
                 self.image.getpixel((185, 815))[0:3] == (36, 125, 172),
                 self.image.getpixel((345, 815))[0:3] == (36, 125, 172),
-                self.image.getpixel((434, 815))[0:3] ==(30, 110, 162),
+                self.image.getpixel((434, 815))[0:3] == (30, 110, 162),
                 ]
 
         return slot
@@ -161,6 +161,9 @@ class ImageTriggers:
 
         if self.image.getpixel((40, 790))[0:3] == (255, 255, 255):
             return 124, None
+
+        if self.image.getpixel((170, 856))[0:3] == (8, 94, 178):
+            return 125, None
 
         self.index2X2 = False
 
@@ -313,6 +316,7 @@ class ImageTriggers:
             (100, self.image.getpixel((529, 950)), self.image.getpixel((529, 950))[0:3] == (7, 71, 144)),
             (121, self.image.getpixel((300, 840)), self.image.getpixel((300, 840))[0:3] == (104, 187, 255)),
             (124, self.image.getpixel((40, 790)), self.image.getpixel((40, 790))[0:3] == (255, 255, 255)),
+            (125, self.image.getpixel((170, 856)), self.image.getpixel((170, 856))[0:3] == (8, 94, 178)),
             (200, self.image.getpixel((530, 944)), self.image.getpixel((530, 944))[0:3] == (64, 76, 95)),
             (202, self.image.getpixel((478, 216)), self.image.getpixel((478, 216))[0:3] == (76, 173, 255)),
             (209, self.image.getpixel((522, 679)), self.image.getpixel((522, 679))[0:3] == (236, 8, 56)),
