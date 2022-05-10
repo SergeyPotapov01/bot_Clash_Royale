@@ -82,6 +82,7 @@ Current features:
 14) Clan wars playing
 15) Swipe deck(1-5 or 6-10)
 16) Send emoji during combat (https://www.youtube.com/watch?v=NUqRh0eeAG8)
+17) mastery collection
 
 
 Further features:
@@ -97,8 +98,7 @@ Further features:
 9) Donate cards and collect one-time rewards for purchasing a clan member's royale pass
 10) Sunday Epic Card Request
 11) Ability to share battle with clanmates
-12) mastery collection
-13) battle tactics based on tower health
+12) battle tactics based on tower health
 
 # Install for developers
 
