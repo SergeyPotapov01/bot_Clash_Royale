@@ -1,7 +1,7 @@
 from time import sleep
 
-import threading
 import subprocess
+import random
 
 from ADB_server import ADB_server
 
@@ -359,3 +359,8 @@ class Bot:
             except:
                 sleep(5)
         print(2)
+
+    def random_placing_card(self):
+        logger.debug('Bot.random_placing_card')
+        self.selectCard(random.randint(0,3))
+        self.ADB.click(random.randint(195, 345), random.randint(485, 610))

@@ -10,7 +10,7 @@ from loguru import logger
 
 
 class Strategics:
-    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android):
+    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir):
         self.port = port
         self.bot = Bot(port=port, android=android)
         self.triggers = ImageTriggers(open_chest, requested_card)
@@ -35,6 +35,10 @@ class Strategics:
         self.reboot_index = reboot_index
         self.reboot_index_2 = reboot_index
         self._reboot_index = 0
+        self.forever_elexir = forever_elexir
+        self._forever_elexir = self.forever_elexir
+        self.index_forever_elexir = 0
+
 
     def main(self):
         if self.bot.ADB.cheakInstallCR() == False:
@@ -99,6 +103,10 @@ class Strategics:
 
             if trigger == 100:
                 self.connection_to_parent._textBrowser_3 = f'In battle Card: {triggers[2]} Elixir: {triggers[1]}  \n' + self.connection_to_parent._textBrowser_3
+
+                if self._forever_elexir:
+                    self.bot.random_placing_card()
+                    continue
 
                 if triggers[1] <= 4:
                     if self.send_emotion:
@@ -676,6 +684,11 @@ class Strategics:
                     else:
                         continue
 
+                if triggers[1] >= 9:
+                    self.index_forever_elexir += 1
+                    if self.index_forever_elexir >= 3:
+                        self._forever_elexir = True
+
                 self.bot.selectCard(randint(0, 3))
                 self.bot.placingCard1X1(randint(275, 475), randint(426, 700))
                 t = time.time()
@@ -690,7 +703,8 @@ class Strategics:
                 self.connection_to_parent._textBrowser_2 = f'The result of the battle: {datetime.datetime.now():%Y-%m-%d %H:%M:%S} crows:{triggers[1]}\n' + self.connection_to_parent._textBrowser_2
                 self.connection_to_parent._textBrowser_3 = 'End of the fight\n'
                 self._reboot_index += 1
-
+                self._forever_elexir = self.forever_elexir
+                self.index_forever_elexir = 0
 
                 if index_batlle == 10:
                     self.bot.reboot()
@@ -720,6 +734,8 @@ class Strategics:
                     self.bot.reboot()
                     index_batlle = 0
                 time.sleep(3)
+                self._forever_elexir = self.forever_elexir
+                self.index_forever_elexir = 0
 
                 if self._reboot_index >= self.reboot_index_2 and False:
                     self.bot.reboot_android()

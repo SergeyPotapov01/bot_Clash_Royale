@@ -28,7 +28,7 @@ class MyThread(QtCore.QThread):
     mysignal5 = QtCore.pyqtSignal(int)
 
 
-    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, parent=None):
+    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, parent=None):
         QtCore.QThread.__init__(self, parent)
         self.farm = False
         self.number_account = '0'
@@ -51,17 +51,17 @@ class MyThread(QtCore.QThread):
             self.mysignal5.emit(self.number_deck)
 
 
-    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android):
+    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir):
         if self.farm:
             self.farm = False
             self.bot.stopFarm()
         else:
             self.farm = True
-            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android)
+            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir)
             threading.Thread(target=self.bot.startFarm).start()
 
-    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android):
-        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android)
+    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir):
+        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir)
 
 
 class Ui_MainWindow(object):
@@ -77,6 +77,7 @@ class Ui_MainWindow(object):
         self.open_chest = False
         self._changed_account = False
         self.send_emotion = False
+        self.forever_elexir = False
         self.port = config['port_adb']
         self._total_accounts = 0
         self._change_account = 0
@@ -89,7 +90,7 @@ class Ui_MainWindow(object):
         self.deck_number = 0
         self.reboot_index = 20
         self.android = 'C:\Program Files\BlueStacks_nxt\HD-Player.exe'
-        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android)
+        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir)
         self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)
         self.thread.mysignal2.connect(self.logEvent, QtCore.Qt.QueuedConnection)
         self.thread.mysignal3.connect(self.logCrown, QtCore.Qt.QueuedConnection)
@@ -205,7 +206,16 @@ class Ui_MainWindow(object):
         self.label_openChest = QtWidgets.QLabel(self.tab_3)
         self.label_openChest.setGeometry(QtCore.QRect(220, 115, 211, 20))
         self.label_openChest.setObjectName("label_openChest")
+        ############
+        self.checkBox_forever_elexir = QtWidgets.QCheckBox(self.tab_3)
+        self.checkBox_forever_elexir.setGeometry(QtCore.QRect(10, 270, 181, 41))
+        self.checkBox_forever_elexir.setObjectName("checkBox_forever_elexir")
+        self.checkBox_forever_elexir.stateChanged.connect(self._forever_elexir)
 
+        self.label_forever_elexir = QtWidgets.QLabel(self.tab_3)
+        self.label_forever_elexir.setGeometry(QtCore.QRect(30, 280, 211, 20))
+        self.label_forever_elexir.setObjectName("label_forever_elexir")
+        ###################
         self.checkBox_requestCard = QtWidgets.QCheckBox(self.tab_3)
         self.checkBox_requestCard.setGeometry(QtCore.QRect(10, 100, 181, 41))
         self.checkBox_requestCard.setObjectName("checkBox_requestCard")
@@ -803,12 +813,12 @@ class Ui_MainWindow(object):
         else:
             self.farm = True
             self.pushButton.setText(_translate("MainWindow", self.language_set_words[1]))
-        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android)
+        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir)
         self.bot = self.thread.bot
 
     def getTrigger(self):
         if self.bot == None:
-            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android)
+            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir)
             self.bot = self.thread.bot
         trigger = ImageTriggers(True, True)
         x = trigger.getTriggerDEBUG(self.bot.bot.getScreen())
@@ -960,6 +970,7 @@ class Ui_MainWindow(object):
         self.label_send_emotion.setText(_translate("MainWindow", 'Send emoji during combat'))
         self.label_epic.setText(_translate("MainWindow", 'Epic cart Request'))
         self.label_android.setText(_translate("MainWindow", 'path to .exe'))
+        self.label_forever_elexir.setText(_translate("MainWindow", 'Forever elixir'))
 
     def on_change(self, v):
         if self.thread.number_account == self.spinBox_change_account.value():
@@ -1008,8 +1019,12 @@ class Ui_MainWindow(object):
 
         if config['Request_cards']:
             self.checkBox_requestCard.click()
+
         if config['play_clan_war']:
             self.checkBox_clan_var.click()
+
+        if config['forever_elexir']:
+            self.checkBox_forever_elexir.click()
 
         self.spinBox_deck_number.setValue(config['deck_number'])
 
@@ -1065,4 +1080,10 @@ class Ui_MainWindow(object):
         self.send_emotion = bool(v)
         print(self.send_emotion)
         self.config['send_emotion'] = bool(self.send_emotion)
+        self.dump_setting()
+
+    def _forever_elexir(self, event):
+        logger.debug(f'Был изменен бесконечного эликсира: {event}')
+        self.forever_elexir = bool(event)
+        self.config['forever_elexir'] = bool(self.forever_elexir)
         self.dump_setting()
