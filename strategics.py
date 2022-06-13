@@ -10,7 +10,8 @@ from loguru import logger
 
 
 class Strategics:
-    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir):
+    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break):
+        logger.debug( f'{(batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break)}')
         self.port = port
         self.bot = Bot(port=port, android=android)
         self.triggers = ImageTriggers(open_chest, requested_card)
@@ -38,9 +39,12 @@ class Strategics:
         self.forever_elexir = forever_elexir
         self._forever_elexir = self.forever_elexir
         self.index_forever_elexir = 0
+        self.number_of_finish = number_of_finish
+        self.time_break = time_break
 
 
     def main(self):
+
         if self.bot.ADB.cheakInstallCR() == False:
             self.cycleStart = False
 
@@ -63,50 +67,65 @@ class Strategics:
             if self.index == 50:
                 self.bot.reboot()
                 self.index = 0
+                logger.debug(str(triggers))
                 continue
 
             if self.index % 5 == 4:
                 self.bot.choose_reward(randint(0, 1))
                 self.bot.returnHome()
+                logger.debug(str(triggers))
 
             if self.index124 >= 25:
                 self.bot.goToShop()
                 self.bot.returnHome()
                 self.bot.reboot()
                 self.index124 = 0
+                logger.debug(str(triggers))
                 continue
 
             if trigger == 124:
                 self.index124 += 1
+                logger.debug(str(triggers))
                 continue
             self.index124 = 0
 
             if not (trigger == 0):
+                logger.debug(str(triggers))
                 self.index = 0
 
             if trigger == 500:
+                logger.debug(str(triggers))
                 self.bot.openCR()
 
             if trigger == 501:
                 self.connection_to_parent._textBrowser_3 = 'INCORRECT SCREEN RESOLUTION IS SET!'
                 self.stopFarm()
+                logger.debug(str(triggers))
 
             if trigger == 0:
                 self.index += 1
                 logger.debug('Не найден триггер')
                 self.connection_to_parent._textBrowser_3 = 'Trigger not found\n' + self.connection_to_parent._textBrowser_3
                 time.sleep(3)
+                logger.debug(str(triggers))
                 continue
             else:
+                logger.debug(str(triggers))
                 self.index = 0
 
 
             if trigger == 100:
                 self.connection_to_parent._textBrowser_3 = f'In battle Card: {triggers[2]} Elixir: {triggers[1]}  \n' + self.connection_to_parent._textBrowser_3
+                logger.debug(str(triggers))
 
                 if self._forever_elexir:
                     self.bot.random_placing_card()
                     continue
+                
+                if triggers[1] >= 9:
+                    self.index_forever_elexir += 1
+                    if self.index_forever_elexir >= 3:
+                        self._forever_elexir = True
 
                 if triggers[1] <= 4:
                     if self.send_emotion:
@@ -181,7 +200,7 @@ class Strategics:
                 if 'Three_Musketeers' in triggers[2]:
                     if triggers[1] >= 9:
                         self.bot.selectCard(triggers[2].index('Three_Musketeers'))
-                        self.bot.placingCard1X1(723, 723)
+                        self.bot.placingCard1X1(260, 700)
                         continue
                     else:
                         continue
@@ -189,7 +208,7 @@ class Strategics:
                 if 'Zappies' in triggers[2]:
                     if triggers[1] >= 4:
                         self.bot.selectCard(triggers[2].index('Zappies'))
-                        self.bot.placingCard1X1(723, 723)
+                        self.bot.placingCard1X1(260, 700)
                         continue
                     else:
                         continue
@@ -684,11 +703,6 @@ class Strategics:
                     else:
                         continue
 
-                if triggers[1] >= 9:
-                    self.index_forever_elexir += 1
-                    if self.index_forever_elexir >= 3:
-                        self._forever_elexir = True
-
                 self.bot.selectCard(randint(0, 3))
                 self.bot.placingCard1X1(randint(275, 475), randint(426, 700))
                 t = time.time()
@@ -696,6 +710,7 @@ class Strategics:
 
 
             elif trigger == 121:
+                logger.debug(str(triggers))
                 index_batlle += 1
                 self.connection_to_parent.totall_batlles += 1
                 self.index_change_deck += 1
@@ -706,22 +721,27 @@ class Strategics:
                 self._forever_elexir = self.forever_elexir
                 self.index_forever_elexir = 0
 
-                if index_batlle == 10:
-                    self.bot.reboot()
-                    index_batlle = 0
-                time.sleep(3)
+                if self.time_break > 0 and self.number_of_finish > 0:
+                    if index_batlle >= self.number_of_finish:
+                        logger.debug(str(triggers))
+                        self.bot.closeCR()
+                        time.sleep(self.time_break * 60 + 1)
+                        index_batlle = 0
 
                 if self._reboot_index >= self.reboot_index_2 and False:
+                    logger.debug(str(triggers))
                     self.bot.reboot_android()
                     self._reboot_index = 0
                     self.reboot_index_2 = self.reboot_index + randint(1, 6)
                     continue
 
                 self.bot.exitBatle1X1()
+                logger.debug(str(triggers))
 
 
 
             elif trigger == 122:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'End of the fight\n'
                 index_batlle += 1
                 self.connection_to_parent.totall_batlles += 1
@@ -730,14 +750,18 @@ class Strategics:
                 self.connection_to_parent._textBrowser_2 = f'The result of the battle: {datetime.datetime.now():%Y-%m-%d %H:%M:%S} crows:{triggers[1]}\n' + self.connection_to_parent._textBrowser_2
                 self.connection_to_parent._textBrowser_3 = f'{triggers}\n'
                 self._reboot_index += 1
-                if index_batlle == 10:
-                    self.bot.reboot()
-                    index_batlle = 0
+                if self.time_break > 0 and self.number_of_finish > 0:
+                    if index_batlle >= self.number_of_finish:
+                        logger.debug(str(triggers))
+                        self.bot.closeCR()
+                        time.sleep(self.time_break * 60 + 1)
+                        index_batlle = 0
                 time.sleep(3)
                 self._forever_elexir = self.forever_elexir
                 self.index_forever_elexir = 0
 
                 if self._reboot_index >= self.reboot_index_2 and False:
+                    logger.debug(str(triggers))
                     self.bot.reboot_android()
                     self._reboot_index = 0
                     self.reboot_index_2 = self.reboot_index + randint(1, 6)
@@ -747,17 +771,21 @@ class Strategics:
 
 
             elif trigger == 124:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Loading a fight\n' + self.connection_to_parent._textBrowser_3
-                self.bot.ADB.click(400, 420)
-                time.sleep(1)
+                self.bot.send_emotion(randint(0, 3))
+                time.sleep(2)
 
             elif trigger == 125:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Send emotion\n' + self.connection_to_parent._textBrowser_3
                 self.bot.send_emotion(randint(0, 3))
 
             elif trigger == 200:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'The bot is in the menu\n' + self.connection_to_parent._textBrowser_3
                 if self.CW:
+                    logger.debug(str(triggers))
                     self.connection_to_parent._textBrowser_3 = 'Checking for sending to battle on square\n' + self.connection_to_parent._textBrowser_3
                     self.bot.goToClanChat()
                     time.sleep(5)
@@ -766,27 +794,32 @@ class Strategics:
                     trigger = triggers[0]
 
                     if trigger == 216:
+                        logger.debug(str(triggers))
                         self.connection_to_parent._textBrowser_3 = 'You are not in a clan\n' + self.connection_to_parent._textBrowser_3
                         self.CW = False
                         self.bot.returnHome()
 
                     if trigger == 239:
+                        logger.debug(str(triggers))
                         self.connection_to_parent._textBrowser_3 = 'Get reward clan war\n' + self.connection_to_parent._textBrowser_3
                         self.bot.get_reward_clan_war()
                         continue
 
                     if trigger == 218:
+                        logger.debug(str(triggers))
                         self.connection_to_parent._textBrowser_3 = 'Close statistics clan war\n' + self.connection_to_parent._textBrowser_3
                         self.bot.close_statistics_clan_war()
                         continue
 
                     if trigger == 260:
+                        logger.debug(str(triggers))
                         self.connection_to_parent._textBrowser_3 = 'Scroll to recognize\n' + self.connection_to_parent._textBrowser_3
                         self.bot.swipe_clan_war_2()
                         self.bot.returnHome()
                         continue
 
                     if trigger == 261:
+                        logger.debug(str(triggers))
                         self.connection_to_parent._textBrowser_3 = 'Scroll to recognize\n' + self.connection_to_parent._textBrowser_3
                         self.bot.swipe_clan_war_2()
                         self.bot.returnHome()
@@ -794,7 +827,9 @@ class Strategics:
 
                     if trigger == 215 and True in triggers[1]:
                         index = 0
+                        logger.debug(str(triggers))
                         while True:
+                            logger.debug(str(triggers))
                             self.connection_to_parent._textBrowser_3 = 'Scroll to send go batlle\n' + self.connection_to_parent._textBrowser_3
                             index += 1
                             self.bot.swipe_clan_war()
@@ -803,10 +838,12 @@ class Strategics:
                             triggers = self.triggers.getTrigger(image)
                             trigger = triggers[0]
                             if trigger == 260:
+                                logger.debug(str(triggers))
                                 self.connection_to_parent._textBrowser_3 = 'Go batlle\n' + self.connection_to_parent._textBrowser_3
                                 self.bot.go_batlle_clan_war(0)
                                 break
                             if trigger == 261 or index >= 7:
+                                logger.debug(str(triggers))
                                 self.connection_to_parent._textBrowser_3 = 'Go batlle\n' + self.connection_to_parent._textBrowser_3
                                 self.bot.go_batlle_clan_war(1)
                                 break
@@ -814,6 +851,7 @@ class Strategics:
                         continue
 
                     elif trigger == 212:
+                        logger.debug(str(triggers))
                         self.connection_to_parent._textBrowser_3 = 'Go batlle\n' + self.connection_to_parent._textBrowser_3
                         self.bot.goToClanChat()
                         time.sleep(1)
@@ -821,18 +859,21 @@ class Strategics:
                         continue
 
                     if trigger == 215 and not (True in triggers[1]):
+                        logger.debug(str(triggers))
                         self.connection_to_parent._textBrowser_3 = 'Switching to the clan wars menu\n' + self.connection_to_parent._textBrowser_3
                         self.CW = False
                         self.bot.returnHome()
                         continue
 
                 if slowdown_in_menu:
+                    logger.debug(str(triggers))
                     slowdown_in_menu = False
                     time.sleep(3)
                     continue
                 slowdown_in_menu = True
 
                 if self._number_fights_deck_change <= self.index_change_deck:
+                    logger.debug(str(triggers))
                     self.connection_to_parent._textBrowser_3 = 'Change deck 1/2\n' + self.connection_to_parent._textBrowser_3
                     self.bot.goToDeck()
                     time.sleep(5)
@@ -841,6 +882,7 @@ class Strategics:
                     trigger = triggers[0]
 
                     if trigger == 209:
+                        logger.debug(str(triggers))
                         self.bot.get_reward_masteries()
                         time.sleep(5)
                         image = self.bot.getScreen()
@@ -848,35 +890,45 @@ class Strategics:
                         trigger = triggers[0]
 
                         if trigger == 290:
+                            logger.debug(str(triggers))
                             self.bot.close_reward_masteries()
                         elif trigger == 291:
+                            logger.debug(str(triggers))
                             self.bot.get_reward_masteries_2(trigger)
                         elif trigger == 292:
+                            logger.debug(str(triggers))
                             self.bot.get_reward_masteries_2(trigger)
                         elif trigger == 293:
+                            logger.debug(str(triggers))
                             self.bot.get_reward_masteries_2(trigger)
                         elif trigger == 294:
+                            logger.debug(str(triggers))
                             self.bot.get_reward_masteries_2(trigger)
 
+                        logger.debug(str(triggers))
                         time.sleep(5)
                         image = self.bot.getScreen()
                         triggers = self.triggers.getTrigger(image)
                         trigger = triggers[0]
 
                         if trigger == 289:
+                            logger.debug(str(triggers))
                             self.connection_to_parent._textBrowser_3 = 'Selling an award\n' + self.connection_to_parent._textBrowser_3
                             self.bot.sale_reward()
                         continue
 
                     if trigger == 202 and self.change_deck:
+                        logger.debug(str(triggers))
                         self.connection_to_parent._textBrowser_3 = 'Change deck 2/2\n' + self.connection_to_parent._textBrowser_3
                         self.connection_to_parent.number_deck += 1
                         if self.connection_to_parent.number_deck >= 5:
+                            logger.debug(str(triggers))
                             self.connection_to_parent.number_deck = 0
                         self.bot.change_deck(self.connection_to_parent.number_deck)
 
                     time.sleep(5)
 
+                    logger.debug(str(triggers))
                     self.index_change_deck = 0
                     self._number_fights_deck_change = self.number_fights_deck_change + randint(0, 6)
 
@@ -884,11 +936,14 @@ class Strategics:
                     time.sleep(2)
 
                 if 'Until Chest Slots Full':
+                    logger.debug(str(triggers))
                     if self.batlle_mode == 'global':
                         self.bot.runBattleGlobal()
                         self.connection_to_parent._textBrowser_3 = 'Run Battle Global\n' + self.connection_to_parent._textBrowser_3
                     elif self.batlle_mode == 'disabled':
+                        logger.debug(str(triggers))
                         if self.changed_account:
+                            logger.debug(str(triggers))
                             self.bot.returnHome()
                             self.increasing_account_number()
                             time.sleep(5)
@@ -896,19 +951,23 @@ class Strategics:
                             self.connection_to_parent.number_account = self.number_account
                             self.CW = self.play_clan_war
                         else:
+                            logger.debug(str(triggers))
                             self.bot.closeCR()
-                            time.sleep(60*60)
+                            time.sleep(60 * self.time_break + 1)
                             self.bot.openCR()
                     else:
+                        logger.debug(str(triggers))
                         self.connection_to_parent._textBrowser_3 = f'Run Battle mode {self.batlle_mode} \n' + self.connection_to_parent._textBrowser_3
                         self.bot.runBattleMode(self.batlle_mode)
                     time.sleep(1)
 
             elif trigger == 202 or trigger == 209:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Return home\n' + self.connection_to_parent._textBrowser_3
                 self.bot.returnHome()
 
             elif trigger == 210:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Checking messages in clan chat\n' + self.connection_to_parent._textBrowser_3
                 self.bot.goToClanChat()
                 time.sleep(2)
@@ -917,26 +976,32 @@ class Strategics:
                 time.sleep(2)
                 trigger = triggers[0]
                 if trigger != 212:
+                    logger.debug(str(triggers))
                     self.connection_to_parent._textBrowser_3 = 'Checking messages in clan chat\n' + self.connection_to_parent._textBrowser_3
                     self.bot.choose_reward(randint(0, 1))
                     self.bot.goToClanChat()
                     time.sleep(2)
                 elif trigger == 239:
+                    logger.debug(str(triggers))
                     self.connection_to_parent._textBrowser_3 = 'Get reward clan war\n' + self.connection_to_parent._textBrowser_3
                     self.bot.get_reward_clan_war()
                 elif trigger == 218:
+                    logger.debug(str(triggers))
                     self.connection_to_parent._textBrowser_3 = 'Close statistics clan war\n' + self.connection_to_parent._textBrowser_3
                     self.bot.close_statistics_clan_war()
                     continue
                 if trigger == 28:
+                    logger.debug(str(triggers))
                     self.connection_to_parent._textBrowser_3 = 'Request Card\n' + self.connection_to_parent._textBrowser_3
                     continue
                     pass
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Request Card\n' + self.connection_to_parent._textBrowser_3
                 self.bot.requestCard(self.id_card)
                 time.sleep(4)
 
             elif trigger == 211:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Checking messages in clan chat\n' + self.connection_to_parent._textBrowser_3
                 self.bot.goToClanChat()
                 time.sleep(2)
@@ -945,14 +1010,17 @@ class Strategics:
                 trigger = triggers[0]
                 time.sleep(2)
                 if trigger == 239:
+                    logger.debug(str(triggers))
                     self.connection_to_parent._textBrowser_3 = 'Get reward clan war\n' + self.connection_to_parent._textBrowser_3
                     self.bot.get_reward_clan_war()
                     continue
                 elif trigger == 218:
+                    logger.debug(str(triggers))
                     self.connection_to_parent._textBrowser_3 = 'Close statistics clan war\n' + self.connection_to_parent._textBrowser_3
                     self.bot.close_statistics_clan_war()
                     continue
                 if trigger != 212:
+                    logger.debug(str(triggers))
                     self.connection_to_parent._textBrowser_3 = 'pass\n' + self.connection_to_parent._textBrowser_3
                     self.bot.choose_reward(randint(0, 1))
                     self.bot.goToClanChat()
@@ -960,50 +1028,61 @@ class Strategics:
                 self.bot.returnHome()
 
             elif trigger == 212:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Return home\n' + self.connection_to_parent._textBrowser_3
                 self.bot.returnHome()
 
             elif trigger == 215:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Return home\n' + self.connection_to_parent._textBrowser_3
                 self.bot.returnHome()
 
             elif trigger == 218:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Сlose statistics clan war\n' + self.connection_to_parent._textBrowser_3
                 self.bot.close_statistics_clan_war()
                 continue
 
             elif trigger == 219:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Unable to request a card\n' + self.connection_to_parent._textBrowser_3
                 self.id_card += 1
                 self.bot.reboot()
 
             elif trigger > 220 and trigger < 225:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Get reward chest\n' + self.connection_to_parent._textBrowser_3
                 self.bot.getRewardChest(trigger - 220)
 
             elif trigger == 225:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Return home\n' + self.connection_to_parent._textBrowser_3
                 self.bot.returnHome()
                 time.sleep(0.5)
 
             elif trigger == 226:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Choose reward\n' + self.connection_to_parent._textBrowser_3
                 self.bot.choose_reward(randint(0, 1))
                 time.sleep(0.5)
 
             elif trigger > 230 and trigger < 235:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = f'Open Chest {trigger - 231}\n' + self.connection_to_parent._textBrowser_3
                 self.bot.openChest(trigger - 230)
 
             elif trigger == 235:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Open pass royale\n' + self.connection_to_parent._textBrowser_3
                 self.bot.open_pass_royale()
 
             elif trigger == 236:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Get shop reward 1/3\n' + self.connection_to_parent._textBrowser_3
                 self.bot.goToShop()
                 x = 0
                 while True:
+                    logger.debug(str(triggers))
                     self.connection_to_parent._textBrowser_3 = 'Get shop reward 2/3\n' + self.connection_to_parent._textBrowser_3
                     x += 1
                     self.bot.swipe_shop()
@@ -1011,38 +1090,49 @@ class Strategics:
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
                     if (trigger == 237 and x >=4) or x >= 7:
+                        logger.debug(str(triggers))
                         break
                 self.connection_to_parent._textBrowser_3 = 'Get shop reward 3/3\n' + self.connection_to_parent._textBrowser_3
                 self.bot.get_shop_reward()
                 self.bot.returnHome()
+                logger.debug(str(triggers))
                 continue
 
             elif trigger == 238:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Skip shop\n' + self.connection_to_parent._textBrowser_3
                 self.bot.goToShop()
                 self.bot.returnHome()
 
             elif trigger == 239:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Get reward clan war\n' + self.connection_to_parent._textBrowser_3
                 self.bot.get_reward_clan_war()
 
             elif trigger == 250:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Reward limit\n' + self.connection_to_parent._textBrowser_3
                 if self.changed_account:
+                    logger.debug(str(triggers))
                     self.increasing_account_number()
                     self.connection_to_parent._textBrowser_3 = 'Changed account 1/2\n' + self.connection_to_parent._textBrowser_3
                     if self.batlle_mode == 'global':
+                        logger.debug(str(triggers))
                         self.bot.skipLimit()
                     else:
+                        logger.debug(str(triggers))
                         self.bot.returnHome()
 
+                    logger.debug(str(triggers))
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
                     self.connection_to_parent._textBrowser_3 = 'Changed account 2/2\n' + self.connection_to_parent._textBrowser_3
                     if trigger == 200:
+                        logger.debug(str(triggers))
                         self.bot.changeAccount(self.number_account, self.total_accounts)
                         self.connection_to_parent.number_account = self.number_account
                     else:
+                        logger.debug(str(triggers))
                         self.bot.returnHome()
                         self.bot.changeAccount(self.number_account, self.total_accounts)
                         self.connection_to_parent.number_account = self.number_account
@@ -1051,63 +1141,79 @@ class Strategics:
                     self.bot.rewardLimit()
 
             elif trigger == 260:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Return Home\n' + self.connection_to_parent._textBrowser_3
                 self.bot.returnHome()
 
             elif trigger == 261:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Return Home\n' + self.connection_to_parent._textBrowser_3
                 self.bot.returnHome()
 
             elif trigger == 270:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Language set incorrectly\n' + self.connection_to_parent._textBrowser_3
                 self.index += 1
                 if self.index >= 5:
+                    logger.debug(str(triggers))
                     self.bot.setEnglishLanguage()
                 else:
+                    logger.debug(str(triggers))
                     self.bot.returnHome()
                     time.sleep(2)
                     continue
 
             elif trigger == 280:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Receiving an award\n' + self.connection_to_parent._textBrowser_3
                 self.index280 += 1
                 if self.index280 >= 10:
+                    logger.debug(str(triggers))
                     self.bot.reboot()
                     self.index280 = 0
+                logger.debug(str(triggers))
                 self.bot.ADB.click(triggers[1], triggers[2])
                 time.sleep(3)
                 self.bot.sale_reward()
 
             elif trigger == 281:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Receiving an award\n' + self.connection_to_parent._textBrowser_3
                 self.bot.ADB.click(triggers[1], triggers[2])
                 time.sleep(3)
                 self.bot.sale_reward()
 
             elif trigger == 289:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Selling an award\n' + self.connection_to_parent._textBrowser_3
                 self.bot.sale_reward()
 
             elif trigger >= 290 and trigger <= 294:
+                logger.debug(str(triggers))
                 self.bot.close_reward_masteries()
                 self.bot.returnHome()
 
 
             elif trigger == 400:
+                logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Loss of connection\n' + self.connection_to_parent._textBrowser_3
-                time.sleep(120)
+                time.sleep(300)
                 self.bot.exitBatle1X1()
 
             t = time.time()
+            logger.debug(str(triggers))
 
     def increasing_account_number(self):
+        logger.debug('increasing_account_number')
         self.number_account += 1
         if self.number_account >= self.total_accounts:
             self.number_account = 0
 
     def startFarm(self):
+        logger.debug('startFarm')
         self.cycleStart = True
         self.main()
 
     def stopFarm(self):
+        logger.debug('stopFarm')
         self.cycleStart = False
