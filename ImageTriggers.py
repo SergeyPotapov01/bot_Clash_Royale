@@ -5,6 +5,8 @@ import neural_networks
 from PIL import Image
 from loguru import logger
 
+import os
+
 recognitionCard = neural_networks.CardInBatlle()
 recognitionElixir = neural_networks.ElixirInBatlle()
 
@@ -171,7 +173,7 @@ class ImageTriggers:
             if self.image.getpixel((63, 830))[0:3] == (255, 255, 255):
                 return 237, None
 
-        if self.image.getpixel((530, 944))[0:3] == (64, 76, 95):  # пиксель на кропку эвента если она не активка
+        if self.image.getpixel((530, 944))[0:3] == (64, 76, 95) or self.image.getpixel((530, 944))[0:3] == (63, 75, 95):  # пиксель на кропку эвента если она не активка
             
             if self.image.getpixel((522, 679))[0:3] in ((236, 8, 56), (236, 8, 57), (236, 9, 56), (236, 9, 57)):
                 return 209, None
@@ -203,7 +205,7 @@ class ImageTriggers:
             if self.image.getpixel((10, 955))[0:3] == (234, 189, 80):
                 return 238, None
 
-            if self.image.getpixel((272, 893))[0:3] == (216, 234, 246) or self.image.getpixel((272, 893))[0:3] == (216, 234, 245):  # пиксель на кропку батл если она открыта
+            if self.image.getpixel((272, 893))[0:3] == (216, 234, 246) or self.image.getpixel((272, 893))[0:3] == (216, 234, 245) or self.image.getpixel((272, 893))[0:3] == (217, 234, 245):  # пиксель на кропку батл если она открыта
                 if self.image.getpixel((433, 887))[0:3] == (48, 184, 69) and self.requested_card:
                     return 210, None  # тригер на отправку запроса карт
                 if self.image.getpixel((433, 887))[0:3] == (236, 8, 56) and self.requested_card:
@@ -215,7 +217,7 @@ class ImageTriggers:
                 if self._getTriggerOpenedChest() and self.open_chest:
                     return 230 + self._getTriggerOpenedChest(), None
 
-                if (self.image.getpixel((264, 193))[0:3] == (152, 75, 7) or self.image.getpixel((264, 193))[0:3] == (152, 74, 7)) and self.open_chest:  # триггер на пасс рояль
+                if (self.image.getpixel((124, 196))[0:3] == (36, 66, 107)) and self.open_chest:  # триггер на пасс рояль
                     return 235, None
 
                 if self.image.getpixel((268, 800)) == (255, 255, 255):
@@ -312,6 +314,8 @@ class ImageTriggers:
         elif self.image.size != (540, 960):
             return ((501, None),)
 
+        print( self.image.getpixel((124, 196)))
+
         return(
             (100, self.image.getpixel((529, 950)), self.image.getpixel((529, 950))[0:3] == (7, 71, 144)),
             (121, self.image.getpixel((300, 840)), self.image.getpixel((300, 840))[0:3] == (104, 187, 255)),
@@ -334,7 +338,7 @@ class ImageTriggers:
             (225, self.image.getpixel((47, 539)), self.image.getpixel((47, 539))[0:3] == (8, 55, 83)),
             (225, self.image.getpixel((47, 539)), self.image.getpixel((47, 539))[0:3] == (7, 49, 74)),
             (226, self.image.getpixel((273, 122)), self.image.getpixel((273, 122))[0:3] == (51, 203, 254)),
-            (235, self.image.getpixel((264, 193)), self.image.getpixel((264, 193))[0:3] == (152, 75, 7)),
+            (235, self.image.getpixel((124, 196)), self.image.getpixel((124, 196))[0:3] == (36, 66, 107)),
             (236, self.image.getpixel((63, 877)), self.image.getpixel((63, 877))[0:3] == (236, 8, 56)),
             (237, self.image.getpixel((17, 922)), self.image.getpixel((17, 922))[0:3] == (78, 115, 149)),
             (250, self.image.getpixel((267, 431)), self.image.getpixel((267, 431))[0:3] == (255, 200, 88)),

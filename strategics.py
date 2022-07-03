@@ -710,6 +710,7 @@ class Strategics:
 
 
             elif trigger == 121:
+                self.bot.send_emotion(randint(0, 3))
                 logger.debug(str(triggers))
                 index_batlle += 1
                 self.connection_to_parent.totall_batlles += 1
@@ -741,6 +742,7 @@ class Strategics:
 
 
             elif trigger == 122:
+                self.bot.send_emotion(randint(0, 3))
                 logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'End of the fight\n'
                 index_batlle += 1
