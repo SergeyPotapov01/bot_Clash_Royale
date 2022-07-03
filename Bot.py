@@ -244,7 +244,7 @@ class Bot:
 
     def open_pass_royale(self):
         logger.debug('Bot.open_pass_royale')
-        self.ADB.click(264, 193)
+        self.ADB.click(420, 200)
         sleep(1)
 
     def choose_reward(self, choose):
