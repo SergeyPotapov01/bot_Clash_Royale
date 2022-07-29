@@ -115,13 +115,17 @@ class Strategics:
 
 
             if trigger == 100:
+                if self.batlle_mode == 'Drop Trophy':
+                    self.connection_to_parent._textBrowser_3 = f'Drop Trophy\n' + self.connection_to_parent._textBrowser_3
+                    continue
+
                 self.connection_to_parent._textBrowser_3 = f'In battle Card: {triggers[2]} Elixir: {triggers[1]}  \n' + self.connection_to_parent._textBrowser_3
                 logger.debug(str(triggers))
 
                 if self._forever_elexir:
                     self.bot.random_placing_card()
                     continue
-                
+
                 if triggers[1] >= 9:
                     self.index_forever_elexir += 1
                     if self.index_forever_elexir >= 3:
@@ -932,14 +936,14 @@ class Strategics:
 
                     logger.debug(str(triggers))
                     self.index_change_deck = 0
-                    self._number_fights_deck_change = self.number_fights_deck_change + randint(0, 6)
+                    self._number_fights_deck_change = self.number_fights_deck_change + randint(1, 2)
 
                     self.bot.returnHome()
                     time.sleep(2)
 
                 if 'Until Chest Slots Full':
                     logger.debug(str(triggers))
-                    if self.batlle_mode == 'global':
+                    if self.batlle_mode in('global', 'Drop Trophy'):
                         self.bot.runBattleGlobal()
                         self.connection_to_parent._textBrowser_3 = 'Run Battle Global\n' + self.connection_to_parent._textBrowser_3
                     elif self.batlle_mode == 'disabled':

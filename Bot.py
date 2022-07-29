@@ -332,7 +332,7 @@ class Bot:
         elif number == 293:
             self.ADB.click(265, 625)
         elif number == 294:
-            #self.ADB.click(492, 707)
+            self.ADB.click(300, 707)
             pass
         sleep(4)
         self.ADB.click(350, 640)

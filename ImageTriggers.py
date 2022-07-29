@@ -5,6 +5,8 @@ import neural_networks
 from PIL import Image
 from loguru import logger
 
+import time
+
 import os
 
 recognitionCard = neural_networks.CardInBatlle()
@@ -96,6 +98,8 @@ class ImageTriggers:
             card_ = card.resize((26, 28))
             card_ = recognitionCard.predict(card_)
             cards.append(card_)
+            #card.save(f'1\\{card_}{time.time()}.png')
+
 
         return cards
 
@@ -217,7 +221,7 @@ class ImageTriggers:
                 if self._getTriggerOpenedChest() and self.open_chest:
                     return 230 + self._getTriggerOpenedChest(), None
 
-                if (self.image.getpixel((124, 196))[0:3] == (36, 66, 107)) and self.open_chest:  # триггер на пасс рояль
+                if (self.image.getpixel((511, 218))[0:3] in ((240, 168, 0), (241, 168, 0), (242, 168, 0), (243, 168, 0), (244, 168, 0))) and self.open_chest:  # триггер на пасс рояль
                     return 235, None
 
                 if self.image.getpixel((268, 800)) == (255, 255, 255):
@@ -286,7 +290,7 @@ class ImageTriggers:
             if self.image.getpixel((265, 625))[0:3] == (251, 221, 125):
                 return 293, None
 
-            if 4 == 0:
+            if self.image.getpixel((324, 756))[0:3] == (222, 165, 255):
                 return 294, None
 
             return 290, None
@@ -314,7 +318,7 @@ class ImageTriggers:
         elif self.image.size != (540, 960):
             return ((501, None),)
 
-        print( self.image.getpixel((124, 196)))
+        print( self.image.getpixel((324, 756)))
 
         return(
             (100, self.image.getpixel((529, 950)), self.image.getpixel((529, 950))[0:3] == (7, 71, 144)),
@@ -338,7 +342,7 @@ class ImageTriggers:
             (225, self.image.getpixel((47, 539)), self.image.getpixel((47, 539))[0:3] == (8, 55, 83)),
             (225, self.image.getpixel((47, 539)), self.image.getpixel((47, 539))[0:3] == (7, 49, 74)),
             (226, self.image.getpixel((273, 122)), self.image.getpixel((273, 122))[0:3] == (51, 203, 254)),
-            (235, self.image.getpixel((124, 196)), self.image.getpixel((124, 196))[0:3] == (36, 66, 107)),
+            (235, self.image.getpixel((511, 218)), self.image.getpixel((511, 218))[0:3] in ((240, 168, 0), (241, 168, 0), (242, 168, 0), (243, 168, 0), (244, 168, 0))),
             (236, self.image.getpixel((63, 877)), self.image.getpixel((63, 877))[0:3] == (236, 8, 56)),
             (237, self.image.getpixel((17, 922)), self.image.getpixel((17, 922))[0:3] == (78, 115, 149)),
             (250, self.image.getpixel((267, 431)), self.image.getpixel((267, 431))[0:3] == (255, 200, 88)),

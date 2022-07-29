@@ -98,7 +98,7 @@ class Ui_MainWindow(object):
         self.thread.mysignal5.connect(self.on_change_2, QtCore.Qt.QueuedConnection)
         self.thread.start()
         self.bot = self.thread.bot
-        self.list_mode = ['global', 'mode_1', 'mode_2', '2X2', 'disabled']
+        self.list_mode = ['global', 'mode_1', 'mode_2', '2X2', 'disabled', 'Drop Trophy']
         self.list_change_language = [ '',
                                      'English', 'Русский', 'Deutsch', 'Español',
                                      'Français', '日本', 'Italiano', 'čeština',
