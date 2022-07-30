@@ -707,8 +707,17 @@ class Strategics:
                     else:
                         continue
 
-                self.bot.selectCard(randint(0, 3))
-                self.bot.placingCard1X1(randint(275, 475), randint(426, 700))
+                if 'МУСОР' in triggers[2]:
+                    l = triggers[2].index('МУСОР')
+                    if l == 3:
+                        self.bot.selectCard(randint(0, 2))
+                        self.bot.placingCard1X1(randint(275, 475), randint(426, 700))
+                    else:
+                        self.bot.selectCard(randint(4))
+                        self.bot.placingCard1X1(randint(275, 475), randint(426, 700))
+                else:
+                    self.bot.selectCard(randint(0, 3))
+                    self.bot.placingCard1X1(randint(275, 475), randint(426, 700))
                 t = time.time()
                 continue
 
