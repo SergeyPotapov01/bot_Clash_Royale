@@ -13,10 +13,11 @@ recognitionCard = neural_networks.CardInBatlle()
 recognitionElixir = neural_networks.ElixirInBatlle()
 
 class ImageTriggers:
-    def __init__(self, open_chest, requested_card):
+    def __init__(self, open_chest, requested_card, open_PR=False):
         self.index2X2 = False
         self.image = None
         self.open_chest = open_chest
+        self.open_PR = open_PR
         self.requested_card = requested_card
         self.m = []
 
@@ -137,11 +138,6 @@ class ImageTriggers:
     def getTrigger(self, img):
         self.image = Image.open(io.BytesIO(img))
 
-        if self.image.size == (960, 540):
-            return 500, None
-        elif self.image.size != (540, 960):
-            return 501, None
-
         if self.image.getpixel((40, 790))[0:3] == (255, 255, 255):  # тригер на облачко
 
             if self.image.getpixel((529, 950))[0:3] == (7, 71, 144) or self.image.getpixel((529, 950))[0:3] == (7, 71, 143) or self.image.getpixel((529, 950))[0:3] == (7, 71, 142) :  # тригер нижнию часть экрана
@@ -221,7 +217,7 @@ class ImageTriggers:
                 if self._getTriggerOpenedChest() and self.open_chest:
                     return 230 + self._getTriggerOpenedChest(), None
 
-                if (self.image.getpixel((511, 218))[0:3] in ((240, 168, 0), (241, 168, 0), (242, 168, 0), (243, 168, 0), (244, 168, 0))) and self.open_chest:  # триггер на пасс рояль
+                if (self.image.getpixel((511, 218))[0:3] in ((240, 168, 0), (241, 168, 0), (242, 168, 0), (243, 168, 0), (244, 168, 0))) and self.open_PR:  # триггер на пасс рояль
                     return 235, None
 
                 if self.image.getpixel((268, 800)) == (255, 255, 255):
@@ -318,8 +314,8 @@ class ImageTriggers:
         elif self.image.size != (540, 960):
             return ((501, None),)
 
-        print( self.image.getpixel((324, 756)))
-        
+        print(self.image.getpixel((324, 756)))
+
         try:
             self.image.save(f'debug\\{time.time()}.png')
         except:

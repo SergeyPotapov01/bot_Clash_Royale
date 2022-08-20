@@ -10,11 +10,11 @@ from loguru import logger
 
 
 class Strategics:
-    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break):
-        logger.debug( f'{(batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break)}')
+    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR):
+        logger.debug( f'{(batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR)}')
         self.port = port
         self.bot = Bot(port=port, android=android)
-        self.triggers = ImageTriggers(open_chest, requested_card)
+        self.triggers = ImageTriggers(open_chest, requested_card, open_PR)
         self.index = 0
         self.index124 = 0
         self.index280 = 0
@@ -707,13 +707,13 @@ class Strategics:
                     else:
                         continue
 
-                if 'МУСОР' in triggers[2]:
+                if 'МУСОР' in triggers[2] and False:
                     l = triggers[2].index('МУСОР')
                     if l == 3:
                         self.bot.selectCard(randint(0, 2))
                         self.bot.placingCard1X1(randint(275, 475), randint(426, 700))
                     else:
-                        self.bot.selectCard(randint(4))
+                        self.bot.selectCard(4)
                         self.bot.placingCard1X1(randint(275, 475), randint(426, 700))
                 else:
                     self.bot.selectCard(randint(0, 3))
