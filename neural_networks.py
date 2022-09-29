@@ -12,7 +12,7 @@ class CardInBatlle:
                             'Barbarian_Hut', 'Barbarians', 'Bats', 'Battle_Healer', 'Battle_Ram', 'Bomb_Tower', 'Bomber',
                             'Bowler', 'Cannon', 'Cannon_Cart', 'Clone', 'Dark_Prince', 'Dart_Goblin', 'Earthquake',
                             'Electro_Dragon', 'Electro_Giant', 'Electro_Spirit', 'Electro_Wizard', 'Elite_Barbarians',
-                            'Elixir_Collector', 'Elixir_Golem', 'Executiomer', 'Fire_Spirit', 'Fireball', 'Firecracker',
+                            'Elixir_Collector', 'Elixir_Golem', 'Executioner', 'Fire_Spirit', 'Fireball', 'Firecracker',
                             'Fisherman', 'Flying_Machine', 'Freeze', 'Furnace', 'Gaint_Skeleton', 'Giant', 'Giant_Snowball',
                             'Goblin_Barrel', 'Goblin_Cage', 'Goblin_Drill', 'Goblin_Gang', 'Goblin_Giant', 'Goblin_Hut',
                             'Goblins', 'Golden_Knight', 'Golem', 'Graveyard', 'Guards', 'Heal_Spirit', 'Hog_Rider', 'Hunter',

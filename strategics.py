@@ -10,11 +10,11 @@ from loguru import logger
 
 
 class Strategics:
-    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR):
-        logger.debug( f'{(batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR)}')
+    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug):
+        logger.debug( f'{(batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug)}')
         self.port = port
         self.bot = Bot(port=port, android=android)
-        self.triggers = ImageTriggers(open_chest, requested_card, open_PR)
+        self.triggers = ImageTriggers(open_chest, requested_card, open_PR, debug)
         self.index = 0
         self.index124 = 0
         self.index280 = 0
@@ -41,6 +41,9 @@ class Strategics:
         self.index_forever_elexir = 0
         self.number_of_finish = number_of_finish
         self.time_break = time_break
+        self.sleep = True
+        self.debug = debug
+        self.t = time.time()
 
 
     def main(self):
@@ -57,8 +60,14 @@ class Strategics:
 
         index_batlle = 0
         t = time.time()
+        self.t = time.time()
         while self.cycleStart:
-            image = self.bot.getScreen()
+            self.t = time.time()
+            try:
+                image = self.bot.getScreen()
+            except:
+                time.sleep(1)
+                continue
             triggers = self.triggers.getTrigger(image)
             trigger = triggers[0]
             logger.debug(str(triggers) + ' ' + str(time.time() - t))
@@ -282,7 +291,11 @@ class Strategics:
                     time.sleep(4)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        continue
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
@@ -292,7 +305,11 @@ class Strategics:
                     time.sleep(4)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        continue
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
@@ -322,7 +339,11 @@ class Strategics:
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     time.sleep(3+sl)
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        continue
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
@@ -330,7 +351,11 @@ class Strategics:
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
                     time.sleep(3+sl)
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        continue
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
@@ -362,7 +387,11 @@ class Strategics:
                     time.sleep(3 + sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        continue
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
@@ -372,7 +401,11 @@ class Strategics:
                     time.sleep(3+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        continue
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
@@ -404,7 +437,11 @@ class Strategics:
                     time.sleep(3+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        continue
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
@@ -414,7 +451,11 @@ class Strategics:
                     time.sleep(4+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        continue
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
@@ -446,7 +487,11 @@ class Strategics:
                     time.sleep(3+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        continue
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
@@ -456,7 +501,11 @@ class Strategics:
                     time.sleep(4+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        continue
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
@@ -497,7 +546,11 @@ class Strategics:
                     time.sleep(3+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        continue
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
@@ -507,7 +560,11 @@ class Strategics:
                     time.sleep(4+sl)
                     if self.send_emotion:
                         self.bot.send_emotion(randint(0, 3))
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        continue
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
@@ -739,8 +796,11 @@ class Strategics:
                     if index_batlle >= self.number_of_finish:
                         logger.debug(str(triggers))
                         self.bot.closeCR()
+                        self.sleep = False
                         time.sleep(self.time_break * 60 + 1)
+                        self.sleep = True
                         index_batlle = 0
+                        self.bot.openCR()
 
                 if self._reboot_index >= self.reboot_index_2 and False:
                     logger.debug(str(triggers))
@@ -769,8 +829,11 @@ class Strategics:
                     if index_batlle >= self.number_of_finish:
                         logger.debug(str(triggers))
                         self.bot.closeCR()
+                        self.sleep = False
                         time.sleep(self.time_break * 60 + 1)
+                        self.sleep = True
                         index_batlle = 0
+                        self.bot.openCR()
                 time.sleep(3)
                 self._forever_elexir = self.forever_elexir
                 self.index_forever_elexir = 0
@@ -804,7 +867,11 @@ class Strategics:
                     self.connection_to_parent._textBrowser_3 = 'Checking for sending to battle on square\n' + self.connection_to_parent._textBrowser_3
                     self.bot.goToClanChat()
                     time.sleep(5)
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        continue
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
 
@@ -849,7 +916,11 @@ class Strategics:
                             index += 1
                             self.bot.swipe_clan_war()
                             time.sleep(2)
-                            image = self.bot.getScreen()
+                            try:
+                                image = self.bot.getScreen()
+                            except:
+                                time.sleep(1)
+                                continue
                             triggers = self.triggers.getTrigger(image)
                             trigger = triggers[0]
                             if trigger == 260:
@@ -892,7 +963,12 @@ class Strategics:
                     self.connection_to_parent._textBrowser_3 = 'Change deck 1/2\n' + self.connection_to_parent._textBrowser_3
                     self.bot.goToDeck()
                     time.sleep(5)
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        self.bot.reboot()
+                        continue
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
 
@@ -900,7 +976,16 @@ class Strategics:
                         logger.debug(str(triggers))
                         self.bot.get_reward_masteries()
                         time.sleep(5)
-                        image = self.bot.getScreen()
+                        try:
+                            try:
+                                image = self.bot.getScreen()
+                            except:
+                                time.sleep(1)
+                                self.bot.reboot()
+                                continue
+                        except:
+                            time.sleep(1)
+                            continue
                         triggers = self.triggers.getTrigger(image)
                         trigger = triggers[0]
 
@@ -922,7 +1007,12 @@ class Strategics:
 
                         logger.debug(str(triggers))
                         time.sleep(5)
-                        image = self.bot.getScreen()
+                        try:
+                            image = self.bot.getScreen()
+                        except:
+                            time.sleep(1)
+                            self.bot.reboot()
+                            continue
                         triggers = self.triggers.getTrigger(image)
                         trigger = triggers[0]
 
@@ -968,7 +1058,9 @@ class Strategics:
                         else:
                             logger.debug(str(triggers))
                             self.bot.closeCR()
+                            self.sleep = False
                             time.sleep(60 * self.time_break + 1)
+                            self.sleep = True
                             self.bot.openCR()
                     else:
                         logger.debug(str(triggers))
@@ -986,7 +1078,12 @@ class Strategics:
                 self.connection_to_parent._textBrowser_3 = 'Checking messages in clan chat\n' + self.connection_to_parent._textBrowser_3
                 self.bot.goToClanChat()
                 time.sleep(2)
-                image = self.bot.getScreen()
+                try:
+                    image = self.bot.getScreen()
+                except:
+                    time.sleep(1)
+                    self.bot.reboot()
+                    continue
                 triggers = self.triggers.getTrigger(image)
                 time.sleep(2)
                 trigger = triggers[0]
@@ -1020,7 +1117,12 @@ class Strategics:
                 self.connection_to_parent._textBrowser_3 = 'Checking messages in clan chat\n' + self.connection_to_parent._textBrowser_3
                 self.bot.goToClanChat()
                 time.sleep(2)
-                image = self.bot.getScreen()
+                try:
+                    image = self.bot.getScreen()
+                except:
+                    time.sleep(1)
+                    self.bot.reboot()
+                    continue
                 triggers = self.triggers.getTrigger(image)
                 trigger = triggers[0]
                 time.sleep(2)
@@ -1101,7 +1203,12 @@ class Strategics:
                     self.connection_to_parent._textBrowser_3 = 'Get shop reward 2/3\n' + self.connection_to_parent._textBrowser_3
                     x += 1
                     self.bot.swipe_shop()
-                    image = self.bot.getScreen()
+                    try:
+                        image = self.bot.getScreen()
+                    except:
+                        time.sleep(1)
+                        self.bot.reboot()
+                        continue
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
                     if (trigger == 237 and x >=4) or x >= 7:

@@ -9,6 +9,7 @@
 
 import json
 import threading
+import time
 
 from strategics import Strategics
 from ImageTriggers import ImageTriggers
@@ -28,7 +29,7 @@ class MyThread(QtCore.QThread):
     mysignal5 = QtCore.pyqtSignal(int)
 
 
-    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, parent=None):
+    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, parent=None):
         QtCore.QThread.__init__(self, parent)
         self.farm = False
         self.number_account = '0'
@@ -40,6 +41,7 @@ class MyThread(QtCore.QThread):
         self.totall_batlles = 0
         self.cup_changes = 0
         self.bot = None
+        self.time_break = time_break
 
     def run(self):
         while True:
@@ -49,19 +51,25 @@ class MyThread(QtCore.QThread):
             self.mysignal3.emit(str(self._textBrowser_2))
             self.mysignal4.emit(str(f'Got Crowns {self.got_crowns}\nTime in Game(Doesnt work) {self.time_in_game}\nTotal battles {self.totall_batlles}\nTrophy changes(Doesnt work) {self.cup_changes}'))
             self.mysignal5.emit(self.number_deck)
+            if self.bot is not None and self.bot.cycleStart:
+                print(time.time() - self.bot.t)
+                if self.bot.sleep or time.time() - self.bot.t > self.time_break * 60 + 10:
+                    if time.time() - self.bot.t > 120:
+                        self.bot.stopFarm()
+                        threading.Thread(target=self.bot.startFarm).start()
 
-
-    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR):
+    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug):
+        self.time_break = time_break
         if self.farm:
             self.farm = False
             self.bot.stopFarm()
         else:
             self.farm = True
-            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR)
+            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug)
             threading.Thread(target=self.bot.startFarm).start()
 
-    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR):
-        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR)
+    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug):
+        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug)
 
 
 class Ui_MainWindow(object):
@@ -82,6 +90,7 @@ class Ui_MainWindow(object):
         self._total_accounts = 0
         self._change_account = 0
         self.id_card = 0
+        self.id_card_epic = 0
         self.number_of_finish = 0
         self.time_break = 0
         self.play_clan_war = False
@@ -91,7 +100,7 @@ class Ui_MainWindow(object):
         self.reboot_index = 20
         self.android = 'C:\Program Files\BlueStacks_nxt\HD-Player.exe'
         self.open_PR = False
-        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR)
+        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug)
         self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)
         self.thread.mysignal2.connect(self.logEvent, QtCore.Qt.QueuedConnection)
         self.thread.mysignal3.connect(self.logCrown, QtCore.Qt.QueuedConnection)
@@ -124,8 +133,12 @@ class Ui_MainWindow(object):
                                   ]
 
         self.list_card_request_epic = [
-
+        'Mirror', 'Wall_Breakers', 'Rage', 'Barbarian_Barrel', 'Skeleton_Army', 'Guards', 'Goblin_Barrel', 'Tornado', 'Clone',
+        'Baby_Dragon', 'Dark_Prince', 'Hunter', 'Goblin_Drill', 'Freeze', 'Poison', 'Balloon', 'Witch', 'Prince', 'Bowler',
+        'Executioner', 'Cannon_Cart', 'Electro_Dragon', 'Gaint_Skeleton', 'Goblin_Giant', 'X-Bow', 'Lightnimg', 'Pekka',
+        'Electro_Giant', 'Golem'
         ]
+
         self.language = 'English'
         self.language_set_words = []
         self.list_mode_bbbb = ['Until Chest Slots Full', 'Until Daily Bonus Met']
@@ -261,7 +274,7 @@ class Ui_MainWindow(object):
         self.comboBox_2_epic.setGeometry(QtCore.QRect(200, 175, 151, 21))
         self.comboBox_2_epic.setObjectName("comboBox_2")
         self.comboBox_2_epic.addItems(self.list_card_request_epic)
-        self.comboBox_2_epic.currentTextChanged.connect(self.currentTextComboBox_2)
+        self.comboBox_2_epic.currentTextChanged.connect(self.currentTextComboBox_0000)
 
         self.label_img_epic = QLabel(self.tab_3)
         self.label_img_epic.move(360, 170)
@@ -404,6 +417,15 @@ class Ui_MainWindow(object):
         self.label_send_emotion = QtWidgets.QLabel(self.tab_4)
         self.label_send_emotion.setGeometry(QtCore.QRect(170, 450, 211, 20))
         self.label_send_emotion.setObjectName("label_send_emotion")
+
+        self.checkBox_debug = QtWidgets.QCheckBox(self.tab_4)
+        self.checkBox_debug.setGeometry(QtCore.QRect(20, 470, 181, 41))
+        self.checkBox_debug.setObjectName("checkBox_send_emotion")
+        self.checkBox_debug.stateChanged.connect(self._checkBox_debug)
+
+        self.label_debug = QtWidgets.QLabel(self.tab_4)
+        self.label_debug.setGeometry(QtCore.QRect(170, 480, 211, 20))
+        self.label_debug.setObjectName("label_debug")
 
         ##########
 
@@ -823,12 +845,12 @@ class Ui_MainWindow(object):
         else:
             self.farm = True
             self.pushButton.setText(_translate("MainWindow", self.language_set_words[1]))
-        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR)
+        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug)
         self.bot = self.thread.bot
 
     def getTrigger(self):
         if self.bot == None:
-            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR)
+            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug)
             self.bot = self.thread.bot
         trigger = ImageTriggers(True, True)
         x = trigger.getTriggerDEBUG(self.bot.bot.getScreen())
@@ -877,6 +899,14 @@ class Ui_MainWindow(object):
         self.config['id_card'] = self.id_card
         self.dump_setting()
         self.label_img.setPixmap(QPixmap(f'Cards/{text}.png'))
+
+    def currentTextComboBox_0000(self, text):
+        self._card_request = text
+        self.id_card_epic = self.list_card_request_epic.index(text)
+        logger.debug(f'Была установлен карта запроса: {text}, {self.id_card_epic}')
+        self.config['id_card_epic'] = self.id_card_epic
+        self.dump_setting()
+        self.label_img_epic.setPixmap(QPixmap(f'Cards/{text}.png'))
 
     def openChest(self, event):
         logger.debug(f'Был изменен параметр открытия сундуков на: {event}')
@@ -972,7 +1002,7 @@ class Ui_MainWindow(object):
         self.label_11.setText(_translate("MainWindow", self.language_set_words[16]))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", self.language_set_words[17]))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("MainWindow", self.language_set_words[18]))
-        self.label.setText(_translate("MainWindow", f"<body><p>{self.language_set_words[19]} Clash Royale</p><p>BugReport: t.me/leninka20</p></body>"))
+        self.label.setText(_translate("MainWindow", f"<body><p>{self.language_set_words[19]} Clash Royale</p><p>BugReport: t.me/Sergey_p7</p></body>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", self.language_set_words[20]))
         self.label_changed_account.setText(_translate("MainWindow", self.language_set_words[21]))
         self.label_change_account.setText(_translate("MainWindow", self.language_set_words[22]))
@@ -988,6 +1018,8 @@ class Ui_MainWindow(object):
         self.label_android.setText(_translate("MainWindow", 'path to .exe'))
         self.label_forever_elexir.setText(_translate("MainWindow", 'Forever elixir'))
         self.label_PR.setText(_translate("MainWindow", 'Open Pass Royale'))
+        self.label_debug.setText(_translate("MainWindow", 'Collect Data Set'))
+
 
     def on_change(self, v):
         if self.thread.number_account == self.spinBox_change_account.value():
@@ -1027,6 +1059,9 @@ class Ui_MainWindow(object):
         self.comboBox_2.setCurrentIndex(self.id_card)
         self.spinBox_change_account.setValue(config['Selected_account'])
         self.spinBox_total_accounts.setValue(config['total_accounts'])
+        self.id_card_epic = config['id_card_epic']
+        self.comboBox_2_epic.setCurrentIndex(self.id_card_epic)
+
 
         if config['Change_accounts']:
             self.checkBox_changed_account.click()
@@ -1039,6 +1074,9 @@ class Ui_MainWindow(object):
 
         if config['play_clan_war']:
             self.checkBox_clan_var.click()
+
+        if config['Open_PR']:
+            self.checkBox_PR.click()
 
         if config['forever_elexir']:
             self.checkBox_forever_elexir.click()
@@ -1053,6 +1091,9 @@ class Ui_MainWindow(object):
 
         if config['send_emotion']:
             self.checkBox_send_emotion.click()
+
+        if config['debug']:
+            self.checkBox_debug.click()
 
         self.lineEdit_android.setText(_translate("MainWindow", str(config['android'])))
 
@@ -1092,11 +1133,19 @@ class Ui_MainWindow(object):
         self.dump_setting()
         logger.debug(f'Был изменен параметр номер колоды на: {value}')
 
+
     def _checkBox_send_emotion(self, v):
         logger.debug(f'Был изменен параметр смены колоды на: {v}')
         self.send_emotion = bool(v)
         print(self.send_emotion)
         self.config['send_emotion'] = bool(self.send_emotion)
+        self.dump_setting()
+
+    def _checkBox_debug(self, v):
+        logger.debug(f'Был изменен параметр смены колоды на: {v}')
+        self.debug = bool(v)
+        print(self.send_emotion)
+        self.config['debug'] = bool(self.debug)
         self.dump_setting()
 
     def _forever_elexir(self, event):

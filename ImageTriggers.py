@@ -13,13 +13,14 @@ recognitionCard = neural_networks.CardInBatlle()
 recognitionElixir = neural_networks.ElixirInBatlle()
 
 class ImageTriggers:
-    def __init__(self, open_chest, requested_card, open_PR=False):
+    def __init__(self, open_chest, requested_card, open_PR=False, debug=False):
         self.index2X2 = False
         self.image = None
         self.open_chest = open_chest
         self.open_PR = open_PR
         self.requested_card = requested_card
         self.m = []
+        self.debug = debug
 
     def _cheakTimeInBatlle(self):
         i = self.image.crop((450, 0, 538, 53))
@@ -99,7 +100,8 @@ class ImageTriggers:
             card_ = card.resize((26, 28))
             card_ = recognitionCard.predict(card_)
             cards.append(card_)
-            #card.save(f'1\\{card_}{time.time()}.png')
+            if self.debug:
+                card.save(f'debug\\{card_}{time.time()}.png')
 
 
         return cards
