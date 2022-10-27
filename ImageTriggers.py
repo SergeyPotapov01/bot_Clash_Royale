@@ -207,7 +207,7 @@ class ImageTriggers:
             if self.image.getpixel((10, 955))[0:3] == (234, 189, 80):
                 return 238, None
 
-            if self.image.getpixel((272, 893))[0:3] in((216, 234, 246), (216, 234, 245) , (217, 234, 245), (224, 205, 251), (202, 219, 231)):  # пиксель на кропку батл если она открыта
+            if self.image.getpixel((514, 28))[0:3] == (72, 208, 25):  # пиксель на кропку батл если она открыта
                 if self.image.getpixel((433, 887))[0:3] == (48, 184, 69) and self.requested_card:
                     return 210, None  # тригер на отправку запроса карт
                 if self.image.getpixel((433, 887))[0:3] == (236, 8, 56) and self.requested_card:
@@ -316,7 +316,7 @@ class ImageTriggers:
         elif self.image.size != (540, 960):
             return ((501, None),)
 
-        print(self.image.getpixel((324, 756)))
+        print(self.image.getpixel((514, 28)))
 
         try:
             self.image.save(f'debug\\{time.time()}.png')
@@ -335,8 +335,7 @@ class ImageTriggers:
             (209, self.image.getpixel((522, 679)), self.image.getpixel((522, 679))[0:3] == (236, 8, 57)),
             (209, self.image.getpixel((522, 679)), self.image.getpixel((522, 679))[0:3] == (236, 9, 57)),
             (209, self.image.getpixel((522, 679)), self.image.getpixel((522, 679))[0:3] == (236, 9, 56)),
-            (200, self.image.getpixel((272, 893)), self.image.getpixel((272, 893))[0:3] == (216, 234, 245)),
-            (200, self.image.getpixel((272, 893)), self.image.getpixel((272, 893))[0:3] == (216, 234, 246)),
+            (200, self.image.getpixel((514, 28)), self.image.getpixel((514, 28))[0:3] == (72, 208, 25)),
             (210, self.image.getpixel((435, 876)), self.image.getpixel((435, 876))[0:3] == (48, 185, 71)),
             (211, self.image.getpixel((435, 876)), self.image.getpixel((435, 876))[0:3] == (236, 8, 56)),
             (212, self.image.getpixel((501, 812)), self.image.getpixel((501, 812))[0:3] == (76, 172, 255)),

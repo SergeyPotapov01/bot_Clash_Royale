@@ -1,5 +1,6 @@
 import time
 import datetime
+import io
 
 from random import randint, choice
 
@@ -8,17 +9,37 @@ from ImageTriggers import ImageTriggers
 
 from loguru import logger
 
+import telebot
+
+
+class Telebot:
+    def __init__(self, token, tg_user):
+        self.bot = telebot.TeleBot(token)
+        self.tg_user = tg_user
+
+    def send_message(self, text):
+        self.bot.send_message(self.tg_user, text)
+
+    def send_image(self, img):
+        self.bot.send_photo(self.tg_user, img)
+
+    def send_debag(self):
+        pass
+
+    def restart_bot(self):
+        self.bot.send_message(self.tg_user, 'The bot has been restarted.')
+
 
 class Strategics:
-    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug):
-        logger.debug( f'{(batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug)}')
+    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot):
+        logger.debug( f'{(batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot)}')
         self.port = port
         self.bot = Bot(port=port, android=android)
         self.triggers = ImageTriggers(open_chest, requested_card, open_PR, debug)
         self.index = 0
         self.index124 = 0
         self.index280 = 0
-        self.cycleStart = True
+        self.cycleStart = False
         self.batlle_mode = batlle_mode
         self.number_account = number_account
         self.changed_account = changed_account
@@ -44,6 +65,7 @@ class Strategics:
         self.sleep = True
         self.debug = debug
         self.t = time.time()
+        #self.tlgbot = Telebot(token, tg_user)
 
 
     def main(self):
@@ -61,7 +83,9 @@ class Strategics:
         index_batlle = 0
         t = time.time()
         self.t = time.time()
+        #self.tlgbot.send_message('Запущен бот')
         while self.cycleStart:
+            #self.tlgbot.send_message('проход по циклу бот')
             self.t = time.time()
             try:
                 image = self.bot.getScreen()
@@ -860,6 +884,7 @@ class Strategics:
                 self.bot.send_emotion(randint(0, 3))
 
             elif trigger == 200:
+                #self.tlgbot.send_image(io.BytesIO(image))
                 logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'The bot is in the menu\n' + self.connection_to_parent._textBrowser_3
                 if self.CW:

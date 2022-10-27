@@ -17,7 +17,9 @@ class Bot:
 
     def runBattleMode(self, mode):
         logger.debug(f'Bot.runBattleMode {mode}')
-        self.ADB.click(400, 630)
+        self.ADB.click(500, 100)
+        sleep(0.5)
+        self.ADB.click(300, 320)
         sleep(0.5)
         if mode == 'mode_1':
             self.ADB.click(420, 396)
