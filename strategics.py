@@ -31,8 +31,8 @@ class Telebot:
 
 
 class Strategics:
-    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot):
-        logger.debug( f'{(batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot)}')
+    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key):
+        logger.debug( f'{(batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key)}')
         self.port = port
         self.bot = Bot(port=port, android=android)
         self.triggers = ImageTriggers(open_chest, requested_card, open_PR, debug)
@@ -65,6 +65,7 @@ class Strategics:
         self.sleep = True
         self.debug = debug
         self.t = time.time()
+        self.use_chest_key = use_chest_key
         #self.tlgbot = Telebot(token, tg_user)
 
 
@@ -921,15 +922,13 @@ class Strategics:
                     if trigger == 260:
                         logger.debug(str(triggers))
                         self.connection_to_parent._textBrowser_3 = 'Scroll to recognize\n' + self.connection_to_parent._textBrowser_3
-                        self.bot.swipe_clan_war_2()
-                        self.bot.returnHome()
+                        self.bot.go_batlle_clan_war(0)
                         continue
 
                     if trigger == 261:
                         logger.debug(str(triggers))
                         self.connection_to_parent._textBrowser_3 = 'Scroll to recognize\n' + self.connection_to_parent._textBrowser_3
-                        self.bot.swipe_clan_war_2()
-                        self.bot.returnHome()
+                        self.bot.go_batlle_clan_war(1)
                         continue
 
                     if trigger == 215 and True in triggers[1]:
@@ -959,7 +958,7 @@ class Strategics:
                                 self.bot.go_batlle_clan_war(1)
                                 break
 
-                        continue
+                            continue
 
                     elif trigger == 212:
                         logger.debug(str(triggers))
@@ -975,6 +974,12 @@ class Strategics:
                         self.CW = False
                         self.bot.returnHome()
                         continue
+                    
+                    self.bot.close_statistics_clan_war()
+                    self.bot.get_reward_clan_war()
+
+                    continue
+
 
                 if slowdown_in_menu:
                     logger.debug(str(triggers))
@@ -1212,6 +1217,13 @@ class Strategics:
                 logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = f'Open Chest {trigger - 231}\n' + self.connection_to_parent._textBrowser_3
                 self.bot.openChest(trigger - 230)
+                image = self.bot.getScreen()
+                triggers = self.triggers.getTrigger(image)
+                trigger = triggers[0]
+                if trigger == 229:
+                    if self.use_chest_key:
+                        self.bot.openChest_2(True)
+                self.bot.openChest_2(False)
 
             elif trigger == 235:
                 logger.debug(str(triggers))
@@ -1344,7 +1356,9 @@ class Strategics:
             elif trigger == 400:
                 logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = 'Loss of connection\n' + self.connection_to_parent._textBrowser_3
+                self.sleep = False
                 time.sleep(300)
+                self.sleep = True
                 self.bot.exitBatle1X1()
 
             t = time.time()

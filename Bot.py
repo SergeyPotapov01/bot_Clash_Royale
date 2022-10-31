@@ -61,8 +61,19 @@ class Bot:
         logger.debug(f'Bot.openChest {number}')
         self.ADB.click(-25 + number * 120, 780)
         sleep(1)
-        self.ADB.click(276, 625)
-        sleep(1)
+
+    def openChest_2(self, flag):
+        logger.debug(f'Bot.openChest {flag}')
+        if flag:
+            self.ADB.click(470, 240)
+            sleep(1)
+            self.ADB.click(460, 157)
+            sleep(1)
+            self.ADB.click(270, 670)
+            sleep(1)
+        else:
+            self.ADB.click(276, 625)
+            sleep(1)
 
     def returnHome(self):
         logger.debug('Bot.returnHome')
@@ -210,7 +221,7 @@ class Bot:
         sleep(3)
         self.ADB.click(500, 90)
         sleep(3)
-        self.ADB.click(250, 575)
+        self.ADB.click(250, 630)
         sleep(3)
         for i in range((total_accounts // 3) + 1):
             self.ADB.swipe(250,398 , 250, 860)
@@ -313,15 +324,16 @@ class Bot:
         self.ADB.click(157 + number * 57, 224)
         sleep(3)
 
-    def send_emotion(self, number: int):
-        logger.debug('Bot.sale_reward')
-        self.ADB.click(51, 800)
-        sleep(1)
-        self.ADB.click(140 + 95 * number, 730)
+    def send_emotion(self, number: int, random_=0):
+        logger.debug('Bot.send_emotion')
+        if random.randint(0, random_) == random_:
+            self.ADB.click(51, 800)
+            sleep(1)
+            self.ADB.click(140 + 95 * number, 730)
 
     def get_reward_masteries(self):
         logger.debug('Bot.get_reward_masteries')
-        self.ADB.click(492, 707)
+        self.ADB.click(342, 707)
         sleep(4)
         self.ADB.click(100, 280)
 

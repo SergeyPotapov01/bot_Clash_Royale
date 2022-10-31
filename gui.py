@@ -16,7 +16,7 @@ from ImageTriggers import ImageTriggers
 
 from loguru import logger
 from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtWidgets import QLabel, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QLabel#, QPushButton, QMessageBox
 from PyQt5.QtGui import QPixmap
 from keras.models import load_model
 
@@ -29,7 +29,7 @@ class MyThread(QtCore.QThread):
     mysignal5 = QtCore.pyqtSignal(int)
 
 
-    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug,token, tg_user, activ_tg_bot, parent=None):
+    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug,token, tg_user, activ_tg_bot, use_chest_key , parent=None):
         QtCore.QThread.__init__(self, parent)
         self.farm = False
         self.number_account = '0'
@@ -53,24 +53,24 @@ class MyThread(QtCore.QThread):
             self.mysignal5.emit(self.number_deck)
             if self.bot is not None and self.bot.cycleStart:
                 print(time.time() - self.bot.t)
-                if self.bot.sleep or time.time() - self.bot.t > self.time_break * 60 + 10:
-                    if time.time() - self.bot.t > 120:
+                if self.bot.sleep and time.time() - self.bot.t > self.time_break * 60 + 10:
+                    if time.time() - self.bot.t > 20:
                         self.bot.stopFarm()
-                        self.bot.tlgbot.restart_bot()
+                        #self.bot.tlgbot.restart_bot()
                         threading.Thread(target=self.bot.startFarm).start()
 
-    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot):
+    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key):
         self.time_break = time_break
         if self.farm:
             self.farm = False
             self.bot.stopFarm()
         else:
             self.farm = True
-            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot)
+            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key)
             threading.Thread(target=self.bot.startFarm).start()
 
-    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot):
-        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot)
+    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key):
+        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key)
 
 
 class Ui_MainWindow(object):
@@ -104,7 +104,8 @@ class Ui_MainWindow(object):
         self.reboot_index = 20
         self.android = 'C:\Program Files\BlueStacks_nxt\HD-Player.exe'
         self.open_PR = False
-        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot)
+        self.use_chest_key = False
+        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot, self.use_chest_key)
         self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)
         self.thread.mysignal2.connect(self.logEvent, QtCore.Qt.QueuedConnection)
         self.thread.mysignal3.connect(self.logCrown, QtCore.Qt.QueuedConnection)
@@ -234,6 +235,15 @@ class Ui_MainWindow(object):
         self.label_PR = QtWidgets.QLabel(self.tab_3)
         self.label_PR.setGeometry(QtCore.QRect(220, 95, 211, 20))
         self.label_PR.setObjectName("label_PR")
+
+        self.checkBox_donate_card = QtWidgets.QCheckBox(self.tab_3)
+        self.checkBox_donate_card.setGeometry(QtCore.QRect(10, 95, 181, 20))
+        self.checkBox_donate_card.setObjectName("checkBox_openPR")
+        #self.checkBox_donate_card.stateChanged.connect(self.openPR)
+
+        self.label_donate_card = QtWidgets.QLabel(self.tab_3)
+        self.label_donate_card.setGeometry(QtCore.QRect(30, 95, 211, 20))
+        self.label_donate_card.setObjectName("label_PR")
         ############
         self.checkBox_forever_elexir = QtWidgets.QCheckBox(self.tab_3)
         self.checkBox_forever_elexir.setGeometry(QtCore.QRect(10, 270, 181, 41))
@@ -767,7 +777,7 @@ class Ui_MainWindow(object):
         #self.checkBox_tg.stateChanged.connect(self._checkBox_debug)
 
         self.label_tg = QtWidgets.QLabel(self.tab_2)
-        self.label_tg.setGeometry(QtCore.QRect(70 200, 211, 20))
+        self.label_tg.setGeometry(QtCore.QRect(70, 200, 211, 20))
         self.label_tg.setObjectName("label_debug")
         
 
@@ -882,12 +892,12 @@ class Ui_MainWindow(object):
         else:
             self.farm = True
             self.pushButton.setText(_translate("MainWindow", self.language_set_words[1]))
-        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot)
+        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot, self.use_chest_key)
         self.bot = self.thread.bot
 
     def getTrigger(self):
         if self.bot == None:
-            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot)
+            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot, self.use_chest_key)
             self.bot = self.thread.bot
         trigger = ImageTriggers(True, True)
         x = trigger.getTriggerDEBUG(self.bot.bot.getScreen())
@@ -1059,10 +1069,11 @@ class Ui_MainWindow(object):
         self.label_tlg_bot.setText(_translate("MainWindow", 'token'))
         self.label_tlg_admin.setText(_translate("MainWindow", 'tlg admin'))
         self.label_tg.setText(_translate("MainWindow", 'tlg activ'))
+        self.label_donate_card.setText(_translate("MainWindow", 'donate card'))
 
 
     def on_change(self, v):
-        if self.thread.number_account == self.spinBox_change_account.value():
+        if int(self.thread.number_account) == int(self.spinBox_change_account.value()):
             return
         logger.debug(f'Был изменен параметр номера аккаунта: {v}')
         self.spinBox_change_account.setValue(int(self.thread.number_account))

@@ -1,4 +1,5 @@
 import io
+import random
 
 import neural_networks
 
@@ -65,8 +66,8 @@ class ImageTriggers:
         for meanPixel in meanPixels:
             indexChest += 1
             if meanPixel[0] == 255.0:
-                if meanPixel[1] >= 229.0 and meanPixel[2] <= 255.0:
-                    if meanPixel[2] >= 84.0 and meanPixel[2] <= 112.1:
+                if meanPixel[1] >= 216.0 and meanPixel[2] <= 255.0:
+                    if meanPixel[2] >= 74.0 and meanPixel[2] <= 112.1:
                         return indexChest
 
     def _getTriggerOpenedChest(self):
@@ -78,10 +79,14 @@ class ImageTriggers:
         ]
 
         indexChest = 0
+        arrayChest = []
         for pixel in chestsPixel:
             indexChest += 1
             if pixel[0:3] == (255, 255, 255):
-                return indexChest
+                arrayChest.append(indexChest)
+        if arrayChest != []:
+            return random.choice(arrayChest)
+        return 0
 
     def _getTextError(self):
         i = self.image.crop((40, 370, 495, 540))
@@ -101,7 +106,8 @@ class ImageTriggers:
             card_ = recognitionCard.predict(card_)
             cards.append(card_)
             if self.debug:
-                card.save(f'debug\\{card_}{time.time()}.png')
+                pass
+                #card.save(f'debug\\{card_}{time.time()}.png')
 
 
         return cards
@@ -175,12 +181,15 @@ class ImageTriggers:
             if self.image.getpixel((63, 830))[0:3] == (255, 255, 255):
                 return 237, None
 
+        if self.image.getpixel((440, 220))[0:3] == (236, 8, 56):
+                return 229, None
+
         if self.image.getpixel((530, 944))[0:3] in((64, 76, 95), (63, 75, 95), (60, 71, 89), (33, 36, 63)):  # пиксель на кропку эвента если она не активка
             
-            if self.image.getpixel((522, 679))[0:3] in ((236, 8, 56), (236, 8, 57), (236, 9, 56), (236, 9, 57)):
+            if self.image.getpixel((360, 679))[0:3] in ((236, 8, 56), (236, 8, 57), (236, 9, 56), (236, 9, 57)):
                 return 209, None
 
-            if self.image.getpixel((478, 216))[0:3] == (76, 173, 255):
+            if self.image.getpixel((42, 214))[0:3] == (76, 175, 255):
                 return 202, None
 
             if self.image.getpixel((270, 70))[0:3] == (226, 226, 226):
@@ -316,7 +325,10 @@ class ImageTriggers:
         elif self.image.size != (540, 960):
             return ((501, None),)
 
-        print(self.image.getpixel((514, 28)))
+        print(self.image.getpixel((440, 220)))
+        (241, 138, 34, 255)
+        (235, 134, 32, 255)
+        (236, 133, 32, 255)
 
         try:
             self.image.save(f'debug\\{time.time()}.png')
@@ -331,10 +343,7 @@ class ImageTriggers:
             (125, self.image.getpixel((170, 856)), self.image.getpixel((170, 856))[0:3] == (8, 94, 178)),
             (200, self.image.getpixel((530, 944)), self.image.getpixel((530, 944))[0:3] == (64, 76, 95)),
             (202, self.image.getpixel((478, 216)), self.image.getpixel((478, 216))[0:3] == (76, 173, 255)),
-            (209, self.image.getpixel((522, 679)), self.image.getpixel((522, 679))[0:3] == (236, 8, 56)),
-            (209, self.image.getpixel((522, 679)), self.image.getpixel((522, 679))[0:3] == (236, 8, 57)),
-            (209, self.image.getpixel((522, 679)), self.image.getpixel((522, 679))[0:3] == (236, 9, 57)),
-            (209, self.image.getpixel((522, 679)), self.image.getpixel((522, 679))[0:3] == (236, 9, 56)),
+            (209, self.image.getpixel((360, 679)), self.image.getpixel((522, 679))[0:3] == (236, 9, 56)),
             (200, self.image.getpixel((514, 28)), self.image.getpixel((514, 28))[0:3] == (72, 208, 25)),
             (210, self.image.getpixel((435, 876)), self.image.getpixel((435, 876))[0:3] == (48, 185, 71)),
             (211, self.image.getpixel((435, 876)), self.image.getpixel((435, 876))[0:3] == (236, 8, 56)),
