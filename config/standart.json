@@ -19,5 +19,7 @@
     "forever_elexir": false,
     "Open_PR": false,
     "debug": false,
-    "id_card_epic":0
+    "id_card_epic":0,
+    "use_key_chest": false,
+    "donate_card": false
 }

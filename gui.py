@@ -29,7 +29,7 @@ class MyThread(QtCore.QThread):
     mysignal5 = QtCore.pyqtSignal(int)
 
 
-    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug,token, tg_user, activ_tg_bot, use_chest_key , parent=None):
+    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug,token, tg_user, activ_tg_bot, use_chest_key, donate_card , parent=None):
         QtCore.QThread.__init__(self, parent)
         self.farm = False
         self.number_account = '0'
@@ -53,24 +53,28 @@ class MyThread(QtCore.QThread):
             self.mysignal5.emit(self.number_deck)
             if self.bot is not None and self.bot.cycleStart:
                 print(time.time() - self.bot.t)
-                if self.bot.sleep and time.time() - self.bot.t > self.time_break * 60 + 10:
-                    if time.time() - self.bot.t > 20:
+                if self.bot.sleep:
+                    print('Бот работает')
+                    if time.time() - self.bot.t > 120:
+                        print('Ребут бота')
                         self.bot.stopFarm()
                         #self.bot.tlgbot.restart_bot()
                         threading.Thread(target=self.bot.startFarm).start()
+                else:
+                    print('Бот cgbn')
 
-    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key):
+    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key, donate_card):
         self.time_break = time_break
         if self.farm:
             self.farm = False
             self.bot.stopFarm()
         else:
             self.farm = True
-            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key)
+            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key, donate_card)
             threading.Thread(target=self.bot.startFarm).start()
 
-    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key):
-        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key)
+    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key, donate_card):
+        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key, donate_card)
 
 
 class Ui_MainWindow(object):
@@ -105,7 +109,8 @@ class Ui_MainWindow(object):
         self.android = 'C:\Program Files\BlueStacks_nxt\HD-Player.exe'
         self.open_PR = False
         self.use_chest_key = False
-        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot, self.use_chest_key)
+        self.donate_card = False
+        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot, self.use_chest_key, self.donate_card)
         self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)
         self.thread.mysignal2.connect(self.logEvent, QtCore.Qt.QueuedConnection)
         self.thread.mysignal3.connect(self.logCrown, QtCore.Qt.QueuedConnection)
@@ -193,15 +198,15 @@ class Ui_MainWindow(object):
         self.textBrowser_3.setObjectName("textBrowser_3")
 
         self.label_2 = QtWidgets.QLabel(self.Log)
-        self.label_2.setGeometry(QtCore.QRect(210, 420, 191, 20))
+        self.label_2.setGeometry(QtCore.QRect(210, 420, 150, 20))
         self.label_2.setObjectName("label_2")
 
         self.label_3 = QtWidgets.QLabel(self.Log)
-        self.label_3.setGeometry(QtCore.QRect(20, 270, 381, 20))
+        self.label_3.setGeometry(QtCore.QRect(20, 270, 150, 20))
         self.label_3.setObjectName("label_3")
 
         self.label_4 = QtWidgets.QLabel(self.Log)
-        self.label_4.setGeometry(QtCore.QRect(20, 10, 381, 26))
+        self.label_4.setGeometry(QtCore.QRect(20, 10, 150, 26))
         self.label_4.setObjectName("label_4")
 
         self.tabWidget.addTab(self.Log, "")
@@ -215,47 +220,56 @@ class Ui_MainWindow(object):
         self.comboBox_.currentTextChanged.connect(self.debug)
 
         self.label_ = QtWidgets.QLabel(self.tab_3)
-        self.label_.setGeometry(QtCore.QRect(10, 65, 211, 20))
+        self.label_.setGeometry(QtCore.QRect(10, 65, 150, 20))
         self.label_.setObjectName("label_")
 
         self.checkBox_openChest = QtWidgets.QCheckBox(self.tab_3)
-        self.checkBox_openChest.setGeometry(QtCore.QRect(200, 100, 181, 41))
+        self.checkBox_openChest.setGeometry(QtCore.QRect(200, 100, 41, 41))
         self.checkBox_openChest.setObjectName("checkBox_openChest")
         self.checkBox_openChest.stateChanged.connect(self.openChest)
 
         self.label_openChest = QtWidgets.QLabel(self.tab_3)
-        self.label_openChest.setGeometry(QtCore.QRect(220, 115, 211, 20))
+        self.label_openChest.setGeometry(QtCore.QRect(220, 115, 150, 20))
         self.label_openChest.setObjectName("label_openChest")
 
         self.checkBox_PR = QtWidgets.QCheckBox(self.tab_3)
-        self.checkBox_PR.setGeometry(QtCore.QRect(200, 95, 181, 20))
+        self.checkBox_PR.setGeometry(QtCore.QRect(200, 80, 41, 41))
         self.checkBox_PR.setObjectName("checkBox_openPR")
         self.checkBox_PR.stateChanged.connect(self.openPR)
 
         self.label_PR = QtWidgets.QLabel(self.tab_3)
-        self.label_PR.setGeometry(QtCore.QRect(220, 95, 211, 20))
+        self.label_PR.setGeometry(QtCore.QRect(220, 90, 150, 20))
         self.label_PR.setObjectName("label_PR")
 
+        self.checkBox_use_key_chest = QtWidgets.QCheckBox(self.tab_3)
+        self.checkBox_use_key_chest.setGeometry(QtCore.QRect(200, 270, 41, 41))
+        self.checkBox_use_key_chest.setObjectName("checkBox_openPR")
+        self.checkBox_use_key_chest.stateChanged.connect(self.d_use_key_chest)
+
+        self.label_use_key_chest = QtWidgets.QLabel(self.tab_3)
+        self.label_use_key_chest.setGeometry(QtCore.QRect(220, 280, 150, 20))
+        self.label_use_key_chest.setObjectName("label_PR")
+
         self.checkBox_donate_card = QtWidgets.QCheckBox(self.tab_3)
-        self.checkBox_donate_card.setGeometry(QtCore.QRect(10, 95, 181, 20))
+        self.checkBox_donate_card.setGeometry(QtCore.QRect(10, 80, 41, 41))
         self.checkBox_donate_card.setObjectName("checkBox_openPR")
-        #self.checkBox_donate_card.stateChanged.connect(self.openPR)
+        self.checkBox_donate_card.stateChanged.connect(self.d_donate_card)
 
         self.label_donate_card = QtWidgets.QLabel(self.tab_3)
-        self.label_donate_card.setGeometry(QtCore.QRect(30, 95, 211, 20))
+        self.label_donate_card.setGeometry(QtCore.QRect(30, 90, 150, 20))
         self.label_donate_card.setObjectName("label_PR")
         ############
         self.checkBox_forever_elexir = QtWidgets.QCheckBox(self.tab_3)
-        self.checkBox_forever_elexir.setGeometry(QtCore.QRect(10, 270, 181, 41))
+        self.checkBox_forever_elexir.setGeometry(QtCore.QRect(10, 270, 41, 41))
         self.checkBox_forever_elexir.setObjectName("checkBox_forever_elexir")
         self.checkBox_forever_elexir.stateChanged.connect(self._forever_elexir)
 
         self.label_forever_elexir = QtWidgets.QLabel(self.tab_3)
-        self.label_forever_elexir.setGeometry(QtCore.QRect(30, 280, 211, 20))
+        self.label_forever_elexir.setGeometry(QtCore.QRect(30, 280, 150, 20))
         self.label_forever_elexir.setObjectName("label_forever_elexir")
         ###################
         self.checkBox_requestCard = QtWidgets.QCheckBox(self.tab_3)
-        self.checkBox_requestCard.setGeometry(QtCore.QRect(10, 100, 181, 41))
+        self.checkBox_requestCard.setGeometry(QtCore.QRect(10, 100, 41, 41))
         self.checkBox_requestCard.setObjectName("checkBox_requestCard")
         self.checkBox_requestCard.stateChanged.connect(self.requestCard)
 
@@ -270,7 +284,7 @@ class Ui_MainWindow(object):
         self.comboBox.currentTextChanged.connect(self.currentTextComboBox_1)
 
         self.label_5 = QtWidgets.QLabel(self.tab_3)
-        self.label_5.setGeometry(QtCore.QRect(10, 35, 201, 20))
+        self.label_5.setGeometry(QtCore.QRect(10, 35, 150, 20))
         self.label_5.setObjectName("label_5")
 
         self.comboBox_2 = QtWidgets.QComboBox(self.tab_3)
@@ -296,7 +310,7 @@ class Ui_MainWindow(object):
         self.label_img_epic.resize(50, 50)
 
         self.label_epic = QtWidgets.QLabel(self.tab_3)
-        self.label_epic.setGeometry(QtCore.QRect(10, 175, 211, 20))
+        self.label_epic.setGeometry(QtCore.QRect(10, 175, 150, 20))
         self.label_epic.setObjectName("label_epic")
 
         ####################################
@@ -308,24 +322,24 @@ class Ui_MainWindow(object):
         self.comboBox_change_language.currentTextChanged.connect(self.currentTextComboBox_change_language)
 
         self.label_change_language = QtWidgets.QLabel(self.tab_3)
-        self.label_change_language.setGeometry(QtCore.QRect(10, 215, 201, 20))
+        self.label_change_language.setGeometry(QtCore.QRect(10, 215, 150, 20))
         self.label_change_language.setObjectName("label_change_language")
 
         self.label_8 = QtWidgets.QLabel(self.tab_3)
-        self.label_8.setGeometry(QtCore.QRect(10, 140, 211, 20))
+        self.label_8.setGeometry(QtCore.QRect(10, 140, 150, 20))
         self.label_8.setObjectName("label_8")
 
         self.checkBox_clan_var = QtWidgets.QCheckBox(self.tab_3)
-        self.checkBox_clan_var.setGeometry(QtCore.QRect(10, 240, 181, 41))
+        self.checkBox_clan_var.setGeometry(QtCore.QRect(10, 240, 41, 41))
         self.checkBox_clan_var.setObjectName("checkBox_clan_var")
         self.checkBox_clan_var.stateChanged.connect(self.clan_war)
 
         self.label_clan_var = QtWidgets.QLabel(self.tab_3)
-        self.label_clan_var.setGeometry(QtCore.QRect(30, 250, 211, 20))
+        self.label_clan_var.setGeometry(QtCore.QRect(30, 250, 150, 20))
         self.label_clan_var.setObjectName("label_clan_var")
 
         self.checkBox_shop_reward = QtWidgets.QCheckBox(self.tab_3)
-        self.checkBox_shop_reward.setGeometry(QtCore.QRect(200, 240, 181, 41))
+        self.checkBox_shop_reward.setGeometry(QtCore.QRect(200, 240, 150, 41))
         self.checkBox_shop_reward.setObjectName("checkBox_shop_reward")
         self.checkBox_shop_reward.stateChanged.connect(self.debug)
 
@@ -346,7 +360,7 @@ class Ui_MainWindow(object):
         self.lineEdit_android.textChanged.connect(self._android)
 
         self.label_android = QtWidgets.QLabel(self.tab_4)
-        self.label_android.setGeometry(QtCore.QRect(280, 50, 231, 20))
+        self.label_android.setGeometry(QtCore.QRect(280, 50, 150, 20))
         self.label_android.setObjectName("label_android")
 
         self.spinBox = QtWidgets.QSpinBox(self.tab_4)
@@ -355,15 +369,15 @@ class Ui_MainWindow(object):
         self.spinBox.valueChanged.connect(self.numberOfFinish)
 
         self.label_9 = QtWidgets.QLabel(self.tab_4)
-        self.label_9.setGeometry(QtCore.QRect(170, 30, 231, 20))
+        self.label_9.setGeometry(QtCore.QRect(170, 30, 150, 20))
         self.label_9.setObjectName("label_9")
 
         self.label_10 = QtWidgets.QLabel(self.tab_4)
-        self.label_10.setGeometry(QtCore.QRect(170, 80, 211, 20))
+        self.label_10.setGeometry(QtCore.QRect(170, 80, 150, 20))
         self.label_10.setObjectName("label_10")
 
         self.label_11 = QtWidgets.QLabel(self.tab_4)
-        self.label_11.setGeometry(QtCore.QRect(170, 130, 211, 20))
+        self.label_11.setGeometry(QtCore.QRect(170, 130, 150, 20))
         self.label_11.setObjectName("label_11")
 
         self.spinBox_2 = QtWidgets.QSpinBox(self.tab_4)
@@ -372,12 +386,12 @@ class Ui_MainWindow(object):
         self.spinBox_2.valueChanged.connect(self.timeBreak)
 
         self.checkBox_changed_account = QtWidgets.QCheckBox(self.tab_4)
-        self.checkBox_changed_account.setGeometry(QtCore.QRect(20, 160, 181, 41))
+        self.checkBox_changed_account.setGeometry(QtCore.QRect(20, 160, 41, 41))
         self.checkBox_changed_account.setObjectName("checkBox_changed_account")
         self.checkBox_changed_account.stateChanged.connect(self.changed_account)
 
         self.label_changed_account = QtWidgets.QLabel(self.tab_4)
-        self.label_changed_account.setGeometry(QtCore.QRect(170, 180, 211, 20))
+        self.label_changed_account.setGeometry(QtCore.QRect(170, 180, 150, 20))
         self.label_changed_account.setObjectName("label_change_account")
 
         self.spinBox_change_account = QtWidgets.QSpinBox(self.tab_4)
@@ -386,7 +400,7 @@ class Ui_MainWindow(object):
         self.spinBox_change_account.valueChanged.connect(self.set_change_account)
 
         self.label_change_account = QtWidgets.QLabel(self.tab_4)
-        self.label_change_account.setGeometry(QtCore.QRect(170, 220, 211, 20))
+        self.label_change_account.setGeometry(QtCore.QRect(170, 220, 150, 20))
         self.label_change_account.setObjectName("label_change_account")
 
         self.spinBox_total_accounts = QtWidgets.QSpinBox(self.tab_4)
@@ -397,12 +411,12 @@ class Ui_MainWindow(object):
         ###########
 
         self.checkBox_change_deck = QtWidgets.QCheckBox(self.tab_4)
-        self.checkBox_change_deck.setGeometry(QtCore.QRect(20, 310, 181, 41))
+        self.checkBox_change_deck.setGeometry(QtCore.QRect(20, 310, 41, 41))
         self.checkBox_change_deck.setObjectName("checkBox_change_deck")
         self.checkBox_change_deck.stateChanged.connect(self._checkBox_change_deck)
 
         self.label_change_deck = QtWidgets.QLabel(self.tab_4)
-        self.label_change_deck.setGeometry(QtCore.QRect(170, 320, 211, 20))
+        self.label_change_deck.setGeometry(QtCore.QRect(170, 320, 150, 20))
         self.label_change_deck.setObjectName("label_change_deck")
 
         self.spinBox_deck_number = QtWidgets.QSpinBox(self.tab_4)
@@ -411,7 +425,7 @@ class Ui_MainWindow(object):
         self.spinBox_deck_number.valueChanged.connect(self._spinBox_deck_number)
 
         self.label_deck_number = QtWidgets.QLabel(self.tab_4)
-        self.label_deck_number.setGeometry(QtCore.QRect(170, 360, 211, 20))
+        self.label_deck_number.setGeometry(QtCore.QRect(170, 360, 150, 20))
         self.label_deck_number.setObjectName("label_deck_number")
 
         self.spinBox_number_fights_deck_change = QtWidgets.QSpinBox(self.tab_4)
@@ -420,32 +434,32 @@ class Ui_MainWindow(object):
         self.spinBox_number_fights_deck_change.valueChanged.connect(self._spinBox_number_fights_deck_change)
 
         self.label_number_fights_deck_change = QtWidgets.QLabel(self.tab_4)
-        self.label_number_fights_deck_change.setGeometry(QtCore.QRect(170, 400, 211, 20))
+        self.label_number_fights_deck_change.setGeometry(QtCore.QRect(170, 400, 150, 20))
         self.label_number_fights_deck_change.setObjectName("label_number_fights_deck_change")
 
 
         self.checkBox_send_emotion = QtWidgets.QCheckBox(self.tab_4)
-        self.checkBox_send_emotion.setGeometry(QtCore.QRect(20, 440, 181, 41))
+        self.checkBox_send_emotion.setGeometry(QtCore.QRect(20, 440, 41, 41))
         self.checkBox_send_emotion.setObjectName("checkBox_send_emotion")
         self.checkBox_send_emotion.stateChanged.connect(self._checkBox_send_emotion)
 
         self.label_send_emotion = QtWidgets.QLabel(self.tab_4)
-        self.label_send_emotion.setGeometry(QtCore.QRect(170, 450, 211, 20))
+        self.label_send_emotion.setGeometry(QtCore.QRect(170, 450, 150, 20))
         self.label_send_emotion.setObjectName("label_send_emotion")
 
         self.checkBox_debug = QtWidgets.QCheckBox(self.tab_4)
-        self.checkBox_debug.setGeometry(QtCore.QRect(20, 470, 181, 41))
+        self.checkBox_debug.setGeometry(QtCore.QRect(20, 470, 41, 41))
         self.checkBox_debug.setObjectName("checkBox_send_emotion")
         self.checkBox_debug.stateChanged.connect(self._checkBox_debug)
 
         self.label_debug = QtWidgets.QLabel(self.tab_4)
-        self.label_debug.setGeometry(QtCore.QRect(170, 480, 211, 20))
+        self.label_debug.setGeometry(QtCore.QRect(170, 480, 150, 20))
         self.label_debug.setObjectName("label_debug")
 
         ##########
 
         self.label_total_accounts = QtWidgets.QLabel(self.tab_4)
-        self.label_total_accounts.setGeometry(QtCore.QRect(170, 270, 211, 20))
+        self.label_total_accounts.setGeometry(QtCore.QRect(170, 270, 150, 20))
         self.label_total_accounts.setObjectName("label_changeAccount")
 
         self.tabWidget.addTab(self.tab_4, "")
@@ -758,7 +772,7 @@ class Ui_MainWindow(object):
         #self.lineEdit_tlg_bot.textChanged.connect(self._android)
 
         self.label_tlg_bot = QtWidgets.QLabel(self.tab_2)
-        self.label_tlg_bot.setGeometry(QtCore.QRect(280, 150, 231, 20))
+        self.label_tlg_bot.setGeometry(QtCore.QRect(280, 150, 150, 20))
         self.label_tlg_bot.setObjectName("label_android")
 
 
@@ -768,16 +782,16 @@ class Ui_MainWindow(object):
         #self.lineEdit_tlg_admin.textChanged.connect(self._android)
 
         self.label_tlg_admin = QtWidgets.QLabel(self.tab_2)
-        self.label_tlg_admin.setGeometry(QtCore.QRect(280, 100, 231, 20))
+        self.label_tlg_admin.setGeometry(QtCore.QRect(280, 100, 150, 20))
         self.label_tlg_admin.setObjectName("label_android")
         
         self.checkBox_tg = QtWidgets.QCheckBox(self.tab_2)
-        self.checkBox_tg.setGeometry(QtCore.QRect(20, 190, 181, 41))
+        self.checkBox_tg.setGeometry(QtCore.QRect(20, 190, 41, 41))
         self.checkBox_tg.setObjectName("checkBox_send_emotion")
         #self.checkBox_tg.stateChanged.connect(self._checkBox_debug)
 
         self.label_tg = QtWidgets.QLabel(self.tab_2)
-        self.label_tg.setGeometry(QtCore.QRect(70, 200, 211, 20))
+        self.label_tg.setGeometry(QtCore.QRect(70, 200, 150, 20))
         self.label_tg.setObjectName("label_debug")
         
 
@@ -892,12 +906,12 @@ class Ui_MainWindow(object):
         else:
             self.farm = True
             self.pushButton.setText(_translate("MainWindow", self.language_set_words[1]))
-        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot, self.use_chest_key)
+        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot, self.use_chest_key, self.donate_card)
         self.bot = self.thread.bot
 
     def getTrigger(self):
         if self.bot == None:
-            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot, self.use_chest_key)
+            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot, self.use_chest_key, self.donate_card)
             self.bot = self.thread.bot
         trigger = ImageTriggers(True, True)
         x = trigger.getTriggerDEBUG(self.bot.bot.getScreen())
@@ -965,6 +979,12 @@ class Ui_MainWindow(object):
         logger.debug(f'Был изменен параметр открытия сундуков на: {event}')
         self.open_PR = bool(event)
         self.config['Open_PR'] = bool(self.open_PR)
+        self.dump_setting()
+
+    def d_use_key_chest(self, event):
+        logger.debug(f'Был изменен параметр открытия сундуков на: {event}')
+        self.use_key_chest = bool(event)
+        self.config['use_key_chest'] = bool(self.use_key_chest)
         self.dump_setting()
 
     def requestCard(self, event):
@@ -1066,10 +1086,11 @@ class Ui_MainWindow(object):
         self.label_forever_elexir.setText(_translate("MainWindow", 'Forever elixir'))
         self.label_PR.setText(_translate("MainWindow", 'Open Pass Royale'))
         self.label_debug.setText(_translate("MainWindow", 'Collect Data Set'))
-        self.label_tlg_bot.setText(_translate("MainWindow", 'token'))
+        self.label_tlg_bot.setText(_translate("MainWindow", 'Token tlg'))
         self.label_tlg_admin.setText(_translate("MainWindow", 'tlg admin'))
         self.label_tg.setText(_translate("MainWindow", 'tlg activ'))
-        self.label_donate_card.setText(_translate("MainWindow", 'donate card'))
+        self.label_donate_card.setText(_translate("MainWindow", 'Donate card'))
+        self.label_use_key_chest.setText(_translate("MainWindow", 'Use key chest'))
 
 
     def on_change(self, v):
@@ -1082,6 +1103,12 @@ class Ui_MainWindow(object):
         logger.debug(f'Был изменен параметр смены аккаунта: {v}')
         self._changed_account = v
         self.config['Change_accounts'] = bool(self._changed_account)
+        self.dump_setting()
+
+    def d_donate_card(self, v):
+        logger.debug(f'Был изменен параметр смены аккаунта: {v}')
+        self.donate_card = v
+        self.config['donate_card'] = bool(self.donate_card)
         self.dump_setting()
 
     def debug(self, text):
@@ -1145,6 +1172,12 @@ class Ui_MainWindow(object):
 
         if config['debug']:
             self.checkBox_debug.click()
+
+        if config['use_key_chest']:
+            self.checkBox_use_key_chest.click()
+
+        if config['donate_card']:
+            self.checkBox_donate_card.click()
 
         self.lineEdit_android.setText(_translate("MainWindow", str(config['android'])))
 

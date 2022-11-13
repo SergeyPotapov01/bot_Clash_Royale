@@ -324,7 +324,7 @@ class Bot:
         self.ADB.click(157 + number * 57, 224)
         sleep(3)
 
-    def send_emotion(self, number: int, random_=0):
+    def send_emotion(self, number: int, random_=4):
         logger.debug('Bot.send_emotion')
         if random.randint(0, random_) == random_:
             self.ADB.click(51, 800)

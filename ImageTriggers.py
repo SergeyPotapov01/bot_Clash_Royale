@@ -216,7 +216,7 @@ class ImageTriggers:
             if self.image.getpixel((10, 955))[0:3] == (234, 189, 80):
                 return 238, None
 
-            if self.image.getpixel((514, 28))[0:3] == (72, 208, 25):  # пиксель на кропку батл если она открыта
+            if self.image.getpixel((496, 113))[0:3] == (214, 236, 249):  # триггер на нахождение в меню
                 if self.image.getpixel((433, 887))[0:3] == (48, 184, 69) and self.requested_card:
                     return 210, None  # тригер на отправку запроса карт
                 if self.image.getpixel((433, 887))[0:3] == (236, 8, 56) and self.requested_card:
@@ -325,7 +325,7 @@ class ImageTriggers:
         elif self.image.size != (540, 960):
             return ((501, None),)
 
-        print(self.image.getpixel((440, 220)))
+        print(self.image.getpixel((496, 113)))
         (241, 138, 34, 255)
         (235, 134, 32, 255)
         (236, 133, 32, 255)

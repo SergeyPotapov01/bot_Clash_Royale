@@ -31,8 +31,8 @@ class Telebot:
 
 
 class Strategics:
-    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key):
-        logger.debug( f'{(batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key)}')
+    def __init__(self, batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key, donate_card):
+        logger.debug( f'{(batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key, donate_card)}')
         self.port = port
         self.bot = Bot(port=port, android=android)
         self.triggers = ImageTriggers(open_chest, requested_card, open_PR, debug)
@@ -66,6 +66,7 @@ class Strategics:
         self.debug = debug
         self.t = time.time()
         self.use_chest_key = use_chest_key
+        self.donate_card = donate_card
         #self.tlgbot = Telebot(token, tg_user)
 
 
@@ -98,20 +99,17 @@ class Strategics:
             logger.debug(str(triggers) + ' ' + str(time.time() - t))
             #self.connection_to_parent._textBrowser_3 = f'{triggers}\n' + self.connection_to_parent._textBrowser_3
 
-            if self.index == 50:
+            if self.index == 25:
                 self.bot.reboot()
                 self.index = 0
                 logger.debug(str(triggers))
                 continue
 
             if self.index % 5 == 4:
-                self.bot.choose_reward(randint(0, 1))
                 self.bot.returnHome()
                 logger.debug(str(triggers))
 
             if self.index124 >= 25:
-                self.bot.goToShop()
-                self.bot.returnHome()
                 self.bot.reboot()
                 self.index124 = 0
                 logger.debug(str(triggers))
@@ -940,11 +938,7 @@ class Strategics:
                             index += 1
                             self.bot.swipe_clan_war()
                             time.sleep(2)
-                            try:
-                                image = self.bot.getScreen()
-                            except:
-                                time.sleep(1)
-                                continue
+                            image = self.bot.getScreen()
                             triggers = self.triggers.getTrigger(image)
                             trigger = triggers[0]
                             if trigger == 260:
@@ -974,9 +968,6 @@ class Strategics:
                         self.CW = False
                         self.bot.returnHome()
                         continue
-                    
-                    self.bot.close_statistics_clan_war()
-                    self.bot.get_reward_clan_war()
 
                     continue
 
