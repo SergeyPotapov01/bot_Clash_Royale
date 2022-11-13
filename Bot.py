@@ -325,10 +325,10 @@ class Bot:
         sleep(3)
 
     def send_emotion(self, number: int, random_=4):
-        logger.debug('Bot.send_emotion')
         if random.randint(0, random_) == random_:
+            logger.debug('Bot.send_emotion')
             self.ADB.click(51, 800)
-            sleep(1)
+            sleep(0.5)
             self.ADB.click(140 + 95 * number, 730)
 
     def get_reward_masteries(self):

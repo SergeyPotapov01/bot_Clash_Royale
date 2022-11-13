@@ -52,9 +52,9 @@ class MyThread(QtCore.QThread):
             self.mysignal4.emit(str(f'Got Crowns {self.got_crowns}\nTime in Game(Doesnt work) {self.time_in_game}\nTotal battles {self.totall_batlles}\nTrophy changes(Doesnt work) {self.cup_changes}'))
             self.mysignal5.emit(self.number_deck)
             if self.bot is not None and self.bot.cycleStart:
-                print(time.time() - self.bot.t)
+                # print(time.time() - self.bot.t)
                 if self.bot.sleep:
-                    print('Бот работает')
+                    # print('Бот работает')
                     if time.time() - self.bot.t > 120:
                         print('Ребут бота')
                         self.bot.stopFarm()

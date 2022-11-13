@@ -7,7 +7,7 @@
     "port_adb": 5555,
     "number_of_finish": 0,
     "time_break": 0,
-    "Change_accounts" :false,
+    "Change_accounts": false,
     "total_accounts": 0,
     "Selected_account": 0,
     "play_clan_war": false,
@@ -19,7 +19,7 @@
     "forever_elexir": false,
     "Open_PR": false,
     "debug": false,
-    "id_card_epic":0,
+    "id_card_epic": 0,
     "use_key_chest": false,
     "donate_card": false
 }
