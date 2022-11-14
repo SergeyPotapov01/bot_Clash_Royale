@@ -17,13 +17,13 @@ class CardInBatlle:
                             'Goblin_Barrel', 'Goblin_Cage', 'Goblin_Drill', 'Goblin_Gang', 'Goblin_Giant', 'Goblin_Hut',
                             'Goblins', 'Golden_Knight', 'Golem', 'Graveyard', 'Guards', 'Heal_Spirit', 'Hog_Rider', 'Hunter',
                             'Ice_Golem', 'Ice_Spirit', 'Ice_Wizard', 'Inferno_Dragon', 'Inferno_Tower', 'Knight', 'Lava_Hound',
-                            'Lightnimg', 'Lumberjack', 'Magic_Archer', 'Mega_Knight', 'Mega_Minion', 'Miner', 'Mini_PEKKA',
+                            'Lightning', 'Lumberjack', 'Magic_Archer', 'Mega_Knight', 'Mega_Minion', 'Miner', 'Mini_PEKKA',
                             'Minion_Horde', 'Minions', 'Mortar', 'Mother_Witch', 'Musketeer', 'Night_Witch', 'Pekka', 'Poison',
                             'Prince', 'Princess', 'Rage', 'Ram_Rider', 'Rascals', 'Rocket', 'Royal_Delivery', 'Royal_Ghost',
                             'Royal_Giant', 'Royal_Hogs', 'Royal_Recruits', 'Skeleton_Army', 'Skeleton_Barrel', 'Skeleton_Dragons',
                             'Skeleton_King', 'Skeletons', 'Sparky', 'Spear_Goblins', 'Tesla', 'The_Log', 'Three_Musketeers',
                             'Tombstone', 'Tornado', 'Valkyrie', 'Wall_Breakers', 'Witch', 'Wizard', 'X-Bow', 'Zap', 'Zappies',
-                            'mighty_miner', 'МУСОР',
+                            'Mighty_Miner', 'МУСОР',
                             ]
 
 

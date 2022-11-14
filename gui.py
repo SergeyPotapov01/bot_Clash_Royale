@@ -145,7 +145,7 @@ class Ui_MainWindow(object):
         self.list_card_request_epic = [
         'Mirror', 'Wall_Breakers', 'Rage', 'Barbarian_Barrel', 'Skeleton_Army', 'Guards', 'Goblin_Barrel', 'Tornado', 'Clone',
         'Baby_Dragon', 'Dark_Prince', 'Hunter', 'Goblin_Drill', 'Freeze', 'Poison', 'Balloon', 'Witch', 'Prince', 'Bowler',
-        'Executioner', 'Cannon_Cart', 'Electro_Dragon', 'Gaint_Skeleton', 'Goblin_Giant', 'X-Bow', 'Lightnimg', 'Pekka',
+        'Executioner', 'Cannon_Cart', 'Electro_Dragon', 'Gaint_Skeleton', 'Goblin_Giant', 'X-Bow', 'Lightning', 'Pekka',
         'Electro_Giant', 'Golem'
         ]
 
