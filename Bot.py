@@ -166,6 +166,10 @@ class Bot:
     def placingCard2X2(self, x, y):
         logger.debug(f'Bot.placingCard2X2 x = {x}, y = {y}')
         self.ADB.click(x, y)
+        
+    def activeHeroAbility(self):
+        logger.debug(f'Bot.activateHeroAbility')
+        self.ADB.click(480, 730)
 
     def exitBatle2X2(self):
         logger.debug('Bot.exitBatle2X2')
@@ -324,11 +328,11 @@ class Bot:
         self.ADB.click(157 + number * 57, 224)
         sleep(3)
 
-    def send_emotion(self, number: int, random_=4):
-        logger.debug('Bot.send_emotion')
+    def send_emotion(self, number: int, random_=8):
         if random.randint(0, random_) == random_:
+            logger.debug('Bot.send_emotion')
             self.ADB.click(51, 800)
-            sleep(1)
+            sleep(0.5)
             self.ADB.click(140 + 95 * number, 730)
 
     def get_reward_masteries(self):
@@ -367,12 +371,10 @@ class Bot:
                 self.ADB = ADB_server(port=self.port)
                 self.ADB.cheakInstallCR()
                 sleep(5)
-                print(1)
                 self.openCR()
                 break
             except:
                 sleep(5)
-        print(2)
 
     def random_placing_card(self):
         logger.debug('Bot.random_placing_card')

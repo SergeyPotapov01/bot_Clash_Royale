@@ -52,9 +52,9 @@ class MyThread(QtCore.QThread):
             self.mysignal4.emit(str(f'Got Crowns {self.got_crowns}\nTime in Game(Doesnt work) {self.time_in_game}\nTotal battles {self.totall_batlles}\nTrophy changes(Doesnt work) {self.cup_changes}'))
             self.mysignal5.emit(self.number_deck)
             if self.bot is not None and self.bot.cycleStart:
-                print(time.time() - self.bot.t)
+                # print(time.time() - self.bot.t)
                 if self.bot.sleep:
-                    print('Бот работает')
+                    # print('Бот работает')
                     if time.time() - self.bot.t > 120:
                         print('Ребут бота')
                         self.bot.stopFarm()
@@ -145,7 +145,7 @@ class Ui_MainWindow(object):
         self.list_card_request_epic = [
         'Mirror', 'Wall_Breakers', 'Rage', 'Barbarian_Barrel', 'Skeleton_Army', 'Guards', 'Goblin_Barrel', 'Tornado', 'Clone',
         'Baby_Dragon', 'Dark_Prince', 'Hunter', 'Goblin_Drill', 'Freeze', 'Poison', 'Balloon', 'Witch', 'Prince', 'Bowler',
-        'Executioner', 'Cannon_Cart', 'Electro_Dragon', 'Gaint_Skeleton', 'Goblin_Giant', 'X-Bow', 'Lightnimg', 'Pekka',
+        'Executioner', 'Cannon_Cart', 'Electro_Dragon', 'Gaint_Skeleton', 'Goblin_Giant', 'X-Bow', 'Lightning', 'Pekka',
         'Electro_Giant', 'Golem'
         ]
 
