@@ -169,6 +169,9 @@ class Bot:
         
     def activeHeroAbility(self):
         logger.debug(f'Bot.activateHeroAbility')
+        # activate 3 times just in case
+        self.ADB.click(480, 730)
+        self.ADB.click(480, 730)
         self.ADB.click(480, 730)
 
     def exitBatle2X2(self):
