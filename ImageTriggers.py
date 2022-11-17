@@ -154,7 +154,6 @@ class ImageTriggers:
             if self.image.getpixel((300, 840))[0:3] == (104, 187, 255):  # тригер на кнопку выйти
                 if self.index2X2:
                     self.index2X2 = False
-                    logger.info(self._getNumeberCrown())
                     return 121, self._getNumeberCrown()  # тригер на закрытие чата в после боя 2х2
                 else:
                     self.index2X2 = True
@@ -163,7 +162,6 @@ class ImageTriggers:
         if self.image.getpixel((526, 951))[0:3] == (52, 66, 83):  # тригер нижнию часть экрана при игре 2х2
             if self.index2X2:
                 self.index2X2 = False
-                logger.info(self._getNumeberCrown())
                 return 122, self._getNumeberCrown()  # тригер на закрытие чата в после боя 2х2
             else:
                 self.index2X2 = True

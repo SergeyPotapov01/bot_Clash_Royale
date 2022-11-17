@@ -221,7 +221,7 @@ class Strategics:
                 self.bot.send_emotion(randint(0, 3), random_=12)
 
                 if "Golem" in triggers[2] and triggers[1] >= 6:
-                    time.sleep(3)
+                    time.sleep(6)
                     self.bot.selectCard(triggers[2].index("Golem"))
                     self.bot.placingCard1X1(275, 700)
 
@@ -246,7 +246,7 @@ class Strategics:
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
-                    self.bot.placingCard1X1(475, 585)
+                    self.bot.placingCard1X1(475, 635)
 
                     time.sleep(4)
                     try:
@@ -257,11 +257,11 @@ class Strategics:
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
-                    self.bot.placingCard1X1(390, 510)
+                    self.bot.placingCard1X1(390, 585)
                     continue
 
                 if "Giant" in triggers[2] and triggers[1] >= 4:
-                    time.sleep(2.5)
+                    time.sleep(4)
                     self.bot.selectCard(triggers[2].index("Giant"))
                     self.bot.placingCard1X1(275, 700)
 
@@ -285,7 +285,7 @@ class Strategics:
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
-                    self.bot.placingCard1X1(475, 585)
+                    self.bot.placingCard1X1(475, 635)
 
                     time.sleep(3)
                     try:
@@ -296,11 +296,11 @@ class Strategics:
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
-                    self.bot.placingCard1X1(390, 510)
+                    self.bot.placingCard1X1(390, 585)
                     continue
 
                 if "Goblin_Giant" in triggers[2] and triggers[1] >= 5:
-                    time.sleep(2.5)
+                    time.sleep(4)
                     self.bot.selectCard(triggers[2].index("Goblin_Giant"))
                     self.bot.placingCard1X1(275, 700)
 
@@ -324,7 +324,7 @@ class Strategics:
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
-                    self.bot.placingCard1X1(475, 585)
+                    self.bot.placingCard1X1(475, 635)
 
                     time.sleep(3)
                     try:
@@ -335,11 +335,11 @@ class Strategics:
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
-                    self.bot.placingCard1X1(390, 510)
+                    self.bot.placingCard1X1(390, 585)
                     continue
 
                 if "Lava_Hound" in triggers[2] and triggers[1] >= 6:
-                    time.sleep(2.5)
+                    time.sleep(4)
                     self.bot.selectCard(triggers[2].index("Lava_Hound"))
                     self.bot.placingCard1X1(275, 700)
 
@@ -363,7 +363,7 @@ class Strategics:
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
-                    self.bot.placingCard1X1(475, 585)
+                    self.bot.placingCard1X1(475, 635)
 
                     time.sleep(4)
                     try:
@@ -374,15 +374,15 @@ class Strategics:
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
-                    self.bot.placingCard1X1(390, 510)
+                    self.bot.placingCard1X1(390, 585)
                     continue
 
                 if "Electro_Giant" in triggers[2] and triggers[1] >= 6:
-                    time.sleep(2.5)
+                    time.sleep(4)
                     self.bot.selectCard(triggers[2].index("Electro_Giant"))
                     self.bot.placingCard1X1(275, 700)
 
-                    time.sleep(5)
+                    time.sleep(6)
                     if "Witch" in triggers[2]:
                         self.bot.selectCard(triggers[2].index("Witch"))
                         self.bot.placingCard1X1(275, 700)
@@ -393,7 +393,7 @@ class Strategics:
                         self.bot.selectCard(triggers[2].index("Electro_Giant"))
                         self.bot.placingCard1X1(275, 700)
 
-                    time.sleep(3)
+                    time.sleep(3.5)
                     try:
                         image = self.bot.getScreen()
                     except:
@@ -402,7 +402,7 @@ class Strategics:
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
-                    self.bot.placingCard1X1(475, 585)
+                    self.bot.placingCard1X1(475, 630)
 
                     time.sleep(4)
                     try:
@@ -413,15 +413,15 @@ class Strategics:
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
-                    self.bot.placingCard1X1(390, 510)
+                    self.bot.placingCard1X1(390, 585)
                     continue
 
                 if "Elixir_Golem" in triggers[2] and triggers[1] >= 5:
-                    time.sleep(2)
+                    time.sleep(4)
                     self.bot.selectCard(triggers[2].index("Elixir_Golem"))
                     self.bot.placingCard1X1(275, 700)
 
-                    time.sleep(2)
+                    time.sleep(4)
                     if "Witch" in triggers[2]:
                         self.bot.selectCard(triggers[2].index("Witch"))
                         self.bot.placingCard1X1(275, 700)
@@ -450,7 +450,7 @@ class Strategics:
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
-                    self.bot.placingCard1X1(475, 585)
+                    self.bot.placingCard1X1(475, 635)
 
                     time.sleep(4)
                     try:
@@ -461,7 +461,7 @@ class Strategics:
                     if self.triggers.getTrigger(image)[0] != 100:
                         continue
                     self.bot.selectCard(randint(0, 3))
-                    self.bot.placingCard1X1(390, 510)
+                    self.bot.placingCard1X1(390, 585)
                     continue
 
                 # Heros
@@ -617,7 +617,7 @@ class Strategics:
 
                 if "Inferno_Dragon" in triggers[2] and triggers[1] >= 5:
                     self.bot.selectCard(triggers[2].index("Inferno_Dragon"))
-                    self.bot.placingCard1X1(500, 706)
+                    self.bot.placingCard1X1(490, 700)
                     continue
 
                 if "Hog_Rider" in triggers[2] and triggers[1] >= 4:
@@ -844,7 +844,7 @@ class Strategics:
                 self.connection_to_parent._textBrowser_3 = (
                     "Loading a fight\n" + self.connection_to_parent._textBrowser_3
                 )
-                time.sleep(2)
+                time.sleep(5)
 
             elif trigger == 125:
                 logger.debug(str(triggers))

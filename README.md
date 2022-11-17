@@ -71,7 +71,7 @@ Current features:
 3) Receive rewards from chests
 4) Read the elixir
 5) Read the deck during combat
-6) 30 cards have logic to play, the rest will be random
+6) 35 + cards have logic to play (with heros), the rest will be random
 7) Get a number of received crowns
 8) Able to select game mode (global, mode_1, mode_2, 2X2)
 9) Multiaccount (only supercell id)
@@ -94,7 +94,7 @@ Further features:
 5) Self-learning neural network that increases gaming level
 6) Multithreaded emulator
 7) Manage and receive information through the telegram bot
-8) Сard improvement
+8) Cards placement improvement
 9) Donate cards and collect one-time rewards for purchasing a clan member's royale pass
 10) Sunday Epic Card Request
 11) Ability to share battle with clanmates
@@ -119,9 +119,9 @@ BlueStacks > Settings > Preferences > Enable Android Debug Bridge (ADB)
 
 Install Python 3.7+ 64 bit
 
-pip install tensorflow PyQt5 opencv-python loguru pure-python-adb Pillow 
+pip install requirements.txt
 
 
 # 
 
-Please, if you find a bug, incorrect program operation or want to offer your idea, write to me in a telegram or here on github
+Please, if you find a bug, incorrect program operation or want to offer your idea, write to me in a telegram, Discord or here on github
