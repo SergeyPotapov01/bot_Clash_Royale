@@ -48,7 +48,7 @@ Using the bot with other emulators
 
 ports:
 
-bluestacks 5555
+bluestacks 5555 (leave port number blank or "bluestacks" for auto detection)
 
 MEmu 21503
 
