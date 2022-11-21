@@ -73,6 +73,8 @@ class Strategics:
         self.number_account = number_account
         self.changed_account = changed_account
         self.total_accounts = total_accounts
+        #TODO: PLEASE ADD TO GUI FOR SWITCH ACCOUNT AFTER CERTAIN BATTLES FEATURE:
+        self.battle_change_account = 45 # TEMP NUMBER PLEASE ADD TO CONFIG
         self.connection_to_parent = connection_to_parent
         self.request_card = requested_card
         self.id_card = id_card
@@ -109,6 +111,7 @@ class Strategics:
         slowdown_in_menu = True
 
         index_batlle = 0
+        index_battle_account_switcher = 0
 
         hero_ability_timer = None
 
@@ -138,7 +141,8 @@ class Strategics:
                 self.bot.returnHome()
                 logger.debug(str(triggers))
 
-            if self.index124 >= 25:
+            # lower reboot frequency from 25 to 200
+            if self.index124 >= 250:
                 self.bot.reboot()
                 self.index124 = 0
                 logger.debug(str(triggers))
@@ -772,6 +776,7 @@ class Strategics:
             elif trigger == 121:
                 logger.debug(str(triggers))
                 index_batlle += 1
+                index_battle_account_switcher += 1
                 self.connection_to_parent.totall_batlles += 1
                 self.index_change_deck += 1
                 self.connection_to_parent.got_crowns += triggers[1]
@@ -802,12 +807,23 @@ class Strategics:
                     continue
 
                 self.bot.exitBatle1X1()
-                logger.debug(str(triggers))
+
+                # change account after certain amount of battles
+                if (
+                    self.changed_account
+                    and index_battle_account_switcher >= self.battle_change_account
+                ):
+                    self.increasing_account_number()
+                    time.sleep(5)
+                    self.bot.changeAccount(self.number_account, self.total_accounts)
+                    self.connection_to_parent.number_account = self.number_account
+                    index_battle_account_switcher = 0
 
             elif trigger == 122:
                 logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = "End of the fight\n"
                 index_batlle += 1
+                index_battle_account_switcher += 1
                 self.connection_to_parent.totall_batlles += 1
                 self.connection_to_parent.got_crowns += triggers[1]
                 self.index_change_deck += 1
@@ -838,6 +854,17 @@ class Strategics:
                     continue
 
                 self.bot.exitBatle2X2()
+                
+                # change account after certain amount of battles
+                if (
+                    self.changed_account
+                    and index_battle_account_switcher >= self.battle_change_account
+                ):
+                    self.increasing_account_number()
+                    time.sleep(5)
+                    self.bot.changeAccount(self.number_account, self.total_accounts)
+                    self.connection_to_parent.number_account = self.number_account
+                    index_battle_account_switcher = 0
 
             elif trigger == 124:
                 logger.debug(str(triggers))
@@ -1452,10 +1479,11 @@ class Strategics:
             elif trigger == 400:
                 logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = (
-                    "Loss of connection\n" + self.connection_to_parent._textBrowser_3
+                    "Loss of connection, sleep for 10 mins\n"
+                    + self.connection_to_parent._textBrowser_3
                 )
                 self.sleep = False
-                time.sleep(300)
+                time.sleep(600)
                 self.sleep = True
                 self.bot.exitBatle1X1()
 
