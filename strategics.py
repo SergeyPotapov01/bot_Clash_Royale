@@ -74,7 +74,7 @@ class Strategics:
         self.changed_account = changed_account
         self.total_accounts = total_accounts
         #TODO: PLEASE ADD TO GUI FOR SWITCH ACCOUNT AFTER CERTAIN BATTLES FEATURE:
-        self.battle_change_account = 45 # TEMP NUMBER PLEASE ADD TO CONFIG
+        self.battle_change_account = 5 # TEMP NUMBER PLEASE ADD TO CONFIG
         self.connection_to_parent = connection_to_parent
         self.request_card = requested_card
         self.id_card = id_card
@@ -123,10 +123,10 @@ class Strategics:
             self.t = time.time()
             try:
                 image = self.bot.getScreen()
+                triggers = self.triggers.getTrigger(image)
             except:
                 time.sleep(1)
                 continue
-            triggers = self.triggers.getTrigger(image)
             trigger = triggers[0]
             logger.debug(str(triggers) + " " + str(time.time() - t))
             # self.connection_to_parent._textBrowser_3 = f'{triggers}\n' + self.connection_to_parent._textBrowser_3
@@ -142,7 +142,7 @@ class Strategics:
                 logger.debug(str(triggers))
 
             # lower reboot frequency from 25 to 200
-            if self.index124 >= 250:
+            if self.index124 >= 200:
                 self.bot.reboot()
                 self.index124 = 0
                 logger.debug(str(triggers))
@@ -153,10 +153,6 @@ class Strategics:
                 logger.debug(str(triggers))
                 continue
             self.index124 = 0
-
-            if not (trigger == 0):
-                logger.debug(str(triggers))
-                self.index = 0
 
             if trigger == 500:
                 logger.debug(str(triggers))
@@ -175,7 +171,7 @@ class Strategics:
                 self.connection_to_parent._textBrowser_3 = (
                     "Trigger not found\n" + self.connection_to_parent._textBrowser_3
                 )
-                time.sleep(3)
+                time.sleep(2)
                 logger.debug(str(triggers))
                 continue
             else:
@@ -1016,7 +1012,7 @@ class Strategics:
                         "Change deck 1/2\n" + self.connection_to_parent._textBrowser_3
                     )
                     self.bot.goToDeck()
-                    time.sleep(5)
+                    time.sleep(7)
                     try:
                         image = self.bot.getScreen()
                     except:
@@ -1029,7 +1025,7 @@ class Strategics:
                     if trigger == 209:
                         logger.debug(str(triggers))
                         self.bot.get_reward_masteries()
-                        time.sleep(5)
+                        time.sleep(7)
                         try:
                             try:
                                 image = self.bot.getScreen()
@@ -1060,7 +1056,7 @@ class Strategics:
                             self.bot.get_reward_masteries_2(trigger)
 
                         logger.debug(str(triggers))
-                        time.sleep(5)
+                        time.sleep(7)
                         try:
                             image = self.bot.getScreen()
                         except:
@@ -1154,7 +1150,7 @@ class Strategics:
                     + self.connection_to_parent._textBrowser_3
                 )
                 self.bot.goToClanChat()
-                time.sleep(2)
+                time.sleep(5)
                 try:
                     image = self.bot.getScreen()
                 except:
@@ -1209,7 +1205,7 @@ class Strategics:
                     + self.connection_to_parent._textBrowser_3
                 )
                 self.bot.goToClanChat()
-                time.sleep(2)
+                time.sleep(5)
                 try:
                     image = self.bot.getScreen()
                 except:
