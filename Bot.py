@@ -225,11 +225,11 @@ class Bot:
 
     def changeAccount(self, number, total_accounts):
         logger.debug(f'Bot.changeAccount {number}, {total_accounts}')
-        sleep(3)
+        sleep(2)
         self.ADB.click(500, 90)
-        sleep(3)
+        sleep(2)
         self.ADB.click(250, 630)
-        sleep(3)
+        sleep(2)
         for i in range((total_accounts // 3) + 1):
             self.ADB.swipe(250,398 , 250, 860)
             sleep(3)
@@ -331,12 +331,14 @@ class Bot:
         self.ADB.click(157 + number * 57, 224)
         sleep(3)
 
-    def send_emotion(self, number: int, random_=8):
-        if random.randint(0, random_) == random_:
+    def send_emotion(self, number: int, random_=8, force=False):
+        if random.randint(0, random_) == random_ or force:
             logger.debug('Bot.send_emotion')
             self.ADB.click(51, 800)
-            sleep(0.5)
+            sleep(0.2)
             self.ADB.click(140 + 95 * number, 730)
+            return True
+        return False
 
     def get_reward_masteries(self):
         logger.debug('Bot.get_reward_masteries')

@@ -13,7 +13,6 @@ class ADB_server:
                 for l in lines:
                     if "bst.instance.Nougat64.status.adb_port=" in l:
                         port = int(l.split("=")[-1][1:-2])
-                        print(port, l)
                         break
         logger.debug(f"ADB_server().__init__({port})")
         os.system(r'"adb\adb kill-server"')
