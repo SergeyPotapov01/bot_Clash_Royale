@@ -1,7 +1,9 @@
-from keras.models import load_model
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 import cv2
 import numpy as np
+from keras.models import load_model
 
 
 class CardInBatlle:
@@ -31,7 +33,7 @@ class CardInBatlle:
         image = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGBA2RGB)
         image = image.astype("float") / 255.0
         image = image.reshape(1, 2184)
-        prediction = self.model.predict(image)
+        prediction = self.model.predict(image, verbose=0)
         prediction = np.argmax(prediction)
         return self.class_names[prediction]
 
@@ -46,7 +48,7 @@ class ElixirInBatlle:
         image = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGBA2RGB)
         image = image.astype("float") / 255.0
         image = image.reshape(1, 840)
-        prediction = self.model.predict(image)
+        prediction = self.model.predict(image, verbose=0)
         prediction = np.argmax(prediction)
 
         try:
@@ -68,6 +70,6 @@ class Chest:
         image = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGBA2RGB)
         image = image.astype("float") / 255.0
         image = image.reshape(1, 2184)
-        prediction = self.model.predict(image)
+        prediction = self.model.predict(image, verbose=0)
         prediction = np.argmax(prediction)
         return self.class_names[prediction]

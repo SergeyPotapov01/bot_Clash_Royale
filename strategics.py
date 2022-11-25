@@ -65,7 +65,9 @@ class Strategics:
         self.port = port
         self.bot = Bot(port=port, android=android)
         self.triggers = ImageTriggers(open_chest, requested_card, open_PR, debug)
+        self.reboot_after_no_trigger = 16
         self.index = 0
+        self.index_battle_account_switcher = 0
         self.index124 = 0
         self.index280 = 0
         self.cycleStart = False
@@ -73,8 +75,8 @@ class Strategics:
         self.number_account = number_account
         self.changed_account = changed_account
         self.total_accounts = total_accounts
-        #TODO: PLEASE ADD TO GUI FOR SWITCH ACCOUNT AFTER CERTAIN BATTLES FEATURE:
-        self.battle_change_account = 45 # TEMP NUMBER PLEASE ADD TO CONFIG
+        # TODO: PLEASE ADD TO GUI FOR SWITCH ACCOUNT AFTER CERTAIN BATTLES FEATURE:
+        self.battle_change_account = 20  # TEMP NUMBER PLEASE ADD TO CONFIG
         self.connection_to_parent = connection_to_parent
         self.request_card = requested_card
         self.id_card = id_card
@@ -111,7 +113,6 @@ class Strategics:
         slowdown_in_menu = True
 
         index_batlle = 0
-        index_battle_account_switcher = 0
 
         hero_ability_timer = None
 
@@ -123,15 +124,15 @@ class Strategics:
             self.t = time.time()
             try:
                 image = self.bot.getScreen()
+                triggers = self.triggers.getTrigger(image)
             except:
                 time.sleep(1)
                 continue
-            triggers = self.triggers.getTrigger(image)
             trigger = triggers[0]
             logger.debug(str(triggers) + " " + str(time.time() - t))
             # self.connection_to_parent._textBrowser_3 = f'{triggers}\n' + self.connection_to_parent._textBrowser_3
 
-            if self.index == 25:
+            if self.index == self.reboot_after_no_trigger:
                 self.bot.reboot()
                 self.index = 0
                 logger.debug(str(triggers))
@@ -142,7 +143,7 @@ class Strategics:
                 logger.debug(str(triggers))
 
             # lower reboot frequency from 25 to 200
-            if self.index124 >= 250:
+            if self.index124 >= 200:
                 self.bot.reboot()
                 self.index124 = 0
                 logger.debug(str(triggers))
@@ -153,10 +154,6 @@ class Strategics:
                 logger.debug(str(triggers))
                 continue
             self.index124 = 0
-
-            if not (trigger == 0):
-                logger.debug(str(triggers))
-                self.index = 0
 
             if trigger == 500:
                 logger.debug(str(triggers))
@@ -171,11 +168,14 @@ class Strategics:
 
             if trigger == 0:
                 self.index += 1
-                logger.debug("Не найден триггер")
-                self.connection_to_parent._textBrowser_3 = (
-                    "Trigger not found\n" + self.connection_to_parent._textBrowser_3
+                logger.debug(
+                    f"Trigger not found, restart in {self.reboot_after_no_trigger - self.index} attempts"
                 )
-                time.sleep(3)
+                self.connection_to_parent._textBrowser_3 = (
+                    f"Trigger not found, restart in {self.reboot_after_no_trigger - self.index} attempts\n"
+                    + self.connection_to_parent._textBrowser_3
+                )
+                time.sleep(2)
                 logger.debug(str(triggers))
                 continue
             else:
@@ -190,7 +190,7 @@ class Strategics:
                     continue
 
                 self.connection_to_parent._textBrowser_3 = (
-                    f"In battle Card: {triggers[2]} Elixir: {triggers[1]}  \n"
+                    f"Cards: {', '.join(triggers[2])}, Elixir: {triggers[1]}\n"
                     + self.connection_to_parent._textBrowser_3
                 )
                 logger.debug(str(triggers))
@@ -221,8 +221,11 @@ class Strategics:
                     time.sleep(randint(1, 5))
                     continue
 
-                # attempt to send emotion every time before battle
-                self.bot.send_emotion(randint(0, 3), random_=12)
+                # attempt to send emotion every time before battle,
+                if self.bot.send_emotion(randint(0, 3), random_=12):
+                    self.connection_to_parent._textBrowser_3 = (
+                        f"BMing...\n" + self.connection_to_parent._textBrowser_3
+                    )
 
                 if "Golem" in triggers[2] and triggers[1] >= 6:
                     time.sleep(6)
@@ -776,14 +779,20 @@ class Strategics:
             elif trigger == 121:
                 logger.debug(str(triggers))
                 index_batlle += 1
-                index_battle_account_switcher += 1
+                self.index_battle_account_switcher += 1
                 self.connection_to_parent.totall_batlles += 1
                 self.index_change_deck += 1
                 self.connection_to_parent.got_crowns += triggers[1]
-                self.connection_to_parent._textBrowser_2 = (
-                    f"The result of the battle: {datetime.datetime.now():%Y-%m-%d %H:%M:%S} crows:{triggers[1]}\n"
-                    + self.connection_to_parent._textBrowser_2
-                )
+                if self.changed_account:
+                    self.connection_to_parent._textBrowser_2 = (
+                        f"{datetime.datetime.now():%m/%d %H:%M} Crowns: {triggers[1]}, account switch in {self.battle_change_account - self.index_battle_account_switcher} battles\n"
+                        + self.connection_to_parent._textBrowser_2
+                    )
+                else:
+                    self.connection_to_parent._textBrowser_2 = (
+                        f"{datetime.datetime.now():%m/%d %H:%M} Crowns: {triggers[1]}\n"
+                        + self.connection_to_parent._textBrowser_2
+                    )
                 self.connection_to_parent._textBrowser_3 = "End of the fight\n"
                 self._reboot_index += 1
                 self._forever_elexir = self.forever_elexir
@@ -811,26 +820,28 @@ class Strategics:
                 # change account after certain amount of battles
                 if (
                     self.changed_account
-                    and index_battle_account_switcher >= self.battle_change_account
+                    and self.index_battle_account_switcher >= self.battle_change_account
                 ):
-                    self.increasing_account_number()
-                    time.sleep(5)
-                    self.bot.changeAccount(self.number_account, self.total_accounts)
-                    self.connection_to_parent.number_account = self.number_account
-                    index_battle_account_switcher = 0
+                    self.change_account()
 
             elif trigger == 122:
                 logger.debug(str(triggers))
                 self.connection_to_parent._textBrowser_3 = "End of the fight\n"
                 index_batlle += 1
-                index_battle_account_switcher += 1
+                self.index_battle_account_switcher += 1
                 self.connection_to_parent.totall_batlles += 1
                 self.connection_to_parent.got_crowns += triggers[1]
                 self.index_change_deck += 1
-                self.connection_to_parent._textBrowser_2 = (
-                    f"The result of the battle: {datetime.datetime.now():%Y-%m-%d %H:%M:%S} crows:{triggers[1]}\n"
-                    + self.connection_to_parent._textBrowser_2
-                )
+                if self.changed_account:
+                    self.connection_to_parent._textBrowser_2 = (
+                        f"{datetime.datetime.now():%m/%d %H:%M} Crowns: {triggers[1]}, account switch in {self.battle_change_account - self.index_battle_account_switcher} battles\n"
+                        + self.connection_to_parent._textBrowser_2
+                    )
+                else:
+                    self.connection_to_parent._textBrowser_2 = (
+                        f"{datetime.datetime.now():%m/%d %H:%M} Crowns: {triggers[1]}\n"
+                        + self.connection_to_parent._textBrowser_2
+                    )
                 self.connection_to_parent._textBrowser_3 = f"{triggers}\n"
                 self._reboot_index += 1
                 if self.time_break > 0 and self.number_of_finish > 0:
@@ -854,17 +865,13 @@ class Strategics:
                     continue
 
                 self.bot.exitBatle2X2()
-                
+
                 # change account after certain amount of battles
                 if (
                     self.changed_account
-                    and index_battle_account_switcher >= self.battle_change_account
+                    and self.index_battle_account_switcher >= self.battle_change_account
                 ):
-                    self.increasing_account_number()
-                    time.sleep(5)
-                    self.bot.changeAccount(self.number_account, self.total_accounts)
-                    self.connection_to_parent.number_account = self.number_account
-                    index_battle_account_switcher = 0
+                    self.change_account()
 
             elif trigger == 124:
                 logger.debug(str(triggers))
@@ -875,6 +882,7 @@ class Strategics:
 
             elif trigger == 125:
                 logger.debug(str(triggers))
+                self.bot.send_emotion(randint(0, 3), force=True)
                 self.connection_to_parent._textBrowser_3 = (
                     "Send emotion\n" + self.connection_to_parent._textBrowser_3
                 )
@@ -1013,7 +1021,7 @@ class Strategics:
                 if self._number_fights_deck_change <= self.index_change_deck:
                     logger.debug(str(triggers))
                     self.connection_to_parent._textBrowser_3 = (
-                        "Change deck 1/2\n" + self.connection_to_parent._textBrowser_3
+                        "Get masteries\n" + self.connection_to_parent._textBrowser_3
                     )
                     self.bot.goToDeck()
                     time.sleep(5)
@@ -1029,7 +1037,7 @@ class Strategics:
                     if trigger == 209:
                         logger.debug(str(triggers))
                         self.bot.get_reward_masteries()
-                        time.sleep(5)
+                        time.sleep(7)
                         try:
                             try:
                                 image = self.bot.getScreen()
@@ -1060,7 +1068,7 @@ class Strategics:
                             self.bot.get_reward_masteries_2(trigger)
 
                         logger.debug(str(triggers))
-                        time.sleep(5)
+                        time.sleep(7)
                         try:
                             image = self.bot.getScreen()
                         except:
@@ -1082,8 +1090,7 @@ class Strategics:
                     if trigger == 202 and self.change_deck:
                         logger.debug(str(triggers))
                         self.connection_to_parent._textBrowser_3 = (
-                            "Change deck 2/2\n"
-                            + self.connection_to_parent._textBrowser_3
+                            "Change deck\n" + self.connection_to_parent._textBrowser_3
                         )
                         self.connection_to_parent.number_deck += 1
                         if self.connection_to_parent.number_deck >= 5:
@@ -1134,7 +1141,7 @@ class Strategics:
                     else:
                         logger.debug(str(triggers))
                         self.connection_to_parent._textBrowser_3 = (
-                            f"Run Battle mode {self.batlle_mode} \n"
+                            f"Run Battle {self.batlle_mode}\n"
                             + self.connection_to_parent._textBrowser_3
                         )
                         self.bot.runBattleMode(self.batlle_mode)
@@ -1154,7 +1161,7 @@ class Strategics:
                     + self.connection_to_parent._textBrowser_3
                 )
                 self.bot.goToClanChat()
-                time.sleep(2)
+                time.sleep(5)
                 try:
                     image = self.bot.getScreen()
                 except:
@@ -1209,7 +1216,7 @@ class Strategics:
                     + self.connection_to_parent._textBrowser_3
                 )
                 self.bot.goToClanChat()
-                time.sleep(2)
+                time.sleep(5)
                 try:
                     image = self.bot.getScreen()
                 except:
@@ -1378,11 +1385,7 @@ class Strategics:
                 )
                 if self.changed_account:
                     logger.debug(str(triggers))
-                    self.increasing_account_number()
-                    self.connection_to_parent._textBrowser_3 = (
-                        "Changed account 1/2\n"
-                        + self.connection_to_parent._textBrowser_3
-                    )
+
                     if self.batlle_mode == "global":
                         logger.debug(str(triggers))
                         self.bot.skipLimit()
@@ -1394,18 +1397,15 @@ class Strategics:
                     triggers = self.triggers.getTrigger(image)
                     trigger = triggers[0]
                     self.connection_to_parent._textBrowser_3 = (
-                        "Changed account 2/2\n"
-                        + self.connection_to_parent._textBrowser_3
+                        "Changed account\n" + self.connection_to_parent._textBrowser_3
                     )
                     if trigger == 200:
                         logger.debug(str(triggers))
-                        self.bot.changeAccount(self.number_account, self.total_accounts)
-                        self.connection_to_parent.number_account = self.number_account
+                        self.change_account()
                     else:
                         logger.debug(str(triggers))
                         self.bot.returnHome()
-                        self.bot.changeAccount(self.number_account, self.total_accounts)
-                        self.connection_to_parent.number_account = self.number_account
+                        self.change_account()
                     continue
                 else:
                     self.bot.rewardLimit()
@@ -1496,6 +1496,21 @@ class Strategics:
         if self.number_account >= self.total_accounts:
             self.number_account = 0
 
+    def change_account(self):
+        self.index_battle_account_switcher = 0
+        self.increasing_account_number()
+        self.connection_to_parent._textBrowser_2 = (
+            f"Switch to account {self.number_account}\n"
+            + self.connection_to_parent._textBrowser_2
+        )
+
+        time.sleep(4)
+        self.bot.changeAccount(self.number_account, self.total_accounts)
+
+        # update current account number in gui
+        self.connection_to_parent.number_account = self.number_account
+        self.connection_to_parent.gui.set_change_account(self.number_account)
+
     def startFarm(self):
         logger.debug("startFarm")
         self.cycleStart = True
@@ -1504,3 +1519,6 @@ class Strategics:
     def stopFarm(self):
         logger.debug("stopFarm")
         self.cycleStart = False
+        self.connection_to_parent._textBrowser_2 = (
+            "Stop Farm\n" + self.connection_to_parent._textBrowser_2
+        )

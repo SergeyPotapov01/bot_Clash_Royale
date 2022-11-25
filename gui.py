@@ -16,9 +16,8 @@ from ImageTriggers import ImageTriggers
 
 from loguru import logger
 from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtWidgets import QLabel#, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QLabel  # , QPushButton, QMessageBox
 from PyQt5.QtGui import QPixmap
-from keras.models import load_model
 
 
 class MyThread(QtCore.QThread):
@@ -28,20 +27,48 @@ class MyThread(QtCore.QThread):
     mysignal4 = QtCore.pyqtSignal(str)
     mysignal5 = QtCore.pyqtSignal(int)
 
-
-    def __init__(self, mode, open_chest, requested_card, port, changed_account, change_account, id_card, total_accounts, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug,token, tg_user, activ_tg_bot, use_chest_key, donate_card , parent=None):
+    def __init__(
+        self,
+        mode,
+        open_chest,
+        requested_card,
+        port,
+        changed_account,
+        change_account,
+        id_card,
+        total_accounts,
+        play_clan_war,
+        change_deck,
+        number_fights_deck_change,
+        send_emotion,
+        reboot_index,
+        android,
+        forever_elexir,
+        number_of_finish,
+        time_break,
+        open_PR,
+        debug,
+        token,
+        tg_user,
+        activ_tg_bot,
+        use_chest_key,
+        donate_card,
+        parent=None,
+        gui=None,
+    ):
         QtCore.QThread.__init__(self, parent)
         self.farm = False
-        self.number_account = '0'
+        self.number_account = "0"
         self.number_deck = 5
-        self._textBrowser_3 = ''
-        self._textBrowser_2 = ''
+        self._textBrowser_3 = ""
+        self._textBrowser_2 = ""
         self.got_crowns = 0
         self.time_in_game = 0
         self.totall_batlles = 0
         self.cup_changes = 0
         self.bot = None
         self.time_break = time_break
+        self.gui = gui
 
     def run(self):
         while True:
@@ -49,52 +76,162 @@ class MyThread(QtCore.QThread):
             self.mysignal.emit(str(self.number_account))
             self.mysignal2.emit(str(self._textBrowser_3))
             self.mysignal3.emit(str(self._textBrowser_2))
-            self.mysignal4.emit(str(f'Got Crowns {self.got_crowns}\nTime in Game(Doesnt work) {self.time_in_game}\nTotal battles {self.totall_batlles}\nTrophy changes(Doesnt work) {self.cup_changes}'))
+            self.mysignal4.emit(
+                str(
+                    f"Got Crowns {self.got_crowns}\nTotal battles {self.totall_batlles}\nTime in Game(Doesnt work) {self.time_in_game}\nTrophy changes(Doesnt work) {self.cup_changes}"
+                )
+            )
             self.mysignal5.emit(self.number_deck)
             if self.bot is not None and self.bot.cycleStart:
                 # print(time.time() - self.bot.t)
                 if self.bot.sleep:
                     # print('Бот работает')
                     if time.time() - self.bot.t > 120:
-                        print('Ребут бота')
+                        print("Ребут бота Rebooting bot")
                         self.bot.stopFarm()
-                        #self.bot.tlgbot.restart_bot()
+                        # self.bot.tlgbot.restart_bot()
                         threading.Thread(target=self.bot.startFarm).start()
                 else:
-                    print('Бот cgbn')
+                    print("Бот cgbn")
 
-    def start_farm(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key, donate_card):
+    def start_farm(
+        self,
+        mode,
+        open_chest,
+        requested_card,
+        port,
+        changed_account,
+        change_account,
+        total_accounts,
+        id_card,
+        play_clan_war,
+        change_deck,
+        number_fights_deck_change,
+        send_emotion,
+        reboot_index,
+        android,
+        forever_elexir,
+        number_of_finish,
+        time_break,
+        open_PR,
+        debug,
+        token,
+        tg_user,
+        activ_tg_bot,
+        use_chest_key,
+        donate_card,
+    ):
         self.time_break = time_break
         if self.farm:
             self.farm = False
             self.bot.stopFarm()
         else:
             self.farm = True
-            self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key, donate_card)
+            self.bot = Strategics(
+                mode,
+                open_chest,
+                requested_card,
+                port,
+                changed_account,
+                change_account,
+                total_accounts,
+                id_card,
+                play_clan_war,
+                self,
+                change_deck,
+                number_fights_deck_change,
+                send_emotion,
+                reboot_index,
+                android,
+                forever_elexir,
+                number_of_finish,
+                time_break,
+                open_PR,
+                debug,
+                token,
+                tg_user,
+                activ_tg_bot,
+                use_chest_key,
+                donate_card,
+            )
             threading.Thread(target=self.bot.startFarm).start()
 
-    def update_server(self, mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key, donate_card):
-        self.bot = Strategics(mode, open_chest, requested_card, port, changed_account, change_account, total_accounts, id_card, play_clan_war, self, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key, donate_card)
+    def update_server(
+        self,
+        mode,
+        open_chest,
+        requested_card,
+        port,
+        changed_account,
+        change_account,
+        total_accounts,
+        id_card,
+        play_clan_war,
+        change_deck,
+        number_fights_deck_change,
+        send_emotion,
+        reboot_index,
+        android,
+        forever_elexir,
+        number_of_finish,
+        time_break,
+        open_PR,
+        debug,
+        token,
+        tg_user,
+        activ_tg_bot,
+        use_chest_key,
+        donate_card,
+    ):
+        self.bot = Strategics(
+            mode,
+            open_chest,
+            requested_card,
+            port,
+            changed_account,
+            change_account,
+            total_accounts,
+            id_card,
+            play_clan_war,
+            self,
+            change_deck,
+            number_fights_deck_change,
+            send_emotion,
+            reboot_index,
+            android,
+            forever_elexir,
+            number_of_finish,
+            time_break,
+            open_PR,
+            debug,
+            token,
+            tg_user,
+            activ_tg_bot,
+            use_chest_key,
+            donate_card,
+        )
 
 
 class Ui_MainWindow(object):
     def __init__(self, config):
         self.config = config
-        self.token = ''
-        self.tg_user = ''
+        self.token = ""
+        self.tg_user = ""
         self.activ_tg_bot = False
         self.farm = False
-        self._textBrowser_3 = 'А здесь у нас лог событий'
-        self._textBrowser_2 = 'Тут у нас последние результаты боев'
-        self._textBrowser = 'Получено корон\nВремя игры\nКолличество боев\nИзменения по кубкам'
-        self._mode = 'global'
-        self._card_request = 'Skeletons'
+        self._textBrowser_3 = "А здесь у нас лог событий"
+        self._textBrowser_2 = "Тут у нас последние результаты боев"
+        self._textBrowser = (
+            "Получено корон\nВремя игры\nКолличество боев\nИзменения по кубкам"
+        )
+        self._mode = "global"
+        self._card_request = "Skeletons"
         self.request_card = False
         self.open_chest = False
         self._changed_account = False
         self.send_emotion = False
         self.forever_elexir = False
-        self.port = config['port_adb']
+        self.port = config["port_adb"]
         self._total_accounts = 0
         self._change_account = 0
         self.id_card = 0
@@ -106,11 +243,37 @@ class Ui_MainWindow(object):
         self.change_deck = False
         self.deck_number = 0
         self.reboot_index = 20
-        self.android = 'C:\Program Files\BlueStacks_nxt\HD-Player.exe'
+        self.android = "C:\Program Files\BlueStacks_nxt\HD-Player.exe"
         self.open_PR = False
         self.use_chest_key = False
         self.donate_card = False
-        self.thread = MyThread(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot, self.use_chest_key, self.donate_card)
+        self.thread = MyThread(
+            self._mode,
+            self.open_chest,
+            self.request_card,
+            self.port,
+            self._changed_account,
+            self._change_account,
+            self._total_accounts,
+            self.id_card,
+            self.play_clan_war,
+            self.change_deck,
+            self.number_fights_deck_change,
+            self.send_emotion,
+            self.reboot_index,
+            self.android,
+            self.forever_elexir,
+            self.number_of_finish,
+            self.time_break,
+            self.open_PR,
+            self.debug,
+            self.token,
+            self.tg_user,
+            self.activ_tg_bot,
+            self.use_chest_key,
+            self.donate_card,
+            gui=self,
+        )
         self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)
         self.thread.mysignal2.connect(self.logEvent, QtCore.Qt.QueuedConnection)
         self.thread.mysignal3.connect(self.logCrown, QtCore.Qt.QueuedConnection)
@@ -118,40 +281,122 @@ class Ui_MainWindow(object):
         self.thread.mysignal5.connect(self.on_change_2, QtCore.Qt.QueuedConnection)
         self.thread.start()
         self.bot = self.thread.bot
-        self.list_mode = ['global', 'mode_1', 'mode_2', '2X2', 'disabled', 'Drop Trophy']
-        self.list_change_language = [ '',
-                                     'English', 'Русский', 'Deutsch', 'Español',
-                                     'Français', '日本', 'Italiano', 'čeština',
-                                     'Português', '中国人'
-                                     ]
-
-        self.list_card_request = [
-                                    'Skeletons', 'Ice_Spirit', 'Fire_Spirit', 'Electro_Spirit',
-                                    'Goblins', 'Bomber', 'Spear_Goblins', 'Bats',
-                                    'Zap', 'Giant_Snowball', 'Knight', 'Archers',
-                                    'Minions', 'Goblin_Gang', 'Skeleton_Barrel', 'Firecracker',
-                                    'Cannon', 'Arrows', 'Royal_Delivery', 'Skeleton_Dragons',
-                                    'Mortar', 'Tesla', 'Barbarians', 'Minion_Horde',
-                                    'Rascals', 'Royal_Giant', 'Elite_Barbarians', 'Royal_Delivery',
-                                    'Heal_Spirit', 'Ice_Golem', 'Mega_Minion', 'Dart_Goblin',
-                                    'Elixir_Golem', 'Tombstone', 'Earthquake', 'Valkyrie',
-                                    'Musketeer', 'Mini_PEKKA', 'Hog_Rider', 'Battle_Ram',
-                                    'Zappies', 'Flying_Machine', 'Battle_Healer', 'Bomb_Tower',
-                                    'Furnace', 'Goblin_Cage', 'Fireball', 'Giant',
-                                    'Wizard', 'Royal_Hogs', 'Goblin_Hut', 'Inferno_Tower',
-                                    'Elixir_Collector', 'Rocket', 'Barbarian_Hut', 'Three_Musketeers',
-                                  ]
-
-        self.list_card_request_epic = [
-        'Mirror', 'Wall_Breakers', 'Rage', 'Barbarian_Barrel', 'Skeleton_Army', 'Guards', 'Goblin_Barrel', 'Tornado', 'Clone',
-        'Baby_Dragon', 'Dark_Prince', 'Hunter', 'Goblin_Drill', 'Freeze', 'Poison', 'Balloon', 'Witch', 'Prince', 'Bowler',
-        'Executioner', 'Cannon_Cart', 'Electro_Dragon', 'Gaint_Skeleton', 'Goblin_Giant', 'X-Bow', 'Lightning', 'Pekka',
-        'Electro_Giant', 'Golem'
+        self.list_mode = [
+            "global",
+            "mode_1",
+            "mode_2",
+            "2X2",
+            "disabled",
+            "Drop Trophy",
+        ]
+        self.list_change_language = [
+            "",
+            "English",
+            "Русский",
+            "Deutsch",
+            "Español",
+            "Français",
+            "日本",
+            "Italiano",
+            "čeština",
+            "Português",
+            "中国人",
         ]
 
-        self.language = 'English'
+        self.list_card_request = [
+            "Skeletons",
+            "Ice_Spirit",
+            "Fire_Spirit",
+            "Electro_Spirit",
+            "Goblins",
+            "Bomber",
+            "Spear_Goblins",
+            "Bats",
+            "Zap",
+            "Giant_Snowball",
+            "Knight",
+            "Archers",
+            "Minions",
+            "Goblin_Gang",
+            "Skeleton_Barrel",
+            "Firecracker",
+            "Cannon",
+            "Arrows",
+            "Royal_Delivery",
+            "Skeleton_Dragons",
+            "Mortar",
+            "Tesla",
+            "Barbarians",
+            "Minion_Horde",
+            "Rascals",
+            "Royal_Giant",
+            "Elite_Barbarians",
+            "Royal_Delivery",
+            "Heal_Spirit",
+            "Ice_Golem",
+            "Mega_Minion",
+            "Dart_Goblin",
+            "Elixir_Golem",
+            "Tombstone",
+            "Earthquake",
+            "Valkyrie",
+            "Musketeer",
+            "Mini_PEKKA",
+            "Hog_Rider",
+            "Battle_Ram",
+            "Zappies",
+            "Flying_Machine",
+            "Battle_Healer",
+            "Bomb_Tower",
+            "Furnace",
+            "Goblin_Cage",
+            "Fireball",
+            "Giant",
+            "Wizard",
+            "Royal_Hogs",
+            "Goblin_Hut",
+            "Inferno_Tower",
+            "Elixir_Collector",
+            "Rocket",
+            "Barbarian_Hut",
+            "Three_Musketeers",
+        ]
+
+        self.list_card_request_epic = [
+            "Mirror",
+            "Wall_Breakers",
+            "Rage",
+            "Barbarian_Barrel",
+            "Skeleton_Army",
+            "Guards",
+            "Goblin_Barrel",
+            "Tornado",
+            "Clone",
+            "Baby_Dragon",
+            "Dark_Prince",
+            "Hunter",
+            "Goblin_Drill",
+            "Freeze",
+            "Poison",
+            "Balloon",
+            "Witch",
+            "Prince",
+            "Bowler",
+            "Executioner",
+            "Cannon_Cart",
+            "Electro_Dragon",
+            "Gaint_Skeleton",
+            "Goblin_Giant",
+            "X-Bow",
+            "Lightning",
+            "Pekka",
+            "Electro_Giant",
+            "Golem",
+        ]
+
+        self.language = "English"
         self.language_set_words = []
-        self.list_mode_bbbb = ['Until Chest Slots Full', 'Until Daily Bonus Met']
+        self.list_mode_bbbb = ["Until Chest Slots Full", "Until Daily Bonus Met"]
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -319,7 +564,9 @@ class Ui_MainWindow(object):
         self.comboBox_change_language.setGeometry(QtCore.QRect(200, 210, 151, 21))
         self.comboBox_change_language.setObjectName("comboBox_change_language")
         self.comboBox_change_language.addItems(self.list_change_language)
-        self.comboBox_change_language.currentTextChanged.connect(self.currentTextComboBox_change_language)
+        self.comboBox_change_language.currentTextChanged.connect(
+            self.currentTextComboBox_change_language
+        )
 
         self.label_change_language = QtWidgets.QLabel(self.tab_3)
         self.label_change_language.setGeometry(QtCore.QRect(10, 215, 150, 20))
@@ -347,7 +594,6 @@ class Ui_MainWindow(object):
 
         self.tab_4 = QtWidgets.QWidget()
         self.tab_4.setObjectName("tab_4")
-
 
         self.lineEdit = QtWidgets.QLineEdit(self.tab_4)
         self.lineEdit.setGeometry(QtCore.QRect(20, 20, 111, 20))
@@ -429,14 +675,23 @@ class Ui_MainWindow(object):
         self.label_deck_number.setObjectName("label_deck_number")
 
         self.spinBox_number_fights_deck_change = QtWidgets.QSpinBox(self.tab_4)
-        self.spinBox_number_fights_deck_change.setGeometry(QtCore.QRect(20, 400, 111, 25))
-        self.spinBox_number_fights_deck_change.setObjectName("spinBox_number_fights_deck_change")
-        self.spinBox_number_fights_deck_change.valueChanged.connect(self._spinBox_number_fights_deck_change)
+        self.spinBox_number_fights_deck_change.setGeometry(
+            QtCore.QRect(20, 400, 111, 25)
+        )
+        self.spinBox_number_fights_deck_change.setObjectName(
+            "spinBox_number_fights_deck_change"
+        )
+        self.spinBox_number_fights_deck_change.valueChanged.connect(
+            self._spinBox_number_fights_deck_change
+        )
 
         self.label_number_fights_deck_change = QtWidgets.QLabel(self.tab_4)
-        self.label_number_fights_deck_change.setGeometry(QtCore.QRect(170, 400, 150, 20))
-        self.label_number_fights_deck_change.setObjectName("label_number_fights_deck_change")
-
+        self.label_number_fights_deck_change.setGeometry(
+            QtCore.QRect(170, 400, 150, 20)
+        )
+        self.label_number_fights_deck_change.setObjectName(
+            "label_number_fights_deck_change"
+        )
 
         self.checkBox_send_emotion = QtWidgets.QCheckBox(self.tab_4)
         self.checkBox_send_emotion.setGeometry(QtCore.QRect(20, 440, 41, 41))
@@ -756,7 +1011,7 @@ class Ui_MainWindow(object):
 
         self.label = QtWidgets.QLabel(self.tab_2)
         self.label.setGeometry(QtCore.QRect(20, 0, 400, 100))
-        self.label.setStyleSheet("font: 10pt \"Segoe UI\";")
+        self.label.setStyleSheet('font: 10pt "Segoe UI";')
         self.label.setObjectName("label")
 
         self.tabWidget.addTab(self.tab_2, "")
@@ -765,42 +1020,37 @@ class Ui_MainWindow(object):
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-
         self.lineEdit_tlg_bot = QtWidgets.QLineEdit(self.tab_2)
         self.lineEdit_tlg_bot.setGeometry(QtCore.QRect(20, 150, 250, 20))
         self.lineEdit_tlg_bot.setObjectName("lineEdit")
-        #self.lineEdit_tlg_bot.textChanged.connect(self._android)
+        # self.lineEdit_tlg_bot.textChanged.connect(self._android)
 
         self.label_tlg_bot = QtWidgets.QLabel(self.tab_2)
         self.label_tlg_bot.setGeometry(QtCore.QRect(280, 150, 150, 20))
         self.label_tlg_bot.setObjectName("label_android")
 
-
         self.lineEdit_tlg_admin = QtWidgets.QLineEdit(self.tab_2)
         self.lineEdit_tlg_admin.setGeometry(QtCore.QRect(20, 100, 250, 20))
         self.lineEdit_tlg_admin.setObjectName("lineEdit")
-        #self.lineEdit_tlg_admin.textChanged.connect(self._android)
+        # self.lineEdit_tlg_admin.textChanged.connect(self._android)
 
         self.label_tlg_admin = QtWidgets.QLabel(self.tab_2)
         self.label_tlg_admin.setGeometry(QtCore.QRect(280, 100, 150, 20))
         self.label_tlg_admin.setObjectName("label_android")
-        
+
         self.checkBox_tg = QtWidgets.QCheckBox(self.tab_2)
         self.checkBox_tg.setGeometry(QtCore.QRect(20, 190, 41, 41))
         self.checkBox_tg.setObjectName("checkBox_send_emotion")
-        #self.checkBox_tg.stateChanged.connect(self._checkBox_debug)
+        # self.checkBox_tg.stateChanged.connect(self._checkBox_debug)
 
         self.label_tg = QtWidgets.QLabel(self.tab_2)
         self.label_tg.setGeometry(QtCore.QRect(70, 200, 150, 20))
         self.label_tg.setObjectName("label_debug")
-        
-
-
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Leninka Bot CR"))
-        MainWindow.setWindowIcon(QtGui.QIcon('img/Leninka.ico'))
+        MainWindow.setWindowIcon(QtGui.QIcon("img/Leninka.ico"))
         self.pushButton_5.setText(_translate("MainWindow", "Open \nChest 1"))
         self.pushButton_6.setText(_translate("MainWindow", "Open \nChest 2"))
         self.pushButton_7.setText(_translate("MainWindow", "Open \nChest 3"))
@@ -893,8 +1143,14 @@ class Ui_MainWindow(object):
         self.pushButton_21.clicked.connect(lambda: self.bot.bot.runBattleGlobal())
         self.pushButton_22.clicked.connect(lambda: self.bot.bot.runBattleMode(1))
         self.pushButton_23.clicked.connect(lambda: self.bot.bot.runBattleMode(2))
-        self.pushButton_24.clicked.connect(lambda: self.bot.bot.changeAccount(self.thread.number_account, self._total_accounts))
-        self.pushButton_25.clicked.connect(lambda: self.bot.bot.requestCard(self.id_card))
+        self.pushButton_24.clicked.connect(
+            lambda: self.bot.bot.changeAccount(
+                self.thread.number_account, self._total_accounts
+            )
+        )
+        self.pushButton_25.clicked.connect(
+            lambda: self.bot.bot.requestCard(self.id_card)
+        )
         self.pushButton_26.clicked.connect(lambda: self.bot.bot.open_pass_royale())
         self.pushButton_27.clicked.connect(lambda: self.bot.bot.get_shop_reward())
 
@@ -902,32 +1158,85 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         if self.farm:
             self.farm = False
-            self.pushButton.setText(_translate("MainWindow", self.language_set_words[0]))
+            self.pushButton.setText(
+                _translate("MainWindow", self.language_set_words[0])
+            )
         else:
             self.farm = True
-            self.pushButton.setText(_translate("MainWindow", self.language_set_words[1]))
-        self.thread.start_farm(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot, self.use_chest_key, self.donate_card)
+            self.pushButton.setText(
+                _translate("MainWindow", self.language_set_words[1])
+            )
+        self.thread.start_farm(
+            self._mode,
+            self.open_chest,
+            self.request_card,
+            self.port,
+            self._changed_account,
+            self._change_account,
+            self._total_accounts,
+            self.id_card,
+            self.play_clan_war,
+            self.change_deck,
+            self.number_fights_deck_change,
+            self.send_emotion,
+            self.reboot_index,
+            self.android,
+            self.forever_elexir,
+            self.number_of_finish,
+            self.time_break,
+            self.open_PR,
+            self.debug,
+            self.token,
+            self.tg_user,
+            self.activ_tg_bot,
+            self.use_chest_key,
+            self.donate_card,
+        )
         self.bot = self.thread.bot
 
     def getTrigger(self):
         if self.bot == None:
-            self.thread.update_server(self._mode, self.open_chest, self.request_card, self.port, self._changed_account, self._change_account, self._total_accounts, self.id_card, self.play_clan_war, self.change_deck, self.number_fights_deck_change, self.send_emotion, self.reboot_index, self.android, self.forever_elexir, self.number_of_finish, self.time_break, self.open_PR, self.debug, self.token, self.tg_user, self.activ_tg_bot, self.use_chest_key, self.donate_card)
+            self.thread.update_server(
+                self._mode,
+                self.open_chest,
+                self.request_card,
+                self.port,
+                self._changed_account,
+                self._change_account,
+                self._total_accounts,
+                self.id_card,
+                self.play_clan_war,
+                self.change_deck,
+                self.number_fights_deck_change,
+                self.send_emotion,
+                self.reboot_index,
+                self.android,
+                self.forever_elexir,
+                self.number_of_finish,
+                self.time_break,
+                self.open_PR,
+                self.debug,
+                self.token,
+                self.tg_user,
+                self.activ_tg_bot,
+                self.use_chest_key,
+                self.donate_card,
+            )
             self.bot = self.thread.bot
         trigger = ImageTriggers(True, True)
         x = trigger.getTriggerDEBUG(self.bot.bot.getScreen())
 
-        string_debug = ''
+        string_debug = ""
         for i in x:
             for j in i:
                 string_debug += str(j)
-            string_debug += '\n'
-        self.thread._textBrowser_3 = 'Получен тригер: ' + string_debug + '\n'
+            string_debug += "\n"
+        self.thread._textBrowser_3 = "Получен тригер: " + string_debug + "\n"
         self.textBrowser_3.setText(self._textBrowser_3)
-
 
     def reboot(self):
         if self.bot == None:
-            self.textBrowser_3.setText('На данный момент не запущен бот')
+            self.textBrowser_3.setText("На данный момент не запущен бот")
             return 0
         self.bot.bot.reboot()
 
@@ -947,103 +1256,102 @@ class Ui_MainWindow(object):
         self.textBrowser.setText(stata)
 
     def currentTextComboBox_1(self, text):
-        logger.debug(f'Был установлен режим: {text}')
+        logger.debug(f"Был установлен режим: {text}")
         self._mode = text
-        self.config['Combat_mode'] = self._mode
+        self.config["Combat_mode"] = self._mode
         self.dump_setting()
-
 
     def currentTextComboBox_2(self, text):
         self._card_request = text
         self.id_card = self.list_card_request.index(text)
-        logger.debug(f'Была установлен карта запроса: {text}, {self.id_card}')
-        self.config['id_card'] = self.id_card
+        logger.debug(f"Была установлен карта запроса: {text}, {self.id_card}")
+        self.config["id_card"] = self.id_card
         self.dump_setting()
-        self.label_img.setPixmap(QPixmap(f'Cards/{text}.png'))
+        self.label_img.setPixmap(QPixmap(f"Cards/{text}.png"))
 
     def currentTextComboBox_0000(self, text):
         self._card_request = text
         self.id_card_epic = self.list_card_request_epic.index(text)
-        logger.debug(f'Была установлен карта запроса: {text}, {self.id_card_epic}')
-        self.config['id_card_epic'] = self.id_card_epic
+        logger.debug(f"Была установлен карта запроса: {text}, {self.id_card_epic}")
+        self.config["id_card_epic"] = self.id_card_epic
         self.dump_setting()
-        self.label_img_epic.setPixmap(QPixmap(f'Cards/{text}.png'))
+        self.label_img_epic.setPixmap(QPixmap(f"Cards/{text}.png"))
 
     def openChest(self, event):
-        logger.debug(f'Был изменен параметр открытия сундуков на: {event}')
+        logger.debug(f"Был изменен параметр открытия сундуков на: {event}")
         self.open_chest = bool(event)
-        self.config['Open_chests'] = bool(self.open_chest)
+        self.config["Open_chests"] = bool(self.open_chest)
         self.dump_setting()
 
     def openPR(self, event):
-        logger.debug(f'Был изменен параметр открытия сундуков на: {event}')
+        logger.debug(f"Был изменен параметр открытия сундуков на: {event}")
         self.open_PR = bool(event)
-        self.config['Open_PR'] = bool(self.open_PR)
+        self.config["Open_PR"] = bool(self.open_PR)
         self.dump_setting()
 
     def d_use_key_chest(self, event):
-        logger.debug(f'Был изменен параметр открытия сундуков на: {event}')
+        logger.debug(f"Был изменен параметр открытия сундуков на: {event}")
         self.use_key_chest = bool(event)
-        self.config['use_key_chest'] = bool(self.use_key_chest)
+        self.config["use_key_chest"] = bool(self.use_key_chest)
         self.dump_setting()
 
     def requestCard(self, event):
-        logger.debug(f'Был изменен параметр запроса карт на: {event}')
+        logger.debug(f"Был изменен параметр запроса карт на: {event}")
         self.request_card = bool(event)
-        self.config['Request_cards'] = bool(self.request_card)
+        self.config["Request_cards"] = bool(self.request_card)
         self.dump_setting()
 
     def adbPort(self, value):
         self.port = value
-        self.config['port_adb'] = self.port
+        self.config["port_adb"] = self.port
         self.dump_setting()
-        logger.debug(f'Был изменен параметр порт подключения на: {value}')
+        logger.debug(f"Был изменен параметр порт подключения на: {value}")
 
     def _android(self, value):
         self.android = value
-        self.config['android'] = self.android
+        self.config["android"] = self.android
         self.dump_setting()
-        logger.debug(f'Был изменен параметр порт подключения на: {value}')
+        logger.debug(f"Был изменен параметр порт подключения на: {value}")
 
     def set_change_account(self, value):
         self.thread.number_account = value
-        self.config['Selected_account'] = self.thread.number_account
+        self.config["Selected_account"] = self.thread.number_account
         self.dump_setting()
-        logger.debug(f'Был изменен параметр выбранный аккаунт на: {value}')
+        logger.debug(f"Был изменен параметр выбранный аккаунт на: {value}")
 
     def set_total_accounts(self, value):
         self._total_accounts = value
-        self.config['total_accounts'] = self._total_accounts
+        self.config["total_accounts"] = self._total_accounts
         self.dump_setting()
-        logger.debug(f'Был изменен параметр всего аккаунтов на: {value}')
+        logger.debug(f"Был изменен параметр всего аккаунтов на: {value}")
 
     def currentTextComboBox_change_language(self, language):
-        if language == 'Русский':
-            self.language = 'Russian'
-        elif language == 'English':
-            self.language = 'English'
-        elif language == 'Deutsch':
-            self.language = 'German'
-        elif language == 'Español':
-            self.language = 'Spanish'
-        elif language == '中国人':
-            self.language = 'Chinese'
-        elif language == 'Français':
-            self.language = 'French'
-        elif language == '日本':
-            self.language = 'Japanese'
-        elif language == 'Italiano':
-            self.language = 'Italian'
-        elif language == 'čeština':
-            self.language = 'Czech'
-        elif language == 'Português':
-            self.language = 'Portuguese'
-        elif language == '':
-            self.language = 'English'
-        self.config['Language'] = language
+        if language == "Русский":
+            self.language = "Russian"
+        elif language == "English":
+            self.language = "English"
+        elif language == "Deutsch":
+            self.language = "German"
+        elif language == "Español":
+            self.language = "Spanish"
+        elif language == "中国人":
+            self.language = "Chinese"
+        elif language == "Français":
+            self.language = "French"
+        elif language == "日本":
+            self.language = "Japanese"
+        elif language == "Italiano":
+            self.language = "Italian"
+        elif language == "čeština":
+            self.language = "Czech"
+        elif language == "Português":
+            self.language = "Portuguese"
+        elif language == "":
+            self.language = "English"
+        self.config["Language"] = language
         self.dump_setting()
         self.language_set_words = []
-        with open(f'Languages/{self.language}.txt', 'r', encoding='UTF-8') as f:
+        with open(f"Languages/{self.language}.txt", "r", encoding="UTF-8") as f:
             while True:
                 line = f.readline()
                 if not line:
@@ -1052,190 +1360,228 @@ class Ui_MainWindow(object):
 
         _translate = QtCore.QCoreApplication.translate
         self.pushButton.setText(_translate("MainWindow", self.language_set_words[0]))
-        self.pushButton_2.setText(_translate("MainWindow", self.language_set_words[2]).replace('_', '\n'))
-        self.pushButton_3.setText(_translate("MainWindow", self.language_set_words[3]).replace('_', '\n'))
+        self.pushButton_2.setText(
+            _translate("MainWindow", self.language_set_words[2]).replace("_", "\n")
+        )
+        self.pushButton_3.setText(
+            _translate("MainWindow", self.language_set_words[3]).replace("_", "\n")
+        )
         self.label_2.setText(_translate("MainWindow", self.language_set_words[4]))
         self.label_3.setText(_translate("MainWindow", self.language_set_words[5]))
         self.label_4.setText(_translate("MainWindow", self.language_set_words[6]))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Log), _translate("MainWindow", self.language_set_words[7]))
-        self.label_openChest.setText(_translate("MainWindow", self.language_set_words[8]))
-        self.label_requestCard.setText(_translate("MainWindow", self.language_set_words[9]))
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.Log),
+            _translate("MainWindow", self.language_set_words[7]),
+        )
+        self.label_openChest.setText(
+            _translate("MainWindow", self.language_set_words[8])
+        )
+        self.label_requestCard.setText(
+            _translate("MainWindow", self.language_set_words[9])
+        )
         self.label_5.setText(_translate("MainWindow", self.language_set_words[10]))
-        self.label_change_language.setText(_translate("MainWindow", self.language_set_words[11]))
+        self.label_change_language.setText(
+            _translate("MainWindow", self.language_set_words[11])
+        )
         self.label_8.setText(_translate("MainWindow", self.language_set_words[12]))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", self.language_set_words[13]))
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_3),
+            _translate("MainWindow", self.language_set_words[13]),
+        )
         self.label_9.setText(_translate("MainWindow", self.language_set_words[14]))
         self.label_10.setText(_translate("MainWindow", self.language_set_words[15]))
         self.label_11.setText(_translate("MainWindow", self.language_set_words[16]))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", self.language_set_words[17]))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("MainWindow", self.language_set_words[18]))
-        self.label.setText(_translate("MainWindow", f"<body><p>{self.language_set_words[19]} Clash Royale</p><p>BugReport:  <a href=t.me/Sergey_p7>t.me/Sergey_p7</a></p><p>Telegram:  <a href=https://t.me/bot_Clash_Royale>https://t.me/bot_Clash_Royale</a></p></body>"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", self.language_set_words[20]))
-        self.label_changed_account.setText(_translate("MainWindow", self.language_set_words[21]))
-        self.label_change_account.setText(_translate("MainWindow", self.language_set_words[22]))
-        self.label_total_accounts.setText(_translate("MainWindow", self.language_set_words[23]))
-        self.label_clan_var.setText(_translate("MainWindow", 'Play clan war'))
-        self.label_.setText(_translate("MainWindow", 'Battle:'))
-        self.checkBox_shop_reward.setText(_translate("MainWindow", 'Get Reward in Shop'))
-        self.label_change_deck.setText(_translate("MainWindow", 'Change deck'))
-        self.label_deck_number.setText(_translate("MainWindow", 'Deck number'))
-        self.label_number_fights_deck_change.setText(_translate("MainWindow", 'Number of fights before deck change'))
-        self.label_send_emotion.setText(_translate("MainWindow", 'Send emoji during combat'))
-        self.label_epic.setText(_translate("MainWindow", 'Epic cart Request'))
-        self.label_android.setText(_translate("MainWindow", 'path to .exe'))
-        self.label_forever_elexir.setText(_translate("MainWindow", 'Forever elixir'))
-        self.label_PR.setText(_translate("MainWindow", 'Open Pass Royale'))
-        self.label_debug.setText(_translate("MainWindow", 'Collect Data Set'))
-        self.label_tlg_bot.setText(_translate("MainWindow", 'Token tlg'))
-        self.label_tlg_admin.setText(_translate("MainWindow", 'tlg admin'))
-        self.label_tg.setText(_translate("MainWindow", 'tlg activ'))
-        self.label_donate_card.setText(_translate("MainWindow", 'Donate card'))
-        self.label_use_key_chest.setText(_translate("MainWindow", 'Use key chest'))
-
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_4),
+            _translate("MainWindow", self.language_set_words[17]),
+        )
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_5),
+            _translate("MainWindow", self.language_set_words[18]),
+        )
+        self.label.setText(
+            _translate(
+                "MainWindow",
+                f"<body><p>{self.language_set_words[19]} Clash Royale</p><p>BugReport:  <a href=t.me/Sergey_p7>t.me/Sergey_p7</a></p><p>Telegram:  <a href=https://t.me/bot_Clash_Royale>https://t.me/bot_Clash_Royale</a></p></body>",
+            )
+        )
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_2),
+            _translate("MainWindow", self.language_set_words[20]),
+        )
+        self.label_changed_account.setText(
+            _translate("MainWindow", self.language_set_words[21])
+        )
+        self.label_change_account.setText(
+            _translate("MainWindow", self.language_set_words[22])
+        )
+        self.label_total_accounts.setText(
+            _translate("MainWindow", self.language_set_words[23])
+        )
+        self.label_clan_var.setText(_translate("MainWindow", "Play clan war"))
+        self.label_.setText(_translate("MainWindow", "Battle:"))
+        self.checkBox_shop_reward.setText(
+            _translate("MainWindow", "Get Reward in Shop")
+        )
+        self.label_change_deck.setText(_translate("MainWindow", "Change deck"))
+        self.label_deck_number.setText(_translate("MainWindow", "Deck number"))
+        self.label_number_fights_deck_change.setText(
+            _translate("MainWindow", "Number of fights before deck change")
+        )
+        self.label_send_emotion.setText(
+            _translate("MainWindow", "Send emoji during combat")
+        )
+        self.label_epic.setText(_translate("MainWindow", "Epic cart Request"))
+        self.label_android.setText(_translate("MainWindow", "path to .exe"))
+        self.label_forever_elexir.setText(_translate("MainWindow", "Forever elixir"))
+        self.label_PR.setText(_translate("MainWindow", "Open Pass Royale"))
+        self.label_debug.setText(_translate("MainWindow", "Collect Data Set"))
+        self.label_tlg_bot.setText(_translate("MainWindow", "Token tlg"))
+        self.label_tlg_admin.setText(_translate("MainWindow", "tlg admin"))
+        self.label_tg.setText(_translate("MainWindow", "tlg activ"))
+        self.label_donate_card.setText(_translate("MainWindow", "Donate card"))
+        self.label_use_key_chest.setText(_translate("MainWindow", "Use key chest"))
 
     def on_change(self, v):
         if int(self.thread.number_account) == int(self.spinBox_change_account.value()):
             return
-        logger.debug(f'Был изменен параметр номера аккаунта: {v}')
+        logger.debug(f"Был изменен параметр номера аккаунта: {v}")
         self.spinBox_change_account.setValue(int(self.thread.number_account))
 
     def changed_account(self, v):
-        logger.debug(f'Был изменен параметр смены аккаунта: {v}')
+        logger.debug(f"Был изменен параметр смены аккаунта: {v}")
         self._changed_account = v
-        self.config['Change_accounts'] = bool(self._changed_account)
+        self.config["Change_accounts"] = bool(self._changed_account)
         self.dump_setting()
 
     def d_donate_card(self, v):
-        logger.debug(f'Был изменен параметр смены аккаунта: {v}')
+        logger.debug(f"Был изменен параметр смены аккаунта: {v}")
         self.donate_card = v
-        self.config['donate_card'] = bool(self.donate_card)
+        self.config["donate_card"] = bool(self.donate_card)
         self.dump_setting()
 
     def debug(self, text):
         print(text, type(text))
 
     def numberOfFinish(self, value):
-        logger.debug(f'Был изменен параметр колличество боев до перерыва: {value}')
+        logger.debug(f"Был изменен параметр колличество боев до перерыва: {value}")
         self.number_of_finish = value
-        self.config['number_of_finish'] = self.number_of_finish
+        self.config["number_of_finish"] = self.number_of_finish
         self.dump_setting()
 
     def timeBreak(self, value):
-        logger.debug(f'Был изменен параметр сна: {value}')
+        logger.debug(f"Был изменен параметр сна: {value}")
         self.time_break = value
-        self.config['time_break'] = self.time_break
+        self.config["time_break"] = self.time_break
         self.dump_setting()
 
     def load_setting(self, config):
         _translate = QtCore.QCoreApplication.translate
-        self.comboBox_change_language.setCurrentIndex(self.list_change_language.index(config['Language']))
-        self.lineEdit.setText(_translate("MainWindow", str(config['port_adb'])))
-        self.spinBox.setValue(config['number_of_finish'])
-        self.spinBox_2.setValue(config['time_break'])
-        self.comboBox.setCurrentIndex(self.list_mode.index(config['Combat_mode']))
-        self.id_card = config['id_card']
+        self.comboBox_change_language.setCurrentIndex(
+            self.list_change_language.index(config["Language"])
+        )
+        self.lineEdit.setText(_translate("MainWindow", str(config["port_adb"])))
+        self.spinBox.setValue(config["number_of_finish"])
+        self.spinBox_2.setValue(config["time_break"])
+        self.comboBox.setCurrentIndex(self.list_mode.index(config["Combat_mode"]))
+        self.id_card = config["id_card"]
         self.comboBox_2.setCurrentIndex(self.id_card)
-        self.spinBox_change_account.setValue(config['Selected_account'])
-        self.spinBox_total_accounts.setValue(config['total_accounts'])
-        self.id_card_epic = config['id_card_epic']
+        self.spinBox_change_account.setValue(config["Selected_account"])
+        self.spinBox_total_accounts.setValue(config["total_accounts"])
+        self.id_card_epic = config["id_card_epic"]
         self.comboBox_2_epic.setCurrentIndex(self.id_card_epic)
 
-
-        if config['Change_accounts']:
+        if config["Change_accounts"]:
             self.checkBox_changed_account.click()
 
-        if config['Open_chests']:
+        if config["Open_chests"]:
             self.checkBox_openChest.click()
 
-        if config['Request_cards']:
+        if config["Request_cards"]:
             self.checkBox_requestCard.click()
 
-        if config['play_clan_war']:
+        if config["play_clan_war"]:
             self.checkBox_clan_var.click()
 
-        if config['Open_PR']:
+        if config["Open_PR"]:
             self.checkBox_PR.click()
 
-        if config['forever_elexir']:
+        if config["forever_elexir"]:
             self.checkBox_forever_elexir.click()
 
-        self.spinBox_deck_number.setValue(config['deck_number'])
+        self.spinBox_deck_number.setValue(config["deck_number"])
 
-        if config['change_deck']:
+        if config["change_deck"]:
             self.checkBox_change_deck.click()
 
-        self.spinBox_deck_number.setValue(config['deck_number'])
-        self.spinBox_number_fights_deck_change.setValue(config['number_fights_deck_change'])
+        self.spinBox_deck_number.setValue(config["deck_number"])
+        self.spinBox_number_fights_deck_change.setValue(
+            config["number_fights_deck_change"]
+        )
 
-        if config['send_emotion']:
+        if config["send_emotion"]:
             self.checkBox_send_emotion.click()
 
-        if config['debug']:
+        if config["debug"]:
             self.checkBox_debug.click()
 
-        if config['use_key_chest']:
+        if config["use_key_chest"]:
             self.checkBox_use_key_chest.click()
 
-        if config['donate_card']:
+        if config["donate_card"]:
             self.checkBox_donate_card.click()
 
-        self.lineEdit_android.setText(_translate("MainWindow", str(config['android'])))
+        self.lineEdit_android.setText(_translate("MainWindow", str(config["android"])))
 
     def dump_setting(self):
-        with open('config/custom.json', 'w') as outfile:
+        with open("config/custom.json", "w") as outfile:
             json.dump(self.config, outfile)
 
     def clan_war(self, event):
-        logger.debug(f'Был изменен параметр клановых войн: {event}')
+        logger.debug(f"Был изменен параметр клановых войн: {event}")
         self.play_clan_war = bool(event)
-        self.config['play_clan_war'] = self.play_clan_war
+        self.config["play_clan_war"] = self.play_clan_war
         self.dump_setting()
-
 
     def on_change_2(self, v):
         if self.spinBox_deck_number.value() == int(v):
             return
-        logger.debug(f'Был изменен параметр номер колоды на: {v}')
+        logger.debug(f"Был изменен параметр номер колоды на: {v}")
         self.spinBox_deck_number.setValue(v)
 
     def _spinBox_deck_number(self, value):
         self.thread.number_deck = self.spinBox_deck_number.value()
         self.deck_number = self.spinBox_deck_number.value()
-        self.config['deck_number'] = self.deck_number
+        self.config["deck_number"] = self.deck_number
         self.dump_setting()
-        logger.debug(f'Был изменен параметр номер колоды на: {value}')
+        logger.debug(f"Был изменен параметр номер колоды на: {value}")
 
     def _checkBox_change_deck(self, v):
-        logger.debug(f'Был изменен параметр смены колоды на: {v}')
+        logger.debug(f"Был изменен параметр смены колоды на: {v}")
         self.change_deck = v
-        self.config['change_deck'] = bool(self.change_deck)
+        self.config["change_deck"] = bool(self.change_deck)
         self.dump_setting()
 
     def _spinBox_number_fights_deck_change(self, value):
         self.number_fights_deck_change = value
-        self.config['number_fights_deck_change'] = self.number_fights_deck_change
+        self.config["number_fights_deck_change"] = self.number_fights_deck_change
         self.dump_setting()
-        logger.debug(f'Был изменен параметр номер колоды на: {value}')
-
+        logger.debug(f"Был изменен параметр номер колоды на: {value}")
 
     def _checkBox_send_emotion(self, v):
-        logger.debug(f'Был изменен параметр смены колоды на: {v}')
+        logger.debug(f"Был изменен параметр смены колоды на: {v}")
         self.send_emotion = bool(v)
-        print(self.send_emotion)
-        self.config['send_emotion'] = bool(self.send_emotion)
+        self.config["send_emotion"] = bool(self.send_emotion)
         self.dump_setting()
 
     def _checkBox_debug(self, v):
-        logger.debug(f'Был изменен параметр смены колоды на: {v}')
+        logger.debug(f"Был изменен параметр смены колоды на: {v}")
         self.debug = bool(v)
-        print(self.send_emotion)
-        self.config['debug'] = bool(self.debug)
+        self.config["debug"] = bool(self.debug)
         self.dump_setting()
 
     def _forever_elexir(self, event):
-        logger.debug(f'Был изменен бесконечного эликсира: {event}')
+        logger.debug(f"Был изменен бесконечного эликсира: {event}")
         self.forever_elexir = bool(event)
-        self.config['forever_elexir'] = bool(self.forever_elexir)
+        self.config["forever_elexir"] = bool(self.forever_elexir)
         self.dump_setting()
-
-
