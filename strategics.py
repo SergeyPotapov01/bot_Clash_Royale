@@ -58,6 +58,7 @@ class Strategics:
         activ_tg_bot,
         use_chest_key,
         donate_card,
+        battle_change_account,
     ):
         logger.debug(
             f"{(batlle_mode, open_chest, requested_card, port, changed_account, number_account, total_accounts, id_card, play_clan_war, connection_to_parent, change_deck, number_fights_deck_change, send_emotion, reboot_index, android, forever_elexir, number_of_finish, time_break, open_PR, debug, token, tg_user, activ_tg_bot, use_chest_key, donate_card)}"
@@ -75,8 +76,7 @@ class Strategics:
         self.number_account = number_account
         self.changed_account = changed_account
         self.total_accounts = total_accounts
-        # TODO: PLEASE ADD TO GUI FOR SWITCH ACCOUNT AFTER CERTAIN BATTLES FEATURE:
-        self.battle_change_account = 20  # TEMP NUMBER PLEASE ADD TO CONFIG
+        self.battle_change_account = battle_change_account
         self.connection_to_parent = connection_to_parent
         self.request_card = requested_card
         self.id_card = id_card

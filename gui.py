@@ -53,6 +53,7 @@ class MyThread(QtCore.QThread):
         activ_tg_bot,
         use_chest_key,
         donate_card,
+        battle_change_account,
         parent=None,
         gui=None,
     ):
@@ -120,6 +121,7 @@ class MyThread(QtCore.QThread):
         activ_tg_bot,
         use_chest_key,
         donate_card,
+        battle_change_account,
     ):
         self.time_break = time_break
         if self.farm:
@@ -153,6 +155,7 @@ class MyThread(QtCore.QThread):
                 activ_tg_bot,
                 use_chest_key,
                 donate_card,
+                battle_change_account,
             )
             threading.Thread(target=self.bot.startFarm).start()
 
@@ -182,6 +185,7 @@ class MyThread(QtCore.QThread):
         activ_tg_bot,
         use_chest_key,
         donate_card,
+        battle_change_account,
     ):
         self.bot = Strategics(
             mode,
@@ -209,6 +213,7 @@ class MyThread(QtCore.QThread):
             activ_tg_bot,
             use_chest_key,
             donate_card,
+            battle_change_account,
         )
 
 
@@ -243,6 +248,7 @@ class Ui_MainWindow(object):
         self.change_deck = False
         self.deck_number = 0
         self.reboot_index = 20
+        self.battle_change_account = 20
         self.android = "C:\Program Files\BlueStacks_nxt\HD-Player.exe"
         self.open_PR = False
         self.use_chest_key = False
@@ -272,6 +278,7 @@ class Ui_MainWindow(object):
             self.activ_tg_bot,
             self.use_chest_key,
             self.donate_card,
+            self.battle_change_account,
             gui=self,
         )
         self.thread.mysignal.connect(self.on_change, QtCore.Qt.QueuedConnection)
@@ -641,13 +648,22 @@ class Ui_MainWindow(object):
         self.label_changed_account.setObjectName("label_change_account")
 
         self.spinBox_change_account = QtWidgets.QSpinBox(self.tab_4)
-        self.spinBox_change_account.setGeometry(QtCore.QRect(20, 220, 111, 25))
+        self.spinBox_change_account.setGeometry(QtCore.QRect(20, 200, 111, 25))
         self.spinBox_change_account.setObjectName("spinBox_change_account")
         self.spinBox_change_account.valueChanged.connect(self.set_change_account)
 
         self.label_change_account = QtWidgets.QLabel(self.tab_4)
-        self.label_change_account.setGeometry(QtCore.QRect(170, 220, 150, 20))
+        self.label_change_account.setGeometry(QtCore.QRect(170, 205, 150, 20))
         self.label_change_account.setObjectName("label_change_account")
+
+        self.spinBox_battle_change_account = QtWidgets.QSpinBox(self.tab_4)
+        self.spinBox_battle_change_account.setGeometry(QtCore.QRect(20, 235, 111, 25))
+        self.spinBox_battle_change_account.setObjectName("spinBox_change_account")
+        self.spinBox_battle_change_account.valueChanged.connect(self.set_battle_change_account)
+
+        self.label_battle_change_account = QtWidgets.QLabel(self.tab_4)
+        self.label_battle_change_account.setGeometry(QtCore.QRect(170, 235, 150, 20))
+        self.label_battle_change_account.setObjectName("label_change_account")
 
         self.spinBox_total_accounts = QtWidgets.QSpinBox(self.tab_4)
         self.spinBox_total_accounts.setGeometry(QtCore.QRect(20, 270, 111, 25))
@@ -1191,6 +1207,7 @@ class Ui_MainWindow(object):
             self.activ_tg_bot,
             self.use_chest_key,
             self.donate_card,
+            self.battle_change_account,
         )
         self.bot = self.thread.bot
 
@@ -1221,6 +1238,7 @@ class Ui_MainWindow(object):
                 self.activ_tg_bot,
                 self.use_chest_key,
                 self.donate_card,
+                self.battle_change_account,
             )
             self.bot = self.thread.bot
         trigger = ImageTriggers(True, True)
@@ -1324,6 +1342,12 @@ class Ui_MainWindow(object):
         self.config["total_accounts"] = self._total_accounts
         self.dump_setting()
         logger.debug(f"Был изменен параметр всего аккаунтов на: {value}")
+
+    def set_battle_change_account(self, value):
+        self.battle_change_account = value
+        self.config["battle_change_account"] = self.battle_change_account
+        self.dump_setting()
+        logger.debug(f"Был изменен параметр боев до смены на: {value}")
 
     def currentTextComboBox_change_language(self, language):
         if language == "Русский":
@@ -1441,6 +1465,7 @@ class Ui_MainWindow(object):
         self.label_tg.setText(_translate("MainWindow", "tlg activ"))
         self.label_donate_card.setText(_translate("MainWindow", "Donate card"))
         self.label_use_key_chest.setText(_translate("MainWindow", "Use key chest"))
+        self.label_battle_change_account.setText(_translate("MainWindow", "Battle change account"))
 
     def on_change(self, v):
         if int(self.thread.number_account) == int(self.spinBox_change_account.value()):
@@ -1488,6 +1513,7 @@ class Ui_MainWindow(object):
         self.comboBox_2.setCurrentIndex(self.id_card)
         self.spinBox_change_account.setValue(config["Selected_account"])
         self.spinBox_total_accounts.setValue(config["total_accounts"])
+        self.spinBox_battle_change_account.setValue(config["battle_change_account"])
         self.id_card_epic = config["id_card_epic"]
         self.comboBox_2_epic.setCurrentIndex(self.id_card_epic)
 
