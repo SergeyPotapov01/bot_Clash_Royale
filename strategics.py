@@ -132,7 +132,7 @@ class Strategics:
             logger.debug(str(triggers) + " " + str(time.time() - t))
             # self.connection_to_parent._textBrowser_3 = f'{triggers}\n' + self.connection_to_parent._textBrowser_3
 
-            if self.index == self.reboot_after_no_trigger:
+            if self.index >= self.reboot_after_no_trigger:
                 self.bot.reboot()
                 self.index = 0
                 logger.debug(str(triggers))
