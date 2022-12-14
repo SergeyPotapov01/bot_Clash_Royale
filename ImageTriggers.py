@@ -145,6 +145,12 @@ class ImageTriggers:
 
     def getTrigger(self, img):
         self.image = Image.open(io.BytesIO(img))
+        
+        # check if image exist
+        try:
+            self.image.getpixel((529, 950))
+        except Exception:
+            return 0, None
 
         if self.image.getpixel((40, 790))[0:3] == (255, 255, 255):  # тригер на облачко
 
@@ -213,8 +219,8 @@ class ImageTriggers:
 
             if self.image.getpixel((10, 955))[0:3] == (234, 189, 80):
                 return 238, None
-
-            if self.image.getpixel((496, 113))[0:3] == (214, 236, 249):  # триггер на нахождение в меню
+            
+            if self.image.getpixel((496, 113))[0:3] == (215, 237, 250):  # menu button
                 if self.image.getpixel((433, 887))[0:3] == (48, 184, 69) and self.requested_card:
                     return 210, None  # тригер на отправку запроса карт
                 if self.image.getpixel((433, 887))[0:3] == (236, 8, 56) and self.requested_card:
