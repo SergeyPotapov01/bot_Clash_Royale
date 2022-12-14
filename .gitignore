@@ -1,3 +1,4 @@
 *.log
 *.pyc
 custom.json
+debug_screenshot/

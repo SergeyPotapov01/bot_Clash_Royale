@@ -1,3 +1,5 @@
+import os
+import time
 from time import sleep
 
 import subprocess
@@ -204,6 +206,14 @@ class Bot:
 
     def reboot(self):
         logger.debug('Bot.reboot')
+        
+        # save screenshot for debug purposes
+        """sc = self.getScreen()
+        filename = rf"debug_screenshot/{time.strftime('%m-%d %H-%M')}.png"
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        with open(filename, "wb") as fp:
+            fp.write(sc)"""
+        
         self.ADB.closeCR()
         sleep(2)
         self.ADB.openCR()
