@@ -93,7 +93,8 @@ class MyThread(QtCore.QThread):
                         # self.bot.tlgbot.restart_bot()
                         threading.Thread(target=self.bot.startFarm).start()
                 else:
-                    print("Бот cgbn")
+                    #print("Бот cgbn")
+                    pass
 
     def start_farm(
         self,

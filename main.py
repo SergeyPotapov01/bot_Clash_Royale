@@ -28,8 +28,8 @@ if DEBUG:
 __version__ = "0.3.17"
 
 # set logger to INFO
-logger.remove()
-logger.add(sys.stderr, level="INFO")
+#logger.remove()
+#logger.add(sys.stderr, level="INFO")
 
 try:
     with open("config/custom.json") as f:

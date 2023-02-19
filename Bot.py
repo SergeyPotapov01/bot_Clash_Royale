@@ -1,5 +1,3 @@
-import os
-import time
 from time import sleep
 
 import subprocess
@@ -206,14 +204,6 @@ class Bot:
 
     def reboot(self):
         logger.debug('Bot.reboot')
-        
-        # save screenshot for debug purposes
-        """sc = self.getScreen()
-        filename = rf"debug_screenshot/{time.strftime('%m-%d %H-%M')}.png"
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-        with open(filename, "wb") as fp:
-            fp.write(sc)"""
-        
         self.ADB.closeCR()
         sleep(2)
         self.ADB.openCR()
@@ -395,3 +385,36 @@ class Bot:
         logger.debug('Bot.random_placing_card')
         self.selectCard(random.randint(0,3))
         self.ADB.click(random.randint(195, 345), random.randint(485, 610))
+
+    def close_box_banner(self):
+        logger.debug('Bot.close_box_banner')
+        self.ADB.click(490, 55)
+
+    def get_box_banner(self):
+        logger.debug('Bot.get_box_banner')
+        self.ADB.click(485, 300)
+        sleep(2)
+        self.ADB.click(485, 870)
+        sleep(2)
+        self.ADB.click(230, 700)
+
+    def get_daily_tasks(self, trigger):
+        logger.debug('Bot.get_daily_tasks')
+        if trigger == 2005:
+            self.ADB.click(485, 300)
+        if trigger == 2006:
+            self.ADB.click(485, 390)
+        if trigger == 2007:
+            self.ADB.click(485, 490)
+        if trigger == 2008:
+            self.ADB.click(485, 630)
+
+    def open_daily_tasks(self):
+        logger.debug('Bot.get_box_banner')
+        self.ADB.click(57, 300)
+        sleep(2)
+
+    def close_daily_tasks(self):
+        logger.debug('Bot.close_daily_tasks')
+        self.ADB.click(170, 755)
+        self.ADB.click(480, 178)

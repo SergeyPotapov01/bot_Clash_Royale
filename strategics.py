@@ -1487,8 +1487,25 @@ class Strategics:
                 self.sleep = True
                 self.bot.exitBatle1X1()
 
+            elif trigger == 2001:
+                self.bot.get_box_banner()
+
+            elif trigger == 2002:
+                self.bot.open_daily_tasks()
+
+            elif trigger in(2005, 2006, 2007, 2008) :
+                self.bot.get_daily_tasks(trigger)
+
+            elif trigger == 2003:
+                self.bot.close_box_banner()
+
+            elif trigger == 2004:
+                self.bot.close_daily_tasks()
+
             t = time.time()
             logger.debug(str(triggers))
+
+
 
     def increasing_account_number(self):
         logger.debug("increasing_account_number")

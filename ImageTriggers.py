@@ -145,12 +145,6 @@ class ImageTriggers:
 
     def getTrigger(self, img):
         self.image = Image.open(io.BytesIO(img))
-        
-        # check if image exist
-        try:
-            self.image.getpixel((529, 950))
-        except Exception:
-            return 0, None
 
         if self.image.getpixel((40, 790))[0:3] == (255, 255, 255):  # тригер на облачко
 
@@ -188,8 +182,28 @@ class ImageTriggers:
         if self.image.getpixel((440, 220))[0:3] == (236, 8, 56):
                 return 229, None
 
+        if self.image.getpixel((236, 256)) == (31, 70, 124, 255):
+            return 2003, None
+
+        if self.image.getpixel((125, 238)) == (192, 164, 124, 255):
+            if self.image.getpixel((206, 306)) in ((255, 230, 141, 255), (255, 230, 140, 255)):
+                return 2005, None
+            if self.image.getpixel((230, 409)) in ((255, 230, 141, 255), (255, 230, 140, 255)):
+                return 2006, None
+            if self.image.getpixel((230, 513)) in ((255, 230, 141, 255), (255, 230, 140, 255)):
+                return 2007, None
+            if self.image.getpixel((220, 644)) in ((255, 230, 141, 255), (255, 230, 140, 255)):
+                return 2008, None
+            return 2004, None
+
         if self.image.getpixel((530, 944))[0:3] in((64, 76, 95), (63, 75, 95), (60, 71, 89), (33, 36, 63)):  # пиксель на кропку эвента если она не активка
-            
+
+            if self.image.getpixel((450, 267)) == (174, 96, 0, 255):
+                return 2001, None
+
+            if self.image.getpixel((74, 322)) == (200, 123, 4, 255):
+                return 2002, None
+
             if self.image.getpixel((360, 679))[0:3] in ((236, 8, 56), (236, 8, 57), (236, 9, 56), (236, 9, 57)):
                 return 209, None
 
@@ -219,8 +233,8 @@ class ImageTriggers:
 
             if self.image.getpixel((10, 955))[0:3] == (234, 189, 80):
                 return 238, None
-            
-            if self.image.getpixel((496, 113))[0:3] == (215, 237, 250):  # menu button
+
+            if self.image.getpixel((496, 113))[0:3] == (214, 236, 249) or self.image.getpixel((496, 113))[0:3] == (215, 237, 250):  # триггер на нахождение в меню
                 if self.image.getpixel((433, 887))[0:3] == (48, 184, 69) and self.requested_card:
                     return 210, None  # тригер на отправку запроса карт
                 if self.image.getpixel((433, 887))[0:3] == (236, 8, 56) and self.requested_card:
@@ -329,10 +343,10 @@ class ImageTriggers:
         elif self.image.size != (540, 960):
             return ((501, None),)
 
-        print(self.image.getpixel((496, 113)))
-        (241, 138, 34, 255)
-        (235, 134, 32, 255)
-        (236, 133, 32, 255)
+
+        print(self.image.getpixel((236, 256)), 2003)
+        print(self.image.getpixel((236, 256)), 2004)
+
 
         try:
             self.image.save(f'debug\\{time.time()}.png')
