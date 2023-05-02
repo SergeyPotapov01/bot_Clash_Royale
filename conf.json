@@ -1,0 +1,121 @@
+{
+ "version": "auto-py-to-exe-configuration_v1",
+ "pyinstallerOptions": [
+  {
+   "optionDest": "noconfirm",
+   "value": true
+  },
+  {
+   "optionDest": "filenames",
+   "value": "C:/Users/spota/PycharmProjects/pythonProject/main.py"
+  },
+  {
+   "optionDest": "onefile",
+   "value": false
+  },
+  {
+   "optionDest": "console",
+   "value": false
+  },
+  {
+   "optionDest": "icon_file",
+   "value": "C:/Users/spota/PycharmProjects/pythonProject/img/Leninka.ico"
+  },
+  {
+   "optionDest": "name",
+   "value": "BotCR 0.4.0"
+  },
+  {
+   "optionDest": "ascii",
+   "value": false
+  },
+  {
+   "optionDest": "clean_build",
+   "value": false
+  },
+  {
+   "optionDest": "debug",
+   "value": "noarchive"
+  },
+  {
+   "optionDest": "strip",
+   "value": false
+  },
+  {
+   "optionDest": "noupx",
+   "value": false
+  },
+  {
+   "optionDest": "disable_windowed_traceback",
+   "value": false
+  },
+  {
+   "optionDest": "embed_manifest",
+   "value": true
+  },
+  {
+   "optionDest": "uac_admin",
+   "value": false
+  },
+  {
+   "optionDest": "uac_uiaccess",
+   "value": false
+  },
+  {
+   "optionDest": "win_private_assemblies",
+   "value": false
+  },
+  {
+   "optionDest": "win_no_prefer_redirects",
+   "value": false
+  },
+  {
+   "optionDest": "bootloader_ignore_signals",
+   "value": false
+  },
+  {
+   "optionDest": "argv_emulation",
+   "value": false
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/spota/PycharmProjects/pythonProject/adb;adb/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/spota/PycharmProjects/pythonProject/Cards;Cards/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/spota/PycharmProjects/pythonProject/clashroyalebuildabot;clashroyalebuildabot/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/spota/PycharmProjects/pythonProject/config;config/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/spota/PycharmProjects/pythonProject/debug;debug/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/spota/PycharmProjects/pythonProject/documentation;documentation/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/spota/PycharmProjects/pythonProject/img;img/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/spota/PycharmProjects/pythonProject/Languages;Languages/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/spota/PycharmProjects/pythonProject/log;log/"
+  }
+ ],
+ "nonPyinstallerOptions": {
+  "increaseRecursionLimit": true,
+  "manualArguments": ""
+ }
+}

@@ -8,7 +8,7 @@ from ADB_server import ADB_server
 from loguru import logger
 
 
-class Bot:
+class Bot_main:
     def __init__(self, port, android):
         logger.debug(f'Bot().__init__({port})')
         self.ADB = ADB_server(port=port)
@@ -17,22 +17,24 @@ class Bot:
 
     def runBattleMode(self, mode):
         logger.debug(f'Bot.runBattleMode {mode}')
-        self.ADB.click(500, 100)
+        self.ADB.click(650, 1200)
         sleep(0.5)
-        self.ADB.click(300, 320)
+        self.ADB.click(50, 50)
         sleep(0.5)
         if mode == 'mode_1':
-            self.ADB.click(420, 396)
+            self.ADB.click(355, 760)
         elif mode == 'mode_2':
-            self.ADB.click(420, 644)
+            self.ADB.click(125, 1000)
+            self.ADB.click(350, 880)
         elif mode == '2X2':
-            self.ADB.swipe(250, 800, 250, 297)
-            self.ADB.click(405, 408)
+            self.ADB.click(125, 1000)
+            self.ADB.click(350, 880)
+            self.ADB.click(493, 712)
         sleep(1)
 
     def runBattleGlobal(self):
         logger.debug('Bot.runBattleGlobal')
-        self.ADB.click(180, 630)
+        self.ADB.click(320, 832)
         sleep(1)
 
     def runBattleEvent(self):
@@ -77,9 +79,9 @@ class Bot:
 
     def returnHome(self):
         logger.debug('Bot.returnHome')
-        self.ADB.click(500, 920)
+        self.ADB.click(650, 1215)
         sleep(1)
-        self.ADB.click(220, 920)
+        self.ADB.click(350, 1215)
         sleep(1)
 
     def goToClanChat(self):
@@ -170,18 +172,18 @@ class Bot:
     def activeHeroAbility(self):
         logger.debug(f'Bot.activateHeroAbility')
         # activate 3 times just in case
-        self.ADB.click(480, 730)
-        self.ADB.click(480, 730)
-        self.ADB.click(480, 730)
+        self.ADB.click(630, 950)
+        self.ADB.click(630, 950)
+        self.ADB.click(630, 950)
 
     def exitBatle2X2(self):
         logger.debug('Bot.exitBatle2X2')
-        self.ADB.click(74, 910)
+        self.ADB.click(74, 1247)
         sleep(1)
 
     def exitBatle1X1(self):
         logger.debug('Bot.exitBatle1X1')
-        self.ADB.click(270, 840)
+        self.ADB.click(356, 1120)
         sleep(1)
 
     def selectCard(self, number):
@@ -191,15 +193,15 @@ class Bot:
     def setEnglishLanguage(self):
         logger.debug('Bot.setEnglishLanguage')
         sleep(3)
-        self.ADB.click(500, 100)
+        self.ADB.click(660, 150)
         sleep(1)
-        self.ADB.click(325, 470)
+        self.ADB.click(500, 640)
         sleep(1)
-        self.ADB.click(160, 570)
+        self.ADB.click(480, 630)
         sleep(1)
-        self.ADB.click(275, 235)
+        self.ADB.click(420, 320)
         sleep(1)
-        self.ADB.click(370, 590)
+        self.ADB.click(500, 780)
         sleep(1)
 
     def reboot(self):
@@ -264,7 +266,7 @@ class Bot:
 
     def open_pass_royale(self):
         logger.debug('Bot.open_pass_royale')
-        self.ADB.click(420, 200)
+        self.ADB.click(580, 250)
         sleep(1)
 
     def choose_reward(self, choose):
@@ -334,9 +336,9 @@ class Bot:
     def send_emotion(self, number: int, random_=8, force=False):
         if random.randint(0, random_) == random_ or force:
             logger.debug('Bot.send_emotion')
-            self.ADB.click(51, 800)
+            self.ADB.click(80, 1064)
             sleep(0.2)
-            self.ADB.click(140 + 95 * number, 730)
+            self.ADB.click(180 + 110 * number, 851)
             return True
         return False
 
@@ -388,33 +390,33 @@ class Bot:
 
     def close_box_banner(self):
         logger.debug('Bot.close_box_banner')
-        self.ADB.click(490, 55)
+        self.ADB.click(650, 78)
 
     def get_box_banner(self):
         logger.debug('Bot.get_box_banner')
-        self.ADB.click(485, 300)
+        self.ADB.click(645, 400)
         sleep(2)
-        self.ADB.click(485, 870)
+        self.ADB.click(607, 1163)
         sleep(2)
-        self.ADB.click(230, 700)
+        self.ADB.click(375, 950)
 
     def get_daily_tasks(self, trigger):
         logger.debug('Bot.get_daily_tasks')
         if trigger == 2005:
-            self.ADB.click(485, 300)
+            self.ADB.click(485, 400)
         if trigger == 2006:
-            self.ADB.click(485, 390)
+            self.ADB.click(485, 606)
         if trigger == 2007:
-            self.ADB.click(485, 490)
+            self.ADB.click(485, 660)
         if trigger == 2008:
-            self.ADB.click(485, 630)
+            self.ADB.click(485, 822)
 
     def open_daily_tasks(self):
         logger.debug('Bot.get_box_banner')
-        self.ADB.click(57, 300)
+        self.ADB.click(57, 400)
         sleep(2)
 
     def close_daily_tasks(self):
         logger.debug('Bot.close_daily_tasks')
-        self.ADB.click(170, 755)
-        self.ADB.click(480, 178)
+        self.ADB.click(170, 1040)
+        self.ADB.click(650, 240)

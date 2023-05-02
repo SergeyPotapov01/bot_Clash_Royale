@@ -1,7 +1,8 @@
 import io
 import random
+import json
 
-import neural_networks
+#import neural_networks
 
 from PIL import Image
 from loguru import logger
@@ -10,18 +11,32 @@ import time
 
 import os
 
-recognitionCard = neural_networks.CardInBatlle()
-recognitionElixir = neural_networks.ElixirInBatlle()
+#recognitionCard = neural_networks.CardInBatlle()
+#recognitionElixir = neural_networks.ElixirInBatlle()
+
+with open("config/trigger.json", encoding='UTF-8') as f:
+    triggers_json = json.load(f)
 
 class ImageTriggers:
     def __init__(self, open_chest, requested_card, open_PR=False, debug=False):
-        self.index2X2 = False
+        self.index2X2 = True
         self.image = None
         self.open_chest = open_chest
         self.open_PR = open_PR
         self.requested_card = requested_card
         self.m = []
         self.debug = debug
+        self.dict_func = {
+            '_cheakTimeInBatlle': self._cheakTimeInBatlle
+            , '_getNumeberCrown': self._getNumeberCrown
+            , '_getTriggerOpenChest': self._getTriggerOpenChest
+            , '_getTriggerOpenedChest': self._getTriggerOpenedChest
+            , '_getTextError': self._getTextError
+            , '_getCardsInBatlle': self._getCardsInBatlle
+            , '_getElixir': self._getElixir
+            , '_get_tower_health': self._get_tower_health
+        }
+
 
     def _cheakTimeInBatlle(self):
         i = self.image.crop((450, 0, 538, 53))
@@ -103,11 +118,11 @@ class ImageTriggers:
         cards = []
         for card in imageCards:
             card_ = card.resize((26, 28))
-            card_ = recognitionCard.predict(card_)
+            #card_ = recognitionCard.predict(card_)
             cards.append(card_)
-            if self.debug:
-                pass
-                #card.save(f'debug\\{card_}{time.time()}.png')
+            if True:
+                # pass
+                card.save(f'debug\\{card_}{time.time()}.png')
 
 
         return cards
@@ -115,7 +130,7 @@ class ImageTriggers:
     def _getElixir(self):
         elixir = self.image.crop((142, 912, 182, 940))
         elixir = elixir.resize((20, 14))
-        return recognitionElixir.predict(elixir)
+        #return recognitionElixir.predict(elixir)
 
     def _get_tower_health(self):
         tower_healths = [
@@ -144,22 +159,37 @@ class ImageTriggers:
         return slot
 
     def getTrigger(self, img):
+
         self.image = Image.open(io.BytesIO(img))
 
-        if self.image.getpixel((40, 790))[0:3] == (255, 255, 255):  # тригер на облачко
+        for trigger in triggers_json:
+            сompleted_trigger = True
+            triggers = []
 
-            if self.image.getpixel((529, 950))[0:3] == (7, 71, 144) or self.image.getpixel((529, 950))[0:3] == (7, 71, 143) or self.image.getpixel((529, 950))[0:3] == (7, 71, 142) :  # тригер нижнию часть экрана
-                return 100, self._getElixir(), self._getCardsInBatlle()  # тригер на бой
+            for data in triggers_json[trigger]["trigger"]:
+                triggers.append((data["coordinates"], data["pixels"]))
 
-            if self.image.getpixel((300, 840))[0:3] == (104, 187, 255):  # тригер на кнопку выйти
-                if self.index2X2:
-                    self.index2X2 = False
-                    return 121, self._getNumeberCrown()  # тригер на закрытие чата в после боя 2х2
-                else:
-                    self.index2X2 = True
-                    return 124, None  # тригер на конец боя 1х1
+            for data_triggers in triggers:
+                if (list(self.image.getpixel((data_triggers[0][0], data_triggers[0][1]))[0:3]) in data_triggers[1]) == False:
+                    сompleted_trigger = False
 
-        if self.image.getpixel((526, 951))[0:3] == (52, 66, 83):  # тригер нижнию часть экрана при игре 2х2
+            if сompleted_trigger:
+                return int(trigger), None
+
+        #if self.image.getpixel((98, 1050))[0:3] == ((255, 255, 255), (239, 239, 239)):  # тригер на облачко
+
+        #    if self.image.getpixel((709, 1243))[0:3] in ((6, 67, 134)) :  # тригер нижнию часть экрана
+        #        return 100, None # self._getElixir(), self._getCardsInBatlle()  # тригер на бой
+
+        #    if self.image.getpixel((405,1140))[0:3] == (78, 175, 255):  # тригер на кнопку выйти
+        #        if self.index2X2:
+        #            self.index2X2 = False
+        #            return 121, self._getNumeberCrown()  # тригер на закрытие чата в после боя 2х2
+        #        else:
+        #            self.index2X2 = True
+        #            return 124, None  # тригер на конец боя 1х1
+
+        if self.image.getpixel((146,1219))[0:3] == ((71, 161, 239)):  # тригер нижнию часть экрана при игре 2х2
             if self.index2X2:
                 self.index2X2 = False
                 return 122, self._getNumeberCrown()  # тригер на закрытие чата в после боя 2х2
@@ -185,24 +215,25 @@ class ImageTriggers:
         if self.image.getpixel((236, 256)) == (31, 70, 124, 255):
             return 2003, None
 
+
         if self.image.getpixel((125, 238)) == (192, 164, 124, 255):
-            if self.image.getpixel((206, 306)) in ((255, 230, 141, 255), (255, 230, 140, 255)):
+            if self.image.getpixel((235, 407)) in ((255, 230, 141, 255), (255, 230, 140, 255)):
                 return 2005, None
-            if self.image.getpixel((230, 409)) in ((255, 230, 141, 255), (255, 230, 140, 255)):
+            if self.image.getpixel((235, 544)) in ((255, 230, 141, 255), (255, 230, 140, 255)):
                 return 2006, None
-            if self.image.getpixel((230, 513)) in ((255, 230, 141, 255), (255, 230, 140, 255)):
+            if self.image.getpixel((235, 683)) in ((255, 230, 141, 255), (255, 230, 140, 255)):
                 return 2007, None
             if self.image.getpixel((220, 644)) in ((255, 230, 141, 255), (255, 230, 140, 255)):
                 return 2008, None
             return 2004, None
 
-        if self.image.getpixel((530, 944))[0:3] in((64, 76, 95), (63, 75, 95), (60, 71, 89), (33, 36, 63)):  # пиксель на кропку эвента если она не активка
+        if self.image.getpixel((709, 1265))[0:3] in((64, 76, 95), (63, 75, 95), (60, 71, 89), (33, 36, 63), (63, 75, 94), (59, 70, 88)):  # пиксель на кропку эвента если она не активка
 
-            if self.image.getpixel((450, 267)) == (174, 96, 0, 255):
-                return 2001, None
+            #if self.image.getpixel((652, 447)) == (174, 96, 0, 255):
+            #    return 2001, None
 
-            if self.image.getpixel((74, 322)) == (200, 123, 4, 255):
-                return 2002, None
+            #if self.image.getpixel((91, 446)) == (200, 123, 4, 255):
+            #    return 2002, None
 
             if self.image.getpixel((360, 679))[0:3] in ((236, 8, 56), (236, 8, 57), (236, 9, 56), (236, 9, 57)):
                 return 209, None
@@ -234,7 +265,7 @@ class ImageTriggers:
             if self.image.getpixel((10, 955))[0:3] == (234, 189, 80):
                 return 238, None
 
-            if self.image.getpixel((496, 113))[0:3] == (214, 236, 249) or self.image.getpixel((496, 113))[0:3] == (215, 237, 250):  # триггер на нахождение в меню
+            if self.image.getpixel((478, 151))[0:3] in ((224, 244, 255), (210, 229, 239)):  # триггер на нахождение в меню
                 if self.image.getpixel((433, 887))[0:3] == (48, 184, 69) and self.requested_card:
                     return 210, None  # тригер на отправку запроса карт
                 if self.image.getpixel((433, 887))[0:3] == (236, 8, 56) and self.requested_card:
@@ -338,23 +369,66 @@ class ImageTriggers:
     def getTriggerDEBUG(self, img):
         self.image = Image.open(io.BytesIO(img))
 
-        if self.image.size == (960, 540):
+        if self.image.size == (1280, 720):
             return ((500, None),)
-        elif self.image.size != (540, 960):
+        elif self.image.size != (720, 1280):
             return ((501, None),)
 
 
-        print(self.image.getpixel((236, 256)), 2003)
-        print(self.image.getpixel((236, 256)), 2004)
+        print(self.image.getpixel((235, 407)), 2001)
+        print(self.image.getpixel((235, 407)), 2002) # ОБЛАКО
+        print(self.image.getpixel(((220, 407))), 2002) # ОБЛАКО
+
+        with open("config/trigger.json", encoding='UTF-8') as f:
+            triggers_json = json.load(f)
+
+        data_json = []
+
+        for trigger in triggers_json:
+            сompleted_trigger = 1
+            triggers = []
+
+            for data in triggers_json[trigger]["trigger"]:
+                triggers.append((data["coordinates"], data["pixels"]))
+
+            for data in triggers:
+                print('trigger'
+                , trigger
+                , 'pixel'
+                , data[0]
+                , 'coord'
+                , data[1]
+                , triggers_json[trigger]["func"]
+                , self.image.getpixel((data[0][0], data[0][1]))
+                , data[1][:]
+                , list(self.image.getpixel((data[0][0], data[0][1]))[0:3]) in data[1])
+
+                data_json.append(('trigger'
+                              , trigger
+                              , 'pixel'
+                              , data[0]
+                              , 'coord'
+                              , data[1]
+                              , triggers_json[trigger]["func"]
+                              , self.image.getpixel((data[0][0], data[0][1]))
+                              , data[1][:]
+                              , list(self.image.getpixel((data[0][0], data[0][1]))[0:3]) in data[1])
+                      )
+
+            if not list(self.image.getpixel((data[0][0], data[0][1]))[0:3]) in data[1]:
+                сompleted_trigger = 0
+
+            if сompleted_trigger == 1:
+                pass
 
 
-        try:
-            self.image.save(f'debug\\{time.time()}.png')
-        except:
-            os.mkdir('debug')
-            self.image.save(f'debug\\{time.time()}.png')
+        #try:
+        #    self.image.save(f'debug\\{time.time()}.png')
+        #except:
+        #    os.mkdir('debug')
+        #    self.image.save(f'debug\\{time.time()}.png')
 
-        return(
+        return( data_json,
             (100, self.image.getpixel((529, 950)), self.image.getpixel((529, 950))[0:3] == (7, 71, 144)),
             (121, self.image.getpixel((300, 840)), self.image.getpixel((300, 840))[0:3] == (104, 187, 255)),
             (124, self.image.getpixel((40, 790)), self.image.getpixel((40, 790))[0:3] == (255, 255, 255)),

@@ -49,3 +49,4 @@ if __name__ == "__main__":
     ui.load_setting(config)
     MainWindow.show()
     sys.exit(app.exec_())
+

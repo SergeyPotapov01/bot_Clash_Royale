@@ -2,7 +2,13 @@ tensorflow==2.10.0
 loguru==0.6.0
 pure_python_adb==0.3.0.dev0
 numpy==1.22.4
-opencv_python_headless==4.3.0.36
+opencv_python_headless
 keras==2.11.0
 Pillow==9.3.0
 PyQt5==5.15.7
+flatbuffers==2.0
+numpy==1.23.0
+onnxruntime==1.12.1
+Pillow==9.1.1
+protobuf==4.21.1
+scipy==1.8.1
